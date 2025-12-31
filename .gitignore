@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Large scraped content (10GB) - not tracked in git
+Website Scrapped/
+
