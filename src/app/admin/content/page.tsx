@@ -72,9 +72,18 @@ export default function ContentManagement() {
   const [autoScrapeSettings, setAutoScrapeSettings] = useState<AutoScrapeSettings>({
     enabled: true,
     frequency: "weekly",
-    lastRun: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    nextRun: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(),
+    lastRun: null,
+    nextRun: null,
   });
+
+  // Set date-dependent values after mount to avoid hydration mismatch
+  useEffect(() => {
+    setAutoScrapeSettings(prev => ({
+      ...prev,
+      lastRun: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+      nextRun: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(),
+    }));
+  }, []);
 
   useEffect(() => {
     const fetchKnowledge = async () => {
