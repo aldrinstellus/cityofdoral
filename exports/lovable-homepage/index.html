@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City of Doral - Official Website</title>
+  <meta name="description" content="Welcome to the City of Doral, Florida. Access municipal services, information, and community resources.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        <img src="https://res.cloudinary.com/dpqp2pvqp/image/upload/v1668702047/doral-logo2_xhl24o.png" alt="City of Doral">
+      </a>
+
+      <button class="mobile-menu-toggle" aria-label="Menu" aria-expanded="false">
+        <span class="material-symbols-rounded">menu</span>
+      </button>
+
+      <nav class="nav">
+        <div class="nav-dropdown">
+          <a href="#">About</a>
+          <div class="nav-dropdown-menu">
+            <a href="#">Doral Facts</a>
+            <a href="#">History</a>
+            <a href="#">City Officials</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <a href="#">Businesses</a>
+          <div class="nav-dropdown-menu">
+            <a href="#">Starting a Business</a>
+            <a href="#">Permits & Licenses</a>
+            <a href="#">Economic Development</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <a href="#">Departments</a>
+          <div class="nav-dropdown-menu">
+            <a href="#">Building Department</a>
+            <a href="#">Parks & Recreation</a>
+            <a href="#">Police Department</a>
+            <a href="#">Public Works</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <a href="#">Residents</a>
+          <div class="nav-dropdown-menu">
+            <a href="#">Online Services</a>
+            <a href="#">Utilities</a>
+            <a href="#">Garbage & Recycling</a>
+          </div>
+        </div>
+        <a href="#">Visitors</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" style="background-image: url('assets/images/hero-image.jpg');">
+    <div class="hero-content">
+      <h1>Welcome to the City of Doral</h1>
+      <p>Your gateway to municipal services, community events, and everything Doral has to offer.</p>
+      <div class="search-bar">
+        <input type="text" placeholder="Search for services...">
+        <button type="submit">Search</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Top Services Section -->
+  <section class="services-section">
+    <div class="container">
+      <h2 class="section-title">Top Services</h2>
+      <div class="grid grid-cols-6">
+        <a href="#" class="service-card">
+          <div class="service-icon">
+            <span class="material-symbols-rounded">description</span>
+          </div>
+          <h3>Building Permits</h3>
+        </a>
+        <a href="#" class="service-card">
+          <div class="service-icon">
+            <span class="material-symbols-rounded">payments</span>
+          </div>
+          <h3>Pay Utilities</h3>
+        </a>
+        <a href="#" class="service-card">
+          <div class="service-icon">
+            <span class="material-symbols-rounded">calendar_month</span>
+          </div>
+          <h3>Events Calendar</h3>
+        </a>
+        <a href="#" class="service-card">
+          <div class="service-icon">
+            <span class="material-symbols-rounded">park</span>
+          </div>
+          <h3>Parks & Recreation</h3>
+        </a>
+        <a href="#" class="service-card">
+          <div class="service-icon">
+            <span class="material-symbols-rounded">local_police</span>
+          </div>
+          <h3>Police Services</h3>
+        </a>
+        <a href="#" class="service-card">
+          <div class="service-icon">
+            <span class="material-symbols-rounded">help</span>
+          </div>
+          <h3>Report an Issue</h3>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Events Section -->
+  <section class="events-section">
+    <div class="container">
+      <h2 class="section-title">Upcoming Events</h2>
+      <div class="grid grid-cols-3">
+        <article class="event-card">
+          <img src="assets/events/event1.jpg" alt="Community Event" class="event-image" onerror="this.style.background='#e5e7eb'">
+          <div class="event-content">
+            <div class="event-date">January 15, 2025</div>
+            <h3 class="event-title">Community Town Hall Meeting</h3>
+            <p class="event-description">Join us for an open discussion about city developments and community initiatives.</p>
+          </div>
+        </article>
+        <article class="event-card">
+          <img src="assets/events/event2.jpg" alt="Parks Event" class="event-image" onerror="this.style.background='#e5e7eb'">
+          <div class="event-content">
+            <div class="event-date">January 20, 2025</div>
+            <h3 class="event-title">Doral Park Festival</h3>
+            <p class="event-description">Family-friendly festival with food, music, and activities at Doral Central Park.</p>
+          </div>
+        </article>
+        <article class="event-card">
+          <img src="assets/events/event3.jpg" alt="Business Event" class="event-image" onerror="this.style.background='#e5e7eb'">
+          <div class="event-content">
+            <div class="event-date">January 25, 2025</div>
+            <h3 class="event-title">Business Networking Breakfast</h3>
+            <p class="event-description">Connect with local business owners and entrepreneurs.</p>
+          </div>
+        </article>
+      </div>
+      <div class="text-center mt-20">
+        <a href="#" class="btn btn-primary">View All Events</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>Contact Us</h4>
+          <p>City of Doral<br>8401 NW 53rd Terrace<br>Doral, FL 33166</p>
+          <p>Phone: (305) 593-6725</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <a href="#">City Directory</a>
+          <a href="#">Job Opportunities</a>
+          <a href="#">Public Records</a>
+          <a href="#">Accessibility</a>
+        </div>
+        <div>
+          <h4>Departments</h4>
+          <a href="#">Building Department</a>
+          <a href="#">Parks & Recreation</a>
+          <a href="#">Police Department</a>
+          <a href="#">Public Works</a>
+        </div>
+        <div>
+          <h4>Stay Connected</h4>
+          <p>Follow us on social media for the latest updates.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook">
+              <span class="material-symbols-rounded">share</span>
+            </a>
+            <a href="#" aria-label="Twitter">
+              <span class="material-symbols-rounded">share</span>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <span class="material-symbols-rounded">share</span>
+            </a>
+            <a href="#" aria-label="YouTube">
+              <span class="material-symbols-rounded">play_circle</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 City of Doral, Florida. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>
