@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Bell,
   Plus,
@@ -18,6 +17,8 @@ import {
   Megaphone,
   Eye,
   EyeOff,
+  Sparkles,
+  Zap,
 } from "lucide-react";
 
 interface Announcement {
@@ -35,57 +36,105 @@ interface Announcement {
 }
 
 const typeConfig = {
-  info: { icon: Info, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-200" },
-  warning: { icon: AlertTriangle, color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-200" },
-  alert: { icon: Megaphone, color: "text-red-600", bg: "bg-red-50", border: "border-red-200" },
-  success: { icon: CheckCircle2, color: "text-green-600", bg: "bg-green-50", border: "border-green-200" },
+  info: {
+    icon: Info,
+    color: "text-[#1D4F91]",
+    bg: "bg-gradient-to-br from-blue-50 to-blue-100/50",
+    border: "border-blue-200",
+    glow: "shadow-blue-500/20",
+  },
+  warning: {
+    icon: AlertTriangle,
+    color: "text-amber-600",
+    bg: "bg-gradient-to-br from-amber-50 to-yellow-100/50",
+    border: "border-amber-200",
+    glow: "shadow-amber-500/20",
+  },
+  alert: {
+    icon: Megaphone,
+    color: "text-red-600",
+    bg: "bg-gradient-to-br from-red-50 to-rose-100/50",
+    border: "border-red-200",
+    glow: "shadow-red-500/20",
+  },
+  success: {
+    icon: CheckCircle2,
+    color: "text-[#006A52]",
+    bg: "bg-gradient-to-br from-green-50 to-emerald-100/50",
+    border: "border-green-200",
+    glow: "shadow-green-500/20",
+  },
 };
 
+// Animated counter component
+function AnimatedCounter({ value, duration = 1 }: { value: number; duration?: number }) {
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    let startTime: number;
+    let animationFrame: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      setDisplayValue(Math.floor(easeOut * value));
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [value, duration]);
+
+  return <span>{displayValue}</span>;
+}
+
+// Initialize announcements from localStorage or defaults
+function getInitialAnnouncements(): Announcement[] {
+  if (typeof window === "undefined") return [];
+  const stored = localStorage.getItem("doral-announcements");
+  if (stored) {
+    return JSON.parse(stored);
+  }
+  const defaults: Announcement[] = [
+    {
+      id: "1",
+      title: "City Hall Holiday Hours",
+      message: "City Hall will be closed on January 1st for New Year's Day. Regular hours resume January 2nd.",
+      type: "info",
+      priority: "medium",
+      language: "both",
+      isActive: true,
+      startDate: "2026-01-01",
+      endDate: "2026-01-02",
+      createdAt: new Date().toISOString(),
+      showInChat: true,
+    },
+    {
+      id: "2",
+      title: "System Maintenance Notice",
+      message: "The e-Permitting portal will be undergoing maintenance this weekend. Some services may be temporarily unavailable.",
+      type: "warning",
+      priority: "high",
+      language: "both",
+      isActive: false,
+      startDate: "2026-01-05",
+      endDate: "2026-01-06",
+      createdAt: new Date().toISOString(),
+      showInChat: true,
+    },
+  ];
+  localStorage.setItem("doral-announcements", JSON.stringify(defaults));
+  return defaults;
+}
+
 export default function Announcements() {
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>(getInitialAnnouncements);
   const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [filterActive, setFilterActive] = useState<"all" | "active" | "inactive">("all");
-
-  // Load announcements from localStorage
-  useEffect(() => {
-    const stored = localStorage.getItem("doral-announcements");
-    if (stored) {
-      setAnnouncements(JSON.parse(stored));
-    } else {
-      // Default announcements
-      const defaults: Announcement[] = [
-        {
-          id: "1",
-          title: "City Hall Holiday Hours",
-          message: "City Hall will be closed on January 1st for New Year's Day. Regular hours resume January 2nd.",
-          type: "info",
-          priority: "medium",
-          language: "both",
-          isActive: true,
-          startDate: "2026-01-01",
-          endDate: "2026-01-02",
-          createdAt: new Date().toISOString(),
-          showInChat: true,
-        },
-        {
-          id: "2",
-          title: "System Maintenance Notice",
-          message: "The e-Permitting portal will be undergoing maintenance this weekend. Some services may be temporarily unavailable.",
-          type: "warning",
-          priority: "high",
-          language: "both",
-          isActive: false,
-          startDate: "2026-01-05",
-          endDate: "2026-01-06",
-          createdAt: new Date().toISOString(),
-          showInChat: true,
-        },
-      ];
-      setAnnouncements(defaults);
-      localStorage.setItem("doral-announcements", JSON.stringify(defaults));
-    }
-  }, []);
 
   const saveAnnouncements = (updated: Announcement[]) => {
     setAnnouncements(updated);
@@ -120,7 +169,6 @@ export default function Announcements() {
     saveAnnouncements(updated);
   };
 
-  // Filter announcements
   const filteredAnnouncements = announcements.filter((a) => {
     if (filterActive === "active") return a.isActive;
     if (filterActive === "inactive") return !a.isActive;
@@ -128,180 +176,249 @@ export default function Announcements() {
   });
 
   const activeCount = announcements.filter((a) => a.isActive).length;
+  const highPriorityCount = announcements.filter((a) => a.priority === "high" && a.isActive).length;
 
   return (
-    <div className="p-6 lg:p-8">
+    <div className="p-6 lg:p-8 max-w-[1600px] mx-auto">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8"
+      >
         <div>
-          <h1 className="text-2xl font-bold text-[#000034]">Announcements</h1>
-          <p className="text-gray-500 mt-1">
-            Manage system alerts and city notifications
-          </p>
+          <div className="flex items-center gap-3 mb-1">
+            <h1 className="text-[32px] font-bold text-[#000034] tracking-tight">Announcements</h1>
+            <motion.div
+              animate={{ rotate: [0, 15, -15, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
+            >
+              <Bell className="h-6 w-6 text-amber-500" />
+            </motion.div>
+          </div>
+          <p className="text-[#666666] mt-1 text-[15px]">Manage system alerts and city notifications</p>
         </div>
-        <Button
+        <motion.button
+          whileHover={{ scale: 1.02, y: -2 }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => setShowAddForm(true)}
-          className="bg-[#000080] hover:bg-[#0000a0]"
+          className="h-11 px-6 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2 w-fit"
         >
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="h-4 w-4" />
           New Announcement
-        </Button>
-      </div>
+        </motion.button>
+      </motion.div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-        <Card className="p-4 bg-white border-[#E7EBF0]">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-50 rounded-lg">
-              <Bell className="h-5 w-5 text-[#1D4F91]" />
-            </div>
-            <div>
-              <p className="text-xs text-gray-500">Total</p>
-              <p className="text-xl font-bold text-[#000034]">{announcements.length}</p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-4 bg-white border-[#E7EBF0]">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-50 rounded-lg">
-              <Eye className="h-5 w-5 text-green-600" />
-            </div>
-            <div>
-              <p className="text-xs text-gray-500">Active</p>
-              <p className="text-xl font-bold text-green-600">{activeCount}</p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-4 bg-white border-[#E7EBF0]">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gray-100 rounded-lg">
-              <EyeOff className="h-5 w-5 text-gray-500" />
-            </div>
-            <div>
-              <p className="text-xs text-gray-500">Inactive</p>
-              <p className="text-xl font-bold text-gray-600">
-                {announcements.length - activeCount}
-              </p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-4 bg-white border-[#E7EBF0]">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-amber-50 rounded-lg">
-              <AlertTriangle className="h-5 w-5 text-amber-600" />
-            </div>
-            <div>
-              <p className="text-xs text-gray-500">High Priority</p>
-              <p className="text-xl font-bold text-amber-600">
-                {announcements.filter((a) => a.priority === "high" && a.isActive).length}
-              </p>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      {/* Filter Tabs */}
-      <div className="flex gap-2 mb-6">
-        {(["all", "active", "inactive"] as const).map((filter) => (
-          <button
-            key={filter}
-            onClick={() => setFilterActive(filter)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${
-              filterActive === filter
-                ? "bg-[#000080] text-white"
-                : "bg-white text-gray-600 hover:bg-gray-50 border border-[#E7EBF0]"
-            }`}
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {[
+          { label: "Total", value: announcements.length, icon: Bell, gradient: "from-[#000080]" },
+          { label: "Active", value: activeCount, icon: Eye, gradient: "from-[#006A52]" },
+          { label: "Inactive", value: announcements.length - activeCount, icon: EyeOff, gradient: "from-gray-500" },
+          { label: "High Priority", value: highPriorityCount, icon: AlertTriangle, gradient: "from-amber-500" },
+        ].map((stat, idx) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.1 }}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] p-5 shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,128,0.15)] transition-all duration-300"
           >
-            {filter}
-          </button>
+            <div className="flex items-center gap-3">
+              <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${stat.gradient} to-transparent/50 flex items-center justify-center shadow-lg`}>
+                <stat.icon className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <p className="text-xs text-[#666666] font-medium uppercase tracking-wide">{stat.label}</p>
+                <p className="text-2xl font-bold text-[#000034]">
+                  <AnimatedCounter value={stat.value} />
+                </p>
+              </div>
+            </div>
+          </motion.div>
         ))}
       </div>
 
+      {/* Filter Tabs */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="flex gap-2 mb-6"
+      >
+        {(["all", "active", "inactive"] as const).map((filter) => (
+          <motion.button
+            key={filter}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setFilterActive(filter)}
+            className={`relative h-11 px-6 rounded-xl text-sm font-medium transition-all duration-200 capitalize ${
+              filterActive === filter
+                ? "text-white"
+                : "bg-white text-[#363535] hover:bg-gray-50 border border-[#E7EBF0]"
+            }`}
+          >
+            {filterActive === filter && (
+              <motion.div
+                layoutId="activeFilterBg"
+                className="absolute inset-0 bg-gradient-to-r from-[#000080] to-[#1D4F91] rounded-xl shadow-lg shadow-[#000080]/25"
+                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+              />
+            )}
+            <span className="relative z-10">{filter}</span>
+          </motion.button>
+        ))}
+      </motion.div>
+
       {/* Add/Edit Form */}
-      {(showAddForm || editingAnnouncement) && (
-        <Card className="mb-6 p-6 bg-white border-[#E7EBF0]">
-          <h3 className="font-semibold text-[#000034] mb-4">
-            {editingAnnouncement ? "Edit Announcement" : "Create Announcement"}
-          </h3>
-          <AnnouncementForm
-            announcement={editingAnnouncement || undefined}
-            onSave={handleSave}
-            onCancel={() => {
-              setEditingAnnouncement(null);
-              setShowAddForm(false);
-            }}
-          />
-        </Card>
-      )}
+      <AnimatePresence>
+        {(showAddForm || editingAnnouncement) && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto" }}
+            exit={{ opacity: 0, y: -20, height: 0 }}
+            className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] shadow-[0_8px_30px_-4px_rgba(0,0,128,0.12)] p-6 mb-6 overflow-hidden"
+          >
+            <h3 className="text-lg font-semibold text-[#000034] mb-6 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#000080] to-[#1D4F91] flex items-center justify-center shadow-lg">
+                {editingAnnouncement ? <Edit2 className="h-5 w-5 text-white" /> : <Plus className="h-5 w-5 text-white" />}
+              </div>
+              {editingAnnouncement ? "Edit Announcement" : "Create Announcement"}
+            </h3>
+            <AnnouncementForm
+              announcement={editingAnnouncement || undefined}
+              onSave={handleSave}
+              onCancel={() => {
+                setEditingAnnouncement(null);
+                setShowAddForm(false);
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Announcements List */}
       <div className="space-y-4">
         {filteredAnnouncements.length === 0 ? (
-          <Card className="p-8 text-center bg-white border-[#E7EBF0]">
-            <Bell className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-            <h3 className="font-medium text-gray-600 mb-2">No announcements</h3>
-            <p className="text-sm text-gray-500">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] p-12 text-center shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)]"
+          >
+            <Bell className="h-12 w-12 mx-auto mb-4 text-[#E7EBF0]" />
+            <h3 className="font-medium text-[#000034] mb-2">No announcements</h3>
+            <p className="text-sm text-[#666666]">
               Create your first announcement to display in the chatbot
             </p>
-          </Card>
+          </motion.div>
         ) : (
-          filteredAnnouncements.map((announcement) => {
+          filteredAnnouncements.map((announcement, idx) => {
             const config = typeConfig[announcement.type];
             const Icon = config.icon;
             return (
-              <Card
+              <motion.div
                 key={announcement.id}
-                className={`p-5 bg-white border-[#E7EBF0] ${
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.05 }}
+                whileHover={{ y: -2, transition: { duration: 0.2 } }}
+                className={`bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] p-5 shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,128,0.12)] transition-all duration-300 ${
                   !announcement.isActive ? "opacity-60" : ""
-                }`}
+                } ${announcement.priority === "high" && announcement.isActive ? `shadow-lg ${config.glow}` : ""}`}
               >
                 <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-xl ${config.bg}`}>
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    className={`p-3.5 rounded-xl ${config.bg} ${config.border} border flex-shrink-0 shadow-sm`}
+                  >
                     <Icon className={`h-6 w-6 ${config.color}`} />
-                  </div>
+                  </motion.div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                       <h3 className="font-semibold text-[#000034]">{announcement.title}</h3>
                       {announcement.priority === "high" && (
-                        <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
+                        <motion.span
+                          initial={{ scale: 0.9 }}
+                          animate={{ scale: 1 }}
+                          className="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-red-50 to-rose-50 text-red-600 px-2.5 py-1 rounded-lg font-medium border border-red-100"
+                        >
+                          <Zap className="h-3 w-3" />
                           High Priority
-                        </span>
+                        </motion.span>
                       )}
                       {!announcement.isActive && (
-                        <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
+                        <span className="text-xs bg-gray-100 text-[#666666] px-2.5 py-1 rounded-lg font-medium">
                           Inactive
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 mb-3">{announcement.message}</p>
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
+                    <p className="text-sm text-[#666666] mb-3 leading-relaxed">{announcement.message}</p>
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-[#999]">
+                      <span className="flex items-center gap-1.5 bg-gray-50 px-2.5 py-1 rounded-lg">
+                        <Calendar className="h-3.5 w-3.5" />
                         {announcement.startDate} - {announcement.endDate}
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
+                      <span className="flex items-center gap-1.5 bg-gray-50 px-2.5 py-1 rounded-lg">
+                        <Clock className="h-3.5 w-3.5" />
                         Created: {new Date(announcement.createdAt).toLocaleDateString()}
                       </span>
-                      <span className="bg-gray-100 px-2 py-0.5 rounded">
-                        {announcement.language === "both"
-                          ? "EN/ES"
-                          : announcement.language.toUpperCase()}
-                      </span>
+                      {/* Language Toggle Buttons */}
+                      <div className="flex items-center gap-1 bg-gray-50 rounded-lg p-0.5 border border-gray-100">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const newLang = announcement.language === "en" ? "both" : announcement.language === "both" ? "es" : "en";
+                            const updated = announcements.map((a) =>
+                              a.id === announcement.id ? { ...a, language: newLang as "en" | "es" | "both" } : a
+                            );
+                            saveAnnouncements(updated);
+                          }}
+                          className={`px-2 py-0.5 text-xs font-medium rounded transition-all ${
+                            announcement.language === "en" || announcement.language === "both"
+                              ? "bg-[#1D4F91] text-white shadow-sm"
+                              : "text-gray-400 hover:text-gray-600"
+                          }`}
+                          title="English"
+                        >
+                          EN
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const newLang = announcement.language === "es" ? "both" : announcement.language === "both" ? "en" : "es";
+                            const updated = announcements.map((a) =>
+                              a.id === announcement.id ? { ...a, language: newLang as "en" | "es" | "both" } : a
+                            );
+                            saveAnnouncements(updated);
+                          }}
+                          className={`px-2 py-0.5 text-xs font-medium rounded transition-all ${
+                            announcement.language === "es" || announcement.language === "both"
+                              ? "bg-[#006A52] text-white shadow-sm"
+                              : "text-gray-400 hover:text-gray-600"
+                          }`}
+                          title="Spanish"
+                        >
+                          ES
+                        </button>
+                      </div>
                       {announcement.showInChat && (
-                        <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded">
+                        <span className="flex items-center gap-1 bg-gradient-to-r from-blue-50 to-indigo-50 text-[#1D4F91] px-2.5 py-1 rounded-lg font-medium border border-blue-100">
+                          <Sparkles className="h-3 w-3" />
                           Shown in Chat
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1">
-                    <button
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={() => handleToggleActive(announcement.id)}
-                      className={`p-2 rounded hover:bg-gray-100 ${
-                        announcement.isActive ? "text-green-500" : "text-gray-400"
+                      className={`w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-50 transition-colors ${
+                        announcement.isActive ? "text-[#006A52]" : "text-[#999]"
                       }`}
                       title={announcement.isActive ? "Deactivate" : "Activate"}
                     >
@@ -310,22 +427,28 @@ export default function Announcements() {
                       ) : (
                         <EyeOff className="h-4 w-4" />
                       )}
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={() => setEditingAnnouncement(announcement)}
-                      className="p-2 text-gray-400 hover:text-[#1D4F91] hover:bg-blue-50 rounded"
+                      className="w-9 h-9 flex items-center justify-center text-[#999] hover:text-[#1D4F91] hover:bg-blue-50 rounded-lg transition-colors"
+                      title="Edit"
                     >
                       <Edit2 className="h-4 w-4" />
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={() => handleDelete(announcement.id)}
-                      className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded"
+                      className="w-9 h-9 flex items-center justify-center text-[#999] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Delete"
                     >
                       <Trash2 className="h-4 w-4" />
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
-              </Card>
+              </motion.div>
             );
           })
         )}
@@ -344,8 +467,14 @@ function AnnouncementForm({
   onSave: (announcement: Announcement) => void;
   onCancel: () => void;
 }) {
-  const today = new Date().toISOString().split("T")[0];
-  const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+  const { today, nextWeek } = useMemo(() => {
+    const now = new Date();
+    const next = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+    return {
+      today: now.toISOString().split("T")[0],
+      nextWeek: next.toISOString().split("T")[0],
+    };
+  }, []);
 
   const [formData, setFormData] = useState<Announcement>({
     id: announcement?.id || "",
@@ -366,26 +495,29 @@ function AnnouncementForm({
     onSave(formData);
   };
 
+  const inputClass = "w-full h-11 px-4 bg-white border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200";
+  const labelClass = "block text-xs font-medium text-[#666666] mb-2 uppercase tracking-wide";
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+        <label className={labelClass}>Title</label>
         <input
           type="text"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className="w-full px-4 py-2 border border-[#E7EBF0] rounded-lg focus:outline-none focus:border-[#000080]"
+          className={inputClass}
           placeholder="Announcement title..."
           required
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+        <label className={labelClass}>Message</label>
         <textarea
           value={formData.message}
           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-          className="w-full px-4 py-2 border border-[#E7EBF0] rounded-lg focus:outline-none focus:border-[#000080] min-h-[100px]"
+          className="w-full px-4 py-3 bg-white border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200 min-h-[120px] resize-none"
           placeholder="Announcement message..."
           required
         />
@@ -393,13 +525,13 @@ function AnnouncementForm({
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+          <label className={labelClass}>Type</label>
           <select
             value={formData.type}
             onChange={(e) =>
               setFormData({ ...formData, type: e.target.value as Announcement["type"] })
             }
-            className="w-full px-4 py-2 border border-[#E7EBF0] rounded-lg focus:outline-none focus:border-[#000080]"
+            className={`${inputClass} cursor-pointer`}
           >
             <option value="info">Info</option>
             <option value="warning">Warning</option>
@@ -409,13 +541,13 @@ function AnnouncementForm({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+          <label className={labelClass}>Priority</label>
           <select
             value={formData.priority}
             onChange={(e) =>
               setFormData({ ...formData, priority: e.target.value as Announcement["priority"] })
             }
-            className="w-full px-4 py-2 border border-[#E7EBF0] rounded-lg focus:outline-none focus:border-[#000080]"
+            className={`${inputClass} cursor-pointer`}
           >
             <option value="low">Low</option>
             <option value="medium">Medium</option>
@@ -424,13 +556,13 @@ function AnnouncementForm({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Language</label>
+          <label className={labelClass}>Language</label>
           <select
             value={formData.language}
             onChange={(e) =>
               setFormData({ ...formData, language: e.target.value as Announcement["language"] })
             }
-            className="w-full px-4 py-2 border border-[#E7EBF0] rounded-lg focus:outline-none focus:border-[#000080]"
+            className={`${inputClass} cursor-pointer`}
           >
             <option value="both">Both (EN/ES)</option>
             <option value="en">English Only</option>
@@ -441,59 +573,78 @@ function AnnouncementForm({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+          <label className={labelClass}>Start Date</label>
           <input
             type="date"
             value={formData.startDate}
             onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-            className="w-full px-4 py-2 border border-[#E7EBF0] rounded-lg focus:outline-none focus:border-[#000080]"
+            className={`${inputClass} cursor-pointer`}
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+          <label className={labelClass}>End Date</label>
           <input
             type="date"
             value={formData.endDate}
             onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-            className="w-full px-4 py-2 border border-[#E7EBF0] rounded-lg focus:outline-none focus:border-[#000080]"
+            className={`${inputClass} cursor-pointer`}
             required
           />
         </div>
       </div>
 
-      <div className="flex items-center gap-6">
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={formData.isActive}
-            onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-            className="w-4 h-4 text-[#000080] border-[#E7EBF0] rounded focus:ring-[#000080]"
-          />
-          <span className="text-sm text-gray-700">Active</span>
+      <div className="flex items-center gap-6 pt-2">
+        <label className="flex items-center gap-3 cursor-pointer group">
+          <div className="relative">
+            <input
+              type="checkbox"
+              checked={formData.isActive}
+              onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-gradient-to-r peer-checked:from-[#000080] peer-checked:to-[#1D4F91] transition-all duration-300"></div>
+            <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-md transition-all duration-300 peer-checked:translate-x-5"></div>
+          </div>
+          <span className="text-sm text-[#363535] group-hover:text-[#000034] transition-colors">Active</span>
         </label>
 
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={formData.showInChat}
-            onChange={(e) => setFormData({ ...formData, showInChat: e.target.checked })}
-            className="w-4 h-4 text-[#000080] border-[#E7EBF0] rounded focus:ring-[#000080]"
-          />
-          <span className="text-sm text-gray-700">Show in Chatbot</span>
+        <label className="flex items-center gap-3 cursor-pointer group">
+          <div className="relative">
+            <input
+              type="checkbox"
+              checked={formData.showInChat}
+              onChange={(e) => setFormData({ ...formData, showInChat: e.target.checked })}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-gradient-to-r peer-checked:from-[#000080] peer-checked:to-[#1D4F91] transition-all duration-300"></div>
+            <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-md transition-all duration-300 peer-checked:translate-x-5"></div>
+          </div>
+          <span className="text-sm text-[#363535] group-hover:text-[#000034] transition-colors">Show in Chatbot</span>
         </label>
       </div>
 
-      <div className="flex justify-end gap-3 pt-4">
-        <Button type="button" variant="outline" onClick={onCancel} className="border-[#E7EBF0]">
-          <X className="h-4 w-4 mr-2" />
+      <div className="flex justify-end gap-3 pt-4 border-t border-[#E7EBF0]">
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          type="button"
+          onClick={onCancel}
+          className="h-11 px-6 bg-white border border-[#E7EBF0] text-[#363535] text-sm font-medium rounded-lg hover:bg-gray-50 transition-all duration-200 flex items-center gap-2"
+        >
+          <X className="h-4 w-4" />
           Cancel
-        </Button>
-        <Button type="submit" className="bg-[#000080] hover:bg-[#0000a0]">
-          <Save className="h-4 w-4 mr-2" />
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.02, y: -2 }}
+          whileTap={{ scale: 0.98 }}
+          type="submit"
+          className="h-11 px-6 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2"
+        >
+          <Save className="h-4 w-4" />
           Save Announcement
-        </Button>
+        </motion.button>
       </div>
     </form>
   );

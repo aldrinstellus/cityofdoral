@@ -1,4 +1,248 @@
 {
-  "conversations": [],
-  "lastUpdated": null
+  "conversations": [
+    {
+      "id": "conv_1767253434478_d5gfzuy48",
+      "sessionId": "sess_1767253433774_j4myf2iz9",
+      "startTime": "2026-01-01T07:43:53.776Z",
+      "endTime": "2026-01-01T07:43:54.418Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-01T07:43:53.776Z"
+        },
+        {
+          "role": "user",
+          "content": "Test message to clear",
+          "timestamp": "2026-01-01T07:43:54.195Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I encountered an issue. Please try again.",
+          "timestamp": "2026-01-01T07:43:54.418Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767253435529_4ukzps0af",
+      "sessionId": "sess_1767253435084_usbvfvaae",
+      "startTime": "2026-01-01T07:43:55.086Z",
+      "endTime": "2026-01-01T07:43:55.506Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-01T07:43:55.086Z"
+        },
+        {
+          "role": "user",
+          "content": "Hide suggestions",
+          "timestamp": "2026-01-01T07:43:55.330Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I encountered an issue. Please try again.",
+          "timestamp": "2026-01-01T07:43:55.506Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767253618762_yxs3kk6f5",
+      "sessionId": "sess_1767252383147_ohzceebhk",
+      "startTime": "2026-01-01T07:46:30.436Z",
+      "endTime": "2026-01-01T07:46:58.712Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-01T07:46:30.436Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-01T07:46:58.547Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I encountered an issue. Please try again.",
+          "timestamp": "2026-01-01T07:46:58.712Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767253714467_yemrrs70r",
+      "sessionId": "sess_1767252383147_ohzceebhk",
+      "startTime": "2026-01-01T07:46:30.436Z",
+      "endTime": "2026-01-01T07:48:34.432Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-01T07:46:30.436Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-01T07:46:58.547Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I encountered an issue. Please try again.",
+          "timestamp": "2026-01-01T07:46:58.712Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I report an issue to the city?",
+          "timestamp": "2026-01-01T07:48:34.295Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I encountered an issue. Please try again.",
+          "timestamp": "2026-01-01T07:48:34.432Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767262313558_4xd3py0us",
+      "sessionId": "sess_1767252383147_ohzceebhk",
+      "startTime": "2026-01-01T10:11:32.846Z",
+      "endTime": "2026-01-01T10:11:53.512Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-01T10:11:32.846Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-01T10:11:53.020Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I encountered an issue. Please try again.",
+          "timestamp": "2026-01-01T10:11:53.512Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767262318687_972o8csbs",
+      "sessionId": "sess_1767252383147_ohzceebhk",
+      "startTime": "2026-01-01T10:11:32.846Z",
+      "endTime": "2026-01-01T10:11:58.640Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-01T10:11:32.846Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-01T10:11:53.020Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I encountered an issue. Please try again.",
+          "timestamp": "2026-01-01T10:11:53.512Z"
+        },
+        {
+          "role": "user",
+          "content": "Where is City Hall located?",
+          "timestamp": "2026-01-01T10:11:58.497Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I encountered an issue. Please try again.",
+          "timestamp": "2026-01-01T10:11:58.640Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767262323784_knzawzhem",
+      "sessionId": "sess_1767252383147_ohzceebhk",
+      "startTime": "2026-01-01T10:11:32.846Z",
+      "endTime": "2026-01-01T10:12:03.761Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-01T10:11:32.846Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-01T10:11:53.020Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I encountered an issue. Please try again.",
+          "timestamp": "2026-01-01T10:11:53.512Z"
+        },
+        {
+          "role": "user",
+          "content": "Where is City Hall located?",
+          "timestamp": "2026-01-01T10:11:58.497Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I encountered an issue. Please try again.",
+          "timestamp": "2026-01-01T10:11:58.640Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I report an issue to the city?",
+          "timestamp": "2026-01-01T10:12:03.642Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I encountered an issue. Please try again.",
+          "timestamp": "2026-01-01T10:12:03.761Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    }
+  ],
+  "lastUpdated": "2026-01-01T10:12:03.785Z"
 }

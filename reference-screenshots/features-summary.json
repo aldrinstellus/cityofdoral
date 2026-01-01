@@ -1,0 +1,113 @@
+{
+  "capturedAt": "2026-01-01T08:46:33.195Z",
+  "baseUrl": "https://doral.lovable.app",
+  "loginSuccessful": true,
+  "pages": [
+    {
+      "name": "Login",
+      "url": "/admin/auth",
+      "screenshot": "01-login-page.png"
+    },
+    {
+      "name": "Dashboard",
+      "url": "https://doral.lovable.app/admin",
+      "screenshot": "03-dashboard.png"
+    },
+    {
+      "name": "Dashboard",
+      "url": "/admin",
+      "screenshot": "04-dashboard.png"
+    },
+    {
+      "name": "FAQs",
+      "url": "/admin/faqs",
+      "screenshot": "05-faqs.png"
+    },
+    {
+      "name": "Announcements",
+      "url": "/admin/announcements",
+      "screenshot": "06-announcements.png"
+    },
+    {
+      "name": "Conversations",
+      "url": "/admin/conversations",
+      "screenshot": "07-conversations.png"
+    },
+    {
+      "name": "Escalations",
+      "url": "/admin/escalations",
+      "screenshot": "08-escalations.png"
+    },
+    {
+      "name": "Content Scraper",
+      "url": "/admin/content",
+      "screenshot": "09-content-scraper.png"
+    },
+    {
+      "name": "Analytics",
+      "url": "/admin/analytics",
+      "screenshot": "10-analytics.png"
+    },
+    {
+      "name": "Audit Logs",
+      "url": "/admin/audit-logs",
+      "screenshot": "11-audit-logs.png"
+    },
+    {
+      "name": "Dashboard",
+      "url": "/admin/dashboard",
+      "screenshot": "12-dashboard.png"
+    },
+    {
+      "name": "Knowledge",
+      "url": "/admin/knowledge",
+      "screenshot": "13-knowledge.png"
+    },
+    {
+      "name": "Settings",
+      "url": "/admin/settings",
+      "screenshot": "14-settings.png"
+    },
+    {
+      "name": "Users",
+      "url": "/admin/users",
+      "screenshot": "15-users.png"
+    }
+  ],
+  "navigation": [
+    {
+      "text": "Dashboard",
+      "href": "/admin"
+    },
+    {
+      "text": "FAQs",
+      "href": "/admin/faqs"
+    },
+    {
+      "text": "Announcements",
+      "href": "/admin/announcements"
+    },
+    {
+      "text": "Conversations",
+      "href": "/admin/conversations"
+    },
+    {
+      "text": "Escalations",
+      "href": "/admin/escalations"
+    },
+    {
+      "text": "Content Scraper",
+      "href": "/admin/content"
+    },
+    {
+      "text": "Analytics",
+      "href": "/admin/analytics"
+    },
+    {
+      "text": "Audit Logs",
+      "href": "/admin/audit-logs"
+    }
+  ],
+  "components": [],
+  "functionality": []
+}

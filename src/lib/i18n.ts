@@ -26,8 +26,6 @@ const ENGLISH_PATTERNS = [
  * Returns 'es' for Spanish, 'en' for English (default)
  */
 export function detectLanguage(text: string): Language {
-  const lowerText = text.toLowerCase();
-
   // Check for Spanish patterns
   let spanishScore = 0;
   for (const pattern of SPANISH_PATTERNS) {

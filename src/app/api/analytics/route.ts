@@ -28,6 +28,7 @@ interface ConversationEntry {
   sentiment: string;
   escalated: boolean;
   feedbackGiven: boolean;
+  channel?: 'web' | 'ivr' | 'sms' | 'facebook' | 'instagram' | 'whatsapp';
 }
 
 interface FeedbackEntry {
@@ -145,6 +146,16 @@ export async function GET(request: NextRequest) {
       negative: filteredConversations.filter(c => c.sentiment === 'negative').length,
     };
 
+    // Channel distribution for multi-channel analytics
+    const channelDistribution = {
+      web: filteredConversations.filter(c => !c.channel || c.channel === 'web').length,
+      ivr: filteredConversations.filter(c => c.channel === 'ivr').length,
+      sms: filteredConversations.filter(c => c.channel === 'sms').length,
+      facebook: filteredConversations.filter(c => c.channel === 'facebook').length,
+      instagram: filteredConversations.filter(c => c.channel === 'instagram').length,
+      whatsapp: filteredConversations.filter(c => c.channel === 'whatsapp').length,
+    };
+
     const dailyStats: Record<string, { conversations: number; messages: number; escalated: number }> = {};
     filteredConversations.forEach(c => {
       const date = new Date(c.startTime).toISOString().split('T')[0];
@@ -178,6 +189,7 @@ export async function GET(request: NextRequest) {
       distributions: {
         language: languageDistribution,
         sentiment: sentimentDistribution,
+        channel: channelDistribution,
       },
       dailyMetrics: Object.entries(dailyStats).map(([date, stats]) => ({
         date,
