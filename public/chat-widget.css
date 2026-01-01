@@ -1,0 +1,588 @@
+/* City of Doral AI Chat Widget - Embeddable Styles */
+/* All classes prefixed with .doral-chat- to avoid conflicts */
+
+/* CSS Variables */
+:root {
+  --doral-primary: #000080;
+  --doral-secondary: #0000a0;
+  --doral-accent: #ffffff;
+  --doral-text: #333333;
+  --doral-text-light: #666666;
+  --doral-border: #e0e0e0;
+  --doral-success: #22c55e;
+  --doral-error: #ef4444;
+  --doral-warning: #f59e0b;
+  --doral-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* FAB Button - mirrors accessibility widget on left */
+.doral-chat-fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--doral-primary);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.doral-chat-fab:hover {
+  background: var(--doral-secondary);
+  transform: scale(1.05);
+}
+
+.doral-chat-fab:focus {
+  outline: 3px solid #4a90d9;
+  outline-offset: 2px;
+}
+
+.doral-chat-fab svg {
+  width: 28px;
+  height: 28px;
+  fill: var(--doral-accent);
+}
+
+.doral-chat-fab .doral-chat-icon {
+  display: block;
+}
+
+.doral-chat-fab .doral-close-icon {
+  display: none;
+}
+
+.doral-chat-fab.doral-chat-open .doral-chat-icon {
+  display: none;
+}
+
+.doral-chat-fab.doral-chat-open .doral-close-icon {
+  display: block;
+}
+
+/* Chat Panel Container */
+.doral-chat-panel {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 380px;
+  height: 550px;
+  background: var(--doral-accent);
+  border-radius: 16px;
+  box-shadow: var(--doral-shadow);
+  z-index: 99998;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.doral-chat-panel.doral-chat-visible {
+  display: flex;
+  animation: doral-slide-up 0.3s ease;
+}
+
+@keyframes doral-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.doral-chat-header {
+  background: var(--doral-primary);
+  color: var(--doral-accent);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.doral-chat-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.doral-chat-avatar {
+  width: 40px;
+  height: 40px;
+  background: var(--doral-accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doral-chat-avatar svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--doral-primary);
+}
+
+.doral-chat-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.doral-chat-subtitle {
+  font-size: 12px;
+  color: #9999ff;
+  margin: 0;
+}
+
+/* Close button in header */
+.doral-chat-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--doral-accent);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.doral-chat-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.doral-chat-close-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.doral-chat-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.doral-chat-lang-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--doral-accent);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s;
+}
+
+.doral-chat-lang-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.doral-chat-lang-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+/* Messages Area */
+.doral-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  scroll-behavior: smooth;
+}
+
+/* Message Bubble */
+.doral-chat-message {
+  display: flex;
+  gap: 8px;
+  max-width: 85%;
+}
+
+.doral-chat-message.doral-user {
+  flex-direction: row-reverse;
+  align-self: flex-end;
+}
+
+.doral-chat-message.doral-assistant {
+  align-self: flex-start;
+}
+
+.doral-chat-message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.doral-chat-message.doral-assistant .doral-chat-message-avatar {
+  background: var(--doral-primary);
+}
+
+.doral-chat-message.doral-user .doral-chat-message-avatar {
+  background: #e5e7eb;
+}
+
+.doral-chat-message-avatar svg {
+  width: 18px;
+  height: 18px;
+}
+
+.doral-chat-message.doral-assistant .doral-chat-message-avatar svg {
+  fill: var(--doral-accent);
+}
+
+.doral-chat-message.doral-user .doral-chat-message-avatar svg {
+  fill: #6b7280;
+}
+
+.doral-chat-message-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.doral-chat-bubble {
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.doral-chat-message.doral-assistant .doral-chat-bubble {
+  background: #f3f4f6;
+  color: var(--doral-text);
+  border-top-left-radius: 4px;
+}
+
+.doral-chat-message.doral-user .doral-chat-bubble {
+  background: var(--doral-primary);
+  color: var(--doral-accent);
+  border-top-right-radius: 4px;
+}
+
+.doral-chat-time {
+  font-size: 11px;
+  color: var(--doral-text-light);
+  padding: 0 4px;
+}
+
+.doral-chat-message.doral-user .doral-chat-time {
+  text-align: right;
+}
+
+/* Sources */
+.doral-chat-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.doral-chat-sources-label {
+  font-size: 11px;
+  color: var(--doral-text-light);
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.doral-chat-source-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #2563eb;
+  background: #eff6ff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.doral-chat-source-link:hover {
+  background: #dbeafe;
+}
+
+.doral-chat-source-link svg {
+  width: 10px;
+  height: 10px;
+  fill: currentColor;
+}
+
+/* Feedback */
+.doral-chat-feedback {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.doral-chat-feedback-label {
+  font-size: 11px;
+  color: var(--doral-text-light);
+}
+
+.doral-chat-feedback-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  color: #9ca3af;
+  transition: color 0.2s, background 0.2s;
+}
+
+.doral-chat-feedback-btn:hover {
+  background: #f3f4f6;
+}
+
+.doral-chat-feedback-btn.doral-positive:hover,
+.doral-chat-feedback-btn.doral-positive.doral-selected {
+  color: var(--doral-success);
+}
+
+.doral-chat-feedback-btn.doral-negative:hover,
+.doral-chat-feedback-btn.doral-negative.doral-selected {
+  color: var(--doral-error);
+}
+
+.doral-chat-feedback-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* Escalation Alert */
+.doral-chat-escalation {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 8px;
+}
+
+.doral-chat-escalation-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #92400e;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.doral-chat-escalation-header svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.doral-chat-escalation-btn {
+  background: var(--doral-accent);
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+
+.doral-chat-escalation-btn:hover {
+  background: #fef3c7;
+}
+
+.doral-chat-escalation-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+/* Loading Indicator */
+.doral-chat-loading {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  background: #f3f4f6;
+  border-radius: 16px;
+  border-top-left-radius: 4px;
+  width: fit-content;
+}
+
+.doral-chat-loading-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--doral-primary);
+  border-radius: 50%;
+  animation: doral-bounce 1.4s ease-in-out infinite;
+}
+
+.doral-chat-loading-dot:nth-child(1) { animation-delay: 0s; }
+.doral-chat-loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.doral-chat-loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes doral-bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-6px); }
+}
+
+/* Suggested Questions */
+.doral-chat-suggestions {
+  padding: 12px 16px;
+  border-top: 1px solid var(--doral-border);
+  flex-shrink: 0;
+}
+
+.doral-chat-suggestions-label {
+  font-size: 12px;
+  color: var(--doral-text-light);
+  margin-bottom: 8px;
+}
+
+.doral-chat-suggestions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.doral-chat-suggestion-btn {
+  background: var(--doral-accent);
+  border: 1px solid var(--doral-border);
+  color: var(--doral-text);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.doral-chat-suggestion-btn:hover {
+  border-color: var(--doral-primary);
+  background: #f8fafc;
+}
+
+/* Input Area */
+.doral-chat-input-area {
+  padding: 16px;
+  border-top: 1px solid var(--doral-border);
+  background: var(--doral-accent);
+  flex-shrink: 0;
+}
+
+.doral-chat-input-form {
+  display: flex;
+  gap: 8px;
+}
+
+.doral-chat-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid var(--doral-border);
+  border-radius: 24px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.doral-chat-input:focus {
+  border-color: var(--doral-primary);
+}
+
+.doral-chat-input::placeholder {
+  color: #9ca3af;
+}
+
+.doral-chat-send-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--doral-primary);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.doral-chat-send-btn:hover:not(:disabled) {
+  background: var(--doral-secondary);
+}
+
+.doral-chat-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.doral-chat-send-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--doral-accent);
+}
+
+.doral-chat-disclaimer {
+  font-size: 11px;
+  color: var(--doral-text-light);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .doral-chat-panel {
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+  }
+
+  .doral-chat-fab {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .doral-chat-panel.doral-chat-visible {
+    animation: none;
+  }
+
+  .doral-chat-loading-dot {
+    animation: none;
+  }
+
+  .doral-chat-fab,
+  .doral-chat-lang-btn,
+  .doral-chat-feedback-btn,
+  .doral-chat-suggestion-btn,
+  .doral-chat-send-btn {
+    transition: none;
+  }
+}

@@ -6,22 +6,49 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar } from "@/components/ui/avatar";
-import { Send, Bot, User, Loader2, MessageCircle, X } from "lucide-react";
+import {
+  Send,
+  Bot,
+  User,
+  Loader2,
+  MessageCircle,
+  X,
+  ThumbsUp,
+  ThumbsDown,
+  ExternalLink,
+  Globe,
+  Phone,
+  AlertTriangle,
+} from "lucide-react";
 import Link from "next/link";
+import { type Language, getLabels } from "@/lib/i18n";
+
+interface Source {
+  title: string;
+  url: string;
+  section: string;
+}
 
 interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
   timestamp: Date;
+  sources?: Source[];
+  sentiment?: string;
+  escalate?: boolean;
+  feedback?: "positive" | "negative" | null;
 }
 
 export default function ChatPage() {
+  const [language, setLanguage] = useState<Language>("en");
+  const labels = getLabels(language);
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
       role: "assistant",
-      content: "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+      content: labels.welcome,
       timestamp: new Date(),
     },
   ]);
@@ -30,6 +57,20 @@ export default function ChatPage() {
   const [isOpen, setIsOpen] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Update welcome message when language changes
+  useEffect(() => {
+    setMessages((prev) => {
+      const newMessages = [...prev];
+      if (newMessages[0]?.id === "welcome") {
+        newMessages[0] = {
+          ...newMessages[0],
+          content: getLabels(language).welcome,
+        };
+      }
+      return newMessages;
+    });
+  }, [language]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -61,16 +102,29 @@ export default function ChatPage() {
             role: m.role,
             content: m.content,
           })),
+          language,
         }),
       });
 
       const data = await response.json();
 
+      // Update language if response detected a different one
+      if (data.language && data.language !== language) {
+        setLanguage(data.language);
+      }
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: data.message || "I apologize, but I encountered an issue. Please try again.",
+        content:
+          data.message ||
+          (language === "es"
+            ? "Lo siento, hubo un problema. Por favor intente de nuevo."
+            : "I apologize, but I encountered an issue. Please try again."),
         timestamp: new Date(),
+        sources: data.sources,
+        sentiment: data.sentiment,
+        escalate: data.escalate,
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -79,7 +133,10 @@ export default function ChatPage() {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "I apologize, but I'm having trouble connecting. Please try again in a moment.",
+        content:
+          language === "es"
+            ? "Lo siento, tengo problemas para conectarme. Por favor intente de nuevo."
+            : "I apologize, but I'm having trouble connecting. Please try again in a moment.",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -89,12 +146,19 @@ export default function ChatPage() {
     }
   };
 
-  const suggestedQuestions = [
-    "What are the city hall hours?",
-    "How do I apply for a building permit?",
-    "What events are coming up?",
-    "Where are the parks located?",
-  ];
+  const handleFeedback = (messageId: string, feedback: "positive" | "negative") => {
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id === messageId ? { ...m, feedback } : m
+      )
+    );
+    // TODO: Send feedback to analytics API
+    console.log("Feedback:", { messageId, feedback });
+  };
+
+  const toggleLanguage = () => {
+    setLanguage((prev) => (prev === "en" ? "es" : "en"));
+  };
 
   if (!isOpen) {
     return (
@@ -102,6 +166,7 @@ export default function ChatPage() {
         <Button
           onClick={() => setIsOpen(true)}
           className="h-14 w-14 rounded-full bg-[#1e3a5f] hover:bg-[#2a4a73] shadow-lg"
+          aria-label={language === "es" ? "Abrir chat" : "Open chat"}
         >
           <MessageCircle className="h-6 w-6" />
         </Button>
@@ -116,17 +181,32 @@ export default function ChatPage() {
         <div className="bg-[#1e3a5f] text-white p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-              <Bot className="h-6 w-6 text-[#1e3a5f]" />
+              <Bot className="h-6 w-6 text-[#1e3a5f]" aria-hidden="true" />
             </div>
             <div>
-              <h1 className="font-semibold">City of Doral AI Assistant</h1>
-              <p className="text-xs text-blue-200">Always here to help</p>
+              <h1 className="font-semibold">{labels.title}</h1>
+              <p className="text-xs text-blue-200">{labels.subtitle}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {/* Language Toggle */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleLanguage}
+              className="text-white hover:bg-white/10 gap-1"
+              aria-label={`${labels.language}: ${language === "en" ? labels.spanish : labels.english}`}
+            >
+              <Globe className="h-4 w-4" aria-hidden="true" />
+              <span className="text-xs">{language.toUpperCase()}</span>
+            </Button>
             <Link href="/admin">
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
-                Admin
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/10"
+              >
+                {labels.admin}
               </Button>
             </Link>
             <Button
@@ -134,6 +214,7 @@ export default function ChatPage() {
               size="icon"
               onClick={() => setIsOpen(false)}
               className="text-white hover:bg-white/10"
+              aria-label={language === "es" ? "Cerrar chat" : "Close chat"}
             >
               <X className="h-5 w-5" />
             </Button>
@@ -141,49 +222,137 @@ export default function ChatPage() {
         </div>
 
         {/* Messages */}
-        <ScrollArea ref={scrollRef} className="flex-1 p-4">
-          <div className="space-y-4">
+        <ScrollArea ref={scrollRef} className="flex-1 p-4" aria-live="polite">
+          <div className="space-y-4" role="log" aria-label={language === "es" ? "Historial del chat" : "Chat history"}>
             {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex gap-3 ${
-                  message.role === "user" ? "flex-row-reverse" : ""
-                }`}
-              >
-                <Avatar className={`h-8 w-8 ${
-                  message.role === "assistant"
-                    ? "bg-[#1e3a5f]"
-                    : "bg-gray-200"
-                } flex items-center justify-center`}>
-                  {message.role === "assistant" ? (
-                    <Bot className="h-5 w-5 text-white" />
-                  ) : (
-                    <User className="h-5 w-5 text-gray-600" />
-                  )}
-                </Avatar>
+              <div key={message.id}>
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-2 ${
-                    message.role === "user"
-                      ? "bg-[#1e3a5f] text-white rounded-tr-sm"
-                      : "bg-gray-100 text-gray-800 rounded-tl-sm"
+                  className={`flex gap-3 ${
+                    message.role === "user" ? "flex-row-reverse" : ""
                   }`}
                 >
-                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                  <p className={`text-xs mt-1 ${
-                    message.role === "user" ? "text-blue-200" : "text-gray-400"
-                  }`}>
-                    {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                  </p>
+                  <Avatar
+                    className={`h-8 w-8 ${
+                      message.role === "assistant"
+                        ? "bg-[#1e3a5f]"
+                        : "bg-gray-200"
+                    } flex items-center justify-center`}
+                  >
+                    {message.role === "assistant" ? (
+                      <Bot className="h-5 w-5 text-white" aria-hidden="true" />
+                    ) : (
+                      <User className="h-5 w-5 text-gray-600" aria-hidden="true" />
+                    )}
+                  </Avatar>
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-4 py-2 ${
+                      message.role === "user"
+                        ? "bg-[#1e3a5f] text-white rounded-tr-sm"
+                        : "bg-gray-100 text-gray-800 rounded-tl-sm"
+                    }`}
+                  >
+                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    <p
+                      className={`text-xs mt-1 ${
+                        message.role === "user" ? "text-blue-200" : "text-gray-400"
+                      }`}
+                    >
+                      {message.timestamp.toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
                 </div>
+
+                {/* Sources */}
+                {message.sources && message.sources.length > 0 && (
+                  <div className="ml-11 mt-2">
+                    <p className="text-xs text-gray-500 mb-1">{labels.sources}:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {message.sources.slice(0, 3).map((source, idx) => (
+                        <a
+                          key={idx}
+                          href={source.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded hover:bg-blue-100 transition-colors"
+                        >
+                          <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                          {source.title.length > 30
+                            ? source.title.substring(0, 30) + "..."
+                            : source.title}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Escalation Alert */}
+                {message.escalate && (
+                  <div className="ml-11 mt-2 bg-amber-50 border border-amber-200 rounded-lg p-3">
+                    <div className="flex items-center gap-2 text-amber-800">
+                      <AlertTriangle className="h-4 w-4" aria-hidden="true" />
+                      <span className="text-sm font-medium">{labels.escalateMessage}</span>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mt-2 text-amber-700 border-amber-300 hover:bg-amber-100"
+                      onClick={() => window.location.href = "tel:+13055936725"}
+                    >
+                      <Phone className="h-4 w-4 mr-1" aria-hidden="true" />
+                      {labels.escalate}
+                    </Button>
+                  </div>
+                )}
+
+                {/* Feedback Buttons */}
+                {message.role === "assistant" && message.id !== "welcome" && (
+                  <div className="ml-11 mt-2 flex items-center gap-2">
+                    <span className="text-xs text-gray-400">{labels.feedback}</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={`h-6 w-6 p-0 ${
+                        message.feedback === "positive"
+                          ? "text-green-600"
+                          : "text-gray-400 hover:text-green-600"
+                      }`}
+                      onClick={() => handleFeedback(message.id, "positive")}
+                      aria-label={labels.yes}
+                      aria-pressed={message.feedback === "positive"}
+                    >
+                      <ThumbsUp className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={`h-6 w-6 p-0 ${
+                        message.feedback === "negative"
+                          ? "text-red-600"
+                          : "text-gray-400 hover:text-red-600"
+                      }`}
+                      onClick={() => handleFeedback(message.id, "negative")}
+                      aria-label={labels.no}
+                      aria-pressed={message.feedback === "negative"}
+                    >
+                      <ThumbsDown className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
               </div>
             ))}
             {isLoading && (
               <div className="flex gap-3">
                 <Avatar className="h-8 w-8 bg-[#1e3a5f] flex items-center justify-center">
-                  <Bot className="h-5 w-5 text-white" />
+                  <Bot className="h-5 w-5 text-white" aria-hidden="true" />
                 </Avatar>
                 <div className="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-3">
-                  <Loader2 className="h-5 w-5 animate-spin text-[#1e3a5f]" />
+                  <Loader2
+                    className="h-5 w-5 animate-spin text-[#1e3a5f]"
+                    aria-label={language === "es" ? "Cargando..." : "Loading..."}
+                  />
                 </div>
               </div>
             )}
@@ -193,9 +362,9 @@ export default function ChatPage() {
         {/* Suggested Questions */}
         {messages.length === 1 && (
           <div className="px-4 pb-2">
-            <p className="text-xs text-gray-500 mb-2">Suggested questions:</p>
+            <p className="text-xs text-gray-500 mb-2">{labels.suggested}</p>
             <div className="flex flex-wrap gap-2">
-              {suggestedQuestions.map((question) => (
+              {labels.suggestedQuestions.map((question) => (
                 <Button
                   key={question}
                   variant="outline"
@@ -220,20 +389,22 @@ export default function ChatPage() {
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your question..."
+              placeholder={labels.placeholder}
               className="flex-1"
               disabled={isLoading}
+              aria-label={labels.placeholder}
             />
             <Button
               type="submit"
               disabled={!input.trim() || isLoading}
               className="bg-[#1e3a5f] hover:bg-[#2a4a73]"
+              aria-label={labels.send}
             >
               <Send className="h-4 w-4" />
             </Button>
           </div>
           <p className="text-xs text-gray-400 mt-2 text-center">
-            Powered by AI - Information may not always be accurate
+            {labels.disclaimer}
           </p>
         </form>
       </Card>
