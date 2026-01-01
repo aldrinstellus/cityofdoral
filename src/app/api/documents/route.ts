@@ -8,7 +8,6 @@ import {
   parseDocument,
   chunkDocument,
   chunksToKnowledgeBase,
-  ParsedDocument,
 } from '@/lib/document-parser';
 
 const KNOWLEDGE_BASE_FILE = path.join(process.cwd(), 'public', 'knowledge-base.json');

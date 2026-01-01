@@ -31,7 +31,7 @@ export async function handleWebhookVerification(
   const token = searchParams.get('hub.verify_token');
   const challenge = searchParams.get('hub.challenge');
 
-  const verifyToken = getVerifyToken(platform);
+  const verifyToken = getVerifyToken();
   const result = verifyWebhook(mode, token, challenge, verifyToken);
 
   if (result.valid) {

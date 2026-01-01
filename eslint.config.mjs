@@ -12,7 +12,21 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Custom ignores - external scraped files (not part of app source):
+    "Website Scrapped/**",
+    "website-scraper/**",
+    "scripts/**",
+    "*.config.js",
+    "*.config.mjs",
   ]),
+  // Custom rules for src/ code
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    rules: {
+      // Allow img tags in admin layout (external URLs)
+      "@next/next/no-img-element": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

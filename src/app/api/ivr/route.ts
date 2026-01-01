@@ -4,14 +4,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
   generateGreeting,
-  generateResponse,
-  generateEscalation,
   generateError,
-  generateGoodbye,
   parseIVRRequest,
 } from '@/lib/channels/twilio-ivr';
-import { processChat, logChannelConversation } from '@/lib/channels/chat-processor';
-import { detectLanguage } from '@/lib/i18n';
 
 // TwiML response headers
 const twimlHeaders = {

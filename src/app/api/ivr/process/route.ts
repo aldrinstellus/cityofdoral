@@ -25,7 +25,6 @@ export async function POST(request: NextRequest) {
     });
 
     const ivrRequest = parseIVRRequest(body);
-    const callSid = ivrRequest.CallSid;
     const callerPhone = ivrRequest.From;
     const speechResult = ivrRequest.SpeechResult;
     const digits = ivrRequest.Digits;

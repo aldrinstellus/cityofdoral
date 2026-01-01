@@ -846,7 +846,8 @@
           })),
           language: state.language,
           sessionId: state.sessionId,
-          conversationId: state.conversationId
+          conversationId: state.conversationId,
+          domain: window.location.hostname // Multi-URL support for doralpd.com
         })
       });
 

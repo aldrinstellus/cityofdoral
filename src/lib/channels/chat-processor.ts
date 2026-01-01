@@ -1,13 +1,16 @@
 // Shared chat processor for all channels (Web, IVR, SMS, Social)
-// Reuses the same RAG + LLM pipeline
+// Reuses the same RAG + LLM pipeline with LLM fallback support
 
 import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
 import { detectLanguage, getSystemPrompt } from '@/lib/i18n';
 import { analyzeSentiment } from '@/lib/sentiment';
 import { ChannelType, ChannelResponse } from './types';
 import { getSessionHistory, addMessageToSession, updateSessionLanguage } from './session-manager';
 
+// Lazy initialization for LLM clients
 let openai: OpenAI | null = null;
+let anthropic: Anthropic | null = null;
 
 function getOpenAI(): OpenAI {
   if (!openai) {
@@ -17,6 +20,13 @@ function getOpenAI(): OpenAI {
     openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   }
   return openai;
+}
+
+function getAnthropic(): Anthropic | null {
+  if (!anthropic && process.env.ANTHROPIC_API_KEY) {
+    anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  }
+  return anthropic;
 }
 
 interface KnowledgeResult {
@@ -29,13 +39,13 @@ interface KnowledgeResult {
   score: number;
 }
 
-async function getKnowledgeContext(query: string, limit = 5): Promise<KnowledgeResult[]> {
+async function getKnowledgeContext(query: string, limit = 5, domain?: string): Promise<KnowledgeResult[]> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const response = await fetch(`${baseUrl}/api/knowledge`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, limit, includeContent: true }),
+      body: JSON.stringify({ query, limit, includeContent: true, domain }),
     });
 
     if (!response.ok) return [];
@@ -60,10 +70,11 @@ export interface ProcessChatOptions {
   userId: string;
   message: string;
   requestedLanguage?: 'en' | 'es';
+  domain?: string; // For multi-URL support (doralpd.com vs cityofdoral.com)
 }
 
 export async function processChat(options: ProcessChatOptions): Promise<ChannelResponse> {
-  const { channel, userId, message, requestedLanguage } = options;
+  const { channel, userId, message, requestedLanguage, domain } = options;
 
   // Get conversation history for session continuity
   const history = await getSessionHistory(channel, userId);
@@ -78,8 +89,8 @@ export async function processChat(options: ProcessChatOptions): Promise<ChannelR
   // Analyze sentiment
   const sentiment = analyzeSentiment(message);
 
-  // Fetch relevant knowledge
-  const knowledgeResults = await getKnowledgeContext(message);
+  // Fetch relevant knowledge (with domain filtering for multi-URL support)
+  const knowledgeResults = await getKnowledgeContext(message, 5, domain);
   const contextString = buildContextString(knowledgeResults);
 
   // Build system prompt
@@ -95,18 +106,59 @@ export async function processChat(options: ProcessChatOptions): Promise<ChannelR
     { role: 'user', content: message },
   ];
 
-  // Call OpenAI
-  const completion = await getOpenAI().chat.completions.create({
-    model: 'gpt-4o-mini',
-    messages,
-    temperature: 0.7,
-    max_tokens: channel === 'sms' ? 320 : 1000, // SMS has 160-char segments
-  });
+  const maxTokens = channel === 'sms' ? 320 : 1000;
+  let assistantMessage: string;
 
-  const assistantMessage = completion.choices[0]?.message?.content ||
-    (detectedLanguage === 'es'
-      ? 'Lo siento, no pude procesar su solicitud.'
-      : 'I apologize, I could not process your request.');
+  // Try OpenAI first, fallback to Claude if it fails (ITN 3.2.3 LLM Backup)
+  try {
+    const completion = await getOpenAI().chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages,
+      temperature: 0.7,
+      max_tokens: maxTokens,
+    });
+
+    assistantMessage = completion.choices[0]?.message?.content || '';
+  } catch (openaiError) {
+    console.error('OpenAI API error, attempting Claude fallback:', openaiError);
+
+    // Try Claude fallback
+    const claudeClient = getAnthropic();
+    if (claudeClient) {
+      try {
+        const claudeMessages = history.map(m => ({
+          role: m.role as 'user' | 'assistant',
+          content: m.content,
+        }));
+        claudeMessages.push({ role: 'user', content: message });
+
+        const claudeResponse = await claudeClient.messages.create({
+          model: 'claude-3-haiku-20240307',
+          max_tokens: maxTokens,
+          system: systemPrompt,
+          messages: claudeMessages,
+        });
+
+        assistantMessage = claudeResponse.content[0].type === 'text'
+          ? claudeResponse.content[0].text
+          : '';
+        console.log('Successfully used Claude fallback');
+      } catch (claudeError) {
+        console.error('Claude fallback also failed:', claudeError);
+        assistantMessage = '';
+      }
+    } else {
+      console.warn('No Claude API key configured for fallback');
+      assistantMessage = '';
+    }
+  }
+
+  // Default message if both LLMs failed
+  if (!assistantMessage) {
+    assistantMessage = detectedLanguage === 'es'
+      ? 'Lo siento, no pude procesar su solicitud. Por favor intente de nuevo.'
+      : 'I apologize, I could not process your request. Please try again.';
+  }
 
   // Add assistant message to session
   await addMessageToSession(channel, userId, 'assistant', assistantMessage);

@@ -15,6 +15,19 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "City of Doral - AI Assistant",
   description: "Your AI-powered guide to City of Doral services, events, and information",
+  icons: {
+    icon: [
+      {
+        url: "/favicon-light.png?v=2",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/favicon-dark.png?v=2",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
+    apple: "/favicon-light.png?v=2",
+  },
 };
 
 export default function RootLayout({

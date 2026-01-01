@@ -63,10 +63,10 @@ export interface MetaWebhookBody {
 export function parseWebhookEvents(body: MetaWebhookBody): MetaMessageEvent[] {
   const events: MetaMessageEvent[] = [];
 
-  // Determine platform type
-  const isWhatsApp = body.object === 'whatsapp_business_account';
-  const isInstagram = body.object === 'instagram';
-  const isFacebook = body.object === 'page';
+  // Determine platform type from webhook object
+  const platform: MetaPlatform =
+    body.object === 'whatsapp_business_account' ? 'whatsapp' :
+    body.object === 'instagram' ? 'instagram' : 'facebook';
 
   for (const entry of body.entry || []) {
     // Facebook & Instagram: messaging array
@@ -74,7 +74,7 @@ export function parseWebhookEvents(body: MetaWebhookBody): MetaMessageEvent[] {
       for (const msg of entry.messaging) {
         if (msg.message && msg.message.text && !msg.message.is_echo) {
           events.push({
-            platform: isInstagram ? 'instagram' : 'facebook',
+            platform: platform === 'whatsapp' ? 'facebook' : platform,
             senderId: msg.sender.id,
             recipientId: msg.recipient.id,
             messageId: msg.message.mid,
@@ -235,9 +235,8 @@ export function getAccessToken(platform: MetaPlatform): string {
   }
 }
 
-// Get verify token for platform
-export function getVerifyToken(platform: MetaPlatform): string {
-  // Can use same verify token for all Meta platforms
+// Get verify token (same token for all Meta platforms)
+export function getVerifyToken(): string {
   return process.env.META_WEBHOOK_VERIFY_TOKEN || '';
 }
 

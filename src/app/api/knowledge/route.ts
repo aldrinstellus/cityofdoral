@@ -112,14 +112,30 @@ export async function GET(request: NextRequest) {
 // POST endpoint for chatbot context retrieval
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { query, limit = 5, includeContent = true } = body;
+  const { query, limit = 5, includeContent = true, domain } = body;
 
   if (!query) {
     return NextResponse.json({ error: 'Query is required' }, { status: 400 });
   }
 
+  // Filter pages based on domain (multi-URL support for doralpd.com)
+  let filteredPages = kb.pages;
+  if (domain && domain.includes('doralpd')) {
+    // For Doral Police domain, prioritize police-related content
+    filteredPages = kb.pages.filter(p =>
+      p.url.toLowerCase().includes('police') ||
+      p.section.toLowerCase().includes('police') ||
+      p.title.toLowerCase().includes('police') ||
+      p.content.toLowerCase().includes('police department')
+    );
+    // If no police-specific content found, fall back to all pages
+    if (filteredPages.length === 0) {
+      filteredPages = kb.pages;
+    }
+  }
+
   // Score and sort pages
-  const scored = kb.pages
+  const scored = filteredPages
     .map(page => ({ page, score: scoreMatch(page, query) }))
     .filter(item => item.score > 0)
     .sort((a, b) => b.score - a.score)

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
 import { detectLanguage, getSystemPrompt } from '@/lib/i18n';
 import { analyzeSentiment } from '@/lib/sentiment';
 import { promises as fs } from 'fs';
@@ -19,6 +20,7 @@ export async function OPTIONS() {
 
 // Lazy initialization to avoid build-time errors
 let openai: OpenAI | null = null;
+let anthropic: Anthropic | null = null;
 
 function getOpenAI(): OpenAI {
   if (!openai) {
@@ -30,6 +32,13 @@ function getOpenAI(): OpenAI {
     });
   }
   return openai;
+}
+
+function getAnthropic(): Anthropic | null {
+  if (!anthropic && process.env.ANTHROPIC_API_KEY) {
+    anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  }
+  return anthropic;
 }
 
 interface KnowledgeResult {
@@ -81,13 +90,13 @@ async function logConversation(entry: ConversationLogEntry): Promise<void> {
 }
 
 // Fetch relevant context from knowledge base
-async function getKnowledgeContext(query: string, limit = 5): Promise<KnowledgeResult[]> {
+async function getKnowledgeContext(query: string, limit = 5, domain?: string): Promise<KnowledgeResult[]> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const response = await fetch(`${baseUrl}/api/knowledge`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, limit, includeContent: true }),
+      body: JSON.stringify({ query, limit, includeContent: true, domain }),
     });
 
     if (!response.ok) {
@@ -117,7 +126,7 @@ function buildContextString(results: KnowledgeResult[]): string {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { messages, language: requestedLanguage } = body;
+    const { messages, language: requestedLanguage, domain } = body;
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json(
@@ -146,8 +155,8 @@ export async function POST(request: NextRequest) {
     // Analyze sentiment
     const sentiment = analyzeSentiment(userQuery);
 
-    // Fetch relevant knowledge
-    const knowledgeResults = await getKnowledgeContext(userQuery);
+    // Fetch relevant knowledge (with domain filtering for multi-URL support)
+    const knowledgeResults = await getKnowledgeContext(userQuery, 5, domain);
     const contextString = buildContextString(knowledgeResults);
 
     // Build system prompt with context
@@ -162,18 +171,57 @@ export async function POST(request: NextRequest) {
       })),
     ];
 
-    // Call OpenAI
-    const completion = await getOpenAI().chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: openaiMessages,
-      temperature: 0.7,
-      max_tokens: 1000,
-    });
+    let assistantMessage: string;
 
-    const assistantMessage = completion.choices[0]?.message?.content ||
-      (detectedLanguage === 'es'
-        ? 'Lo siento, no pude procesar su solicitud.'
-        : 'I apologize, I could not process your request.');
+    // Try OpenAI first, fallback to Claude if it fails (ITN 3.2.3 LLM Backup)
+    try {
+      const completion = await getOpenAI().chat.completions.create({
+        model: 'gpt-4o-mini',
+        messages: openaiMessages,
+        temperature: 0.7,
+        max_tokens: 1000,
+      });
+
+      assistantMessage = completion.choices[0]?.message?.content || '';
+    } catch (openaiError) {
+      console.error('OpenAI API error, attempting Claude fallback:', openaiError);
+
+      // Try Claude fallback
+      const claudeClient = getAnthropic();
+      if (claudeClient) {
+        try {
+          const claudeMessages = messages.map((m: ChatMessage) => ({
+            role: m.role as 'user' | 'assistant',
+            content: m.content,
+          }));
+
+          const claudeResponse = await claudeClient.messages.create({
+            model: 'claude-3-haiku-20240307',
+            max_tokens: 1000,
+            system: systemPrompt,
+            messages: claudeMessages,
+          });
+
+          assistantMessage = claudeResponse.content[0].type === 'text'
+            ? claudeResponse.content[0].text
+            : '';
+          console.log('Successfully used Claude fallback');
+        } catch (claudeError) {
+          console.error('Claude fallback also failed:', claudeError);
+          assistantMessage = '';
+        }
+      } else {
+        console.warn('No Claude API key configured for fallback');
+        assistantMessage = '';
+      }
+    }
+
+    // Default message if both LLMs failed
+    if (!assistantMessage) {
+      assistantMessage = detectedLanguage === 'es'
+        ? 'Lo siento, no pude procesar su solicitud. Por favor intente de nuevo.'
+        : 'I apologize, I could not process your request. Please try again.';
+    }
 
     // Prepare sources for response
     const sources = knowledgeResults.map(r => ({
