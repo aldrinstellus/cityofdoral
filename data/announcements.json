@@ -1,0 +1,28 @@
+[
+  {
+    "id": "ann-1",
+    "title": "Holiday Hours - City Hall Closure",
+    "content": "City Hall will be closed on January 1st for New Year's Day. Normal hours resume January 2nd.",
+    "type": "info",
+    "startDate": "2025-12-30T21:22:25.279Z",
+    "endDate": "2026-01-06T21:22:25.279Z",
+    "targetAudience": "all",
+    "isActive": true,
+    "views": 1523,
+    "createdAt": "2025-12-25T21:22:25.279Z",
+    "updatedAt": "2025-12-30T21:22:25.279Z"
+  },
+  {
+    "id": "ann-2",
+    "title": "Water Main Maintenance Notice",
+    "content": "Scheduled water main maintenance in the Downtown area on January 5th from 10 PM to 4 AM. Temporary water service interruption expected.",
+    "type": "warning",
+    "startDate": "2026-01-01T21:22:25.279Z",
+    "endDate": "2026-01-11T21:22:25.279Z",
+    "targetAudience": "residents",
+    "isActive": true,
+    "views": 876,
+    "createdAt": "2025-12-29T21:22:25.279Z",
+    "updatedAt": "2025-12-31T21:22:25.279Z"
+  }
+]

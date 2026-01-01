@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
+import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   AlertTriangle,
   Search,
@@ -15,7 +17,9 @@ import {
   User,
   MoreHorizontal,
   ArrowUpRight,
+  Trash2,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Escalation {
   id: string;
@@ -54,6 +58,28 @@ const statusConfig = {
   },
 };
 
+// Highlight matching text component
+function HighlightText({ text, highlight }: { text: string; highlight: string }) {
+  if (!highlight.trim()) {
+    return <>{text}</>;
+  }
+  const regex = new RegExp(`(${highlight.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+  const parts = text.split(regex);
+  return (
+    <>
+      {parts.map((part, i) =>
+        regex.test(part) ? (
+          <mark key={i} className="bg-yellow-200 text-[#000034] rounded px-0.5">
+            {part}
+          </mark>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+}
+
 export default function EscalationsPage() {
   const [escalations, setEscalations] = useState<Escalation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,6 +87,7 @@ export default function EscalationsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedEscalation, setSelectedEscalation] = useState<Escalation | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const { confirm, DialogComponent } = useConfirmDialog();
 
   const fetchEscalations = useCallback(async () => {
     setLoading(true);
@@ -101,10 +128,39 @@ export default function EscalationsPage() {
         fetchEscalations();
         setShowUpdateModal(false);
         setSelectedEscalation(null);
+        toast.success("Escalation status updated successfully");
+      } else {
+        toast.error("Failed to update escalation status");
       }
     } catch (error) {
       console.error("Failed to update escalation:", error);
+      toast.error("An error occurred while updating the escalation");
     }
+  };
+
+  const handleDelete = (escalation: Escalation) => {
+    confirm({
+      title: "Delete Escalation",
+      description: `Are you sure you want to delete the escalation from "${escalation.userName}"? This action cannot be undone.`,
+      confirmLabel: "Delete",
+      variant: "danger",
+      onConfirm: async () => {
+        try {
+          const response = await fetch(`/api/escalations/${escalation.id}`, {
+            method: "DELETE",
+          });
+          if (response.ok) {
+            fetchEscalations();
+            toast.success("Escalation deleted successfully");
+          } else {
+            toast.error("Failed to delete escalation");
+          }
+        } catch (error) {
+          console.error("Failed to delete escalation:", error);
+          toast.error("An error occurred while deleting the escalation");
+        }
+      },
+    });
   };
 
   const pendingCount = escalations.filter((e) => e.status === "pending").length;
@@ -112,6 +168,7 @@ export default function EscalationsPage() {
 
   return (
     <div className="p-6 lg:p-8 max-w-[1600px] mx-auto">
+      {DialogComponent}
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -219,8 +276,56 @@ export default function EscalationsPage() {
         className="bg-white rounded-xl border border-[#E7EBF0] shadow-sm overflow-hidden"
       >
         {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <RefreshCw className="h-8 w-8 text-[#000080] animate-spin" />
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-[#E7EBF0]">
+                <tr>
+                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">User</th>
+                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">Contact</th>
+                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">Reason</th>
+                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">Requested</th>
+                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">Status</th>
+                  <th className="text-right text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#E7EBF0]">
+                {[...Array(4)].map((_, idx) => (
+                  <tr key={idx}>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="h-10 w-10 rounded-full bg-gray-200" />
+                        <div>
+                          <Skeleton className="h-4 w-24 mb-1 bg-gray-200" />
+                          <Skeleton className="h-3 w-20 bg-gray-100" />
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="h-4 w-4 bg-gray-200" />
+                        <Skeleton className="h-4 w-32 bg-gray-200" />
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-4 w-48 bg-gray-200" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-4 w-20 mb-1 bg-gray-200" />
+                      <Skeleton className="h-3 w-16 bg-gray-100" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-6 w-24 rounded-full bg-gray-200" />
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Skeleton className="h-8 w-8 rounded-lg bg-gray-200" />
+                        <Skeleton className="h-8 w-8 rounded-lg bg-gray-200" />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ) : escalations.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center">
@@ -275,7 +380,9 @@ export default function EscalationsPage() {
                             <User className="h-5 w-5 text-white" />
                           </div>
                           <div>
-                            <p className="font-medium text-[#000034]">{escalation.userName}</p>
+                            <p className="font-medium text-[#000034]">
+                              <HighlightText text={escalation.userName} highlight={searchQuery} />
+                            </p>
                             <p className="text-xs text-gray-500">Session: {escalation.sessionId.slice(0, 8)}...</p>
                           </div>
                         </div>
@@ -287,12 +394,14 @@ export default function EscalationsPage() {
                           ) : (
                             <Mail className="h-4 w-4 text-gray-400" />
                           )}
-                          <span className="text-sm text-[#363535]">{escalation.contactValue}</span>
+                          <span className="text-sm text-[#363535]">
+                            <HighlightText text={escalation.contactValue} highlight={searchQuery} />
+                          </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <p className="text-sm text-[#363535] max-w-xs truncate" title={escalation.reason}>
-                          {escalation.reason}
+                          <HighlightText text={escalation.reason} highlight={searchQuery} />
                         </p>
                       </td>
                       <td className="px-6 py-4">
@@ -322,6 +431,15 @@ export default function EscalationsPage() {
                             title="Update Status"
                           >
                             <MoreHorizontal className="h-4 w-4 text-gray-500" />
+                          </motion.button>
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => handleDelete(escalation)}
+                            className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete Escalation"
+                          >
+                            <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
                           </motion.button>
                         </div>
                       </td>

@@ -109,46 +109,55 @@ export async function processChat(options: ProcessChatOptions): Promise<ChannelR
   const maxTokens = channel === 'sms' ? 320 : 1000;
   let assistantMessage: string;
 
-  // Try OpenAI first, fallback to Claude if it fails (ITN 3.2.3 LLM Backup)
-  try {
-    const completion = await getOpenAI().chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages,
-      temperature: 0.7,
-      max_tokens: maxTokens,
-    });
+  // Try Claude first (primary), fallback to OpenAI if needed (ITN 3.2.3 LLM Support)
+  const claudeClient = getAnthropic();
+  if (claudeClient) {
+    try {
+      const claudeMessages = history.map(m => ({
+        role: m.role as 'user' | 'assistant',
+        content: m.content,
+      }));
+      claudeMessages.push({ role: 'user', content: message });
 
-    assistantMessage = completion.choices[0]?.message?.content || '';
-  } catch (openaiError) {
-    console.error('OpenAI API error, attempting Claude fallback:', openaiError);
+      const claudeResponse = await claudeClient.messages.create({
+        model: 'claude-3-haiku-20240307',
+        max_tokens: maxTokens,
+        system: systemPrompt,
+        messages: claudeMessages,
+      });
 
-    // Try Claude fallback
-    const claudeClient = getAnthropic();
-    if (claudeClient) {
+      assistantMessage = claudeResponse.content[0].type === 'text'
+        ? claudeResponse.content[0].text
+        : '';
+    } catch (claudeError) {
+      console.error('Claude API error, attempting OpenAI fallback:', claudeError);
+
+      // Try OpenAI fallback
       try {
-        const claudeMessages = history.map(m => ({
-          role: m.role as 'user' | 'assistant',
-          content: m.content,
-        }));
-        claudeMessages.push({ role: 'user', content: message });
-
-        const claudeResponse = await claudeClient.messages.create({
-          model: 'claude-3-haiku-20240307',
+        const completion = await getOpenAI().chat.completions.create({
+          model: 'gpt-4o-mini',
+          messages,
+          temperature: 0.7,
           max_tokens: maxTokens,
-          system: systemPrompt,
-          messages: claudeMessages,
         });
-
-        assistantMessage = claudeResponse.content[0].type === 'text'
-          ? claudeResponse.content[0].text
-          : '';
-        console.log('Successfully used Claude fallback');
-      } catch (claudeError) {
-        console.error('Claude fallback also failed:', claudeError);
+        assistantMessage = completion.choices[0]?.message?.content || '';
+      } catch (openaiError) {
+        console.error('OpenAI fallback also failed:', openaiError);
         assistantMessage = '';
       }
-    } else {
-      console.warn('No Claude API key configured for fallback');
+    }
+  } else {
+    // No Claude key, try OpenAI
+    try {
+      const completion = await getOpenAI().chat.completions.create({
+        model: 'gpt-4o-mini',
+        messages,
+        temperature: 0.7,
+        max_tokens: maxTokens,
+      });
+      assistantMessage = completion.choices[0]?.message?.content || '';
+    } catch (openaiError) {
+      console.error('OpenAI API error:', openaiError);
       assistantMessage = '';
     }
   }

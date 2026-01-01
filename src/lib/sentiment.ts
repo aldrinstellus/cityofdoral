@@ -130,10 +130,13 @@ export function analyzeSentiment(text: string): SentimentResult {
   let category: SentimentCategory;
   let score: number;
 
+  // Intensified negative sentiment (e.g., "very frustrated") should be treated more seriously
+  const hasIntensifiedNegative = intensifierCount > 0 && negativeScore > 0;
+
   if (urgentScore >= 2) {
     category = 'urgent';
     score = -0.9;
-  } else if (negativeScore > positiveScore && negativeScore >= 2) {
+  } else if (negativeScore > positiveScore && (negativeScore >= 2 || hasIntensifiedNegative)) {
     category = 'negative';
     score = Math.max(-1, -0.3 * negativeScore);
   } else if (positiveScore > negativeScore && positiveScore >= 1) {
@@ -145,8 +148,9 @@ export function analyzeSentiment(text: string): SentimentResult {
   }
 
   // Determine if escalation is needed
+  // Escalate on urgent, strongly negative (>=3), or intensified negative sentiment
   const shouldEscalate = category === 'urgent' ||
-    (category === 'negative' && negativeScore >= 3);
+    (category === 'negative' && (negativeScore >= 3 || hasIntensifiedNegative));
 
   return {
     category,

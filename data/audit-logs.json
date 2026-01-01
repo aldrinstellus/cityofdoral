@@ -1,0 +1,628 @@
+[
+  {
+    "id": "log-1767309857542",
+    "timestamp": "2026-01-01T23:24:17.542Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "settings",
+    "resourceId": "global",
+    "details": {
+      "appearance": {
+        "primaryColor": "#FF5722",
+        "position": "bottom-left"
+      }
+    }
+  },
+  {
+    "id": "log-1767304334002",
+    "timestamp": "2026-01-01T21:52:14.002Z",
+    "user": "Admin",
+    "action": "CREATE",
+    "resource": "faq",
+    "resourceId": "faq-1767304334000",
+    "details": {
+      "question": "How do I register for youth sports?",
+      "category": "Recreation"
+    }
+  },
+  {
+    "id": "audit-1767302551924-41",
+    "timestamp": "2026-01-01T19:22:31.924Z",
+    "user": "John Manager",
+    "action": "UPDATE",
+    "resource": "Settings",
+    "resourceId": "1041",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.85"
+  },
+  {
+    "id": "audit-1767302551924-43",
+    "timestamp": "2026-01-01T17:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGOUT",
+    "resource": "Escalation",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.9"
+  },
+  {
+    "id": "audit-1767302551924-32",
+    "timestamp": "2026-01-01T16:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "UPDATE",
+    "resource": "Announcement",
+    "resourceId": "1032",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.212"
+  },
+  {
+    "id": "audit-1767302551924-23",
+    "timestamp": "2026-01-01T12:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "VIEW",
+    "resource": "Conversation",
+    "resourceId": "1023",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.91"
+  },
+  {
+    "id": "audit-1767302551924-4",
+    "timestamp": "2026-01-01T11:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "EXPORT",
+    "resource": "Escalation",
+    "resourceId": "1004",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.47"
+  },
+  {
+    "id": "audit-1767302551924-11",
+    "timestamp": "2026-01-01T10:22:31.924Z",
+    "user": "Admin User",
+    "action": "EXPORT",
+    "resource": "Announcement",
+    "resourceId": "1011",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.249"
+  },
+  {
+    "id": "audit-1767302551924-28",
+    "timestamp": "2026-01-01T07:22:31.924Z",
+    "user": "Admin User",
+    "action": "VIEW_PII",
+    "resource": "Conversation",
+    "resourceId": "1028",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.87"
+  },
+  {
+    "id": "audit-1767302551924-29",
+    "timestamp": "2026-01-01T05:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "UPDATE",
+    "resource": "Announcement",
+    "resourceId": "1029",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.83"
+  },
+  {
+    "id": "audit-1767302551924-47",
+    "timestamp": "2026-01-01T04:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "LOGOUT",
+    "resource": "Escalation",
+    "resourceId": "",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.244"
+  },
+  {
+    "id": "audit-1767302551924-14",
+    "timestamp": "2025-12-31T09:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "CREATE",
+    "resource": "Announcement",
+    "resourceId": "1014",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.253"
+  },
+  {
+    "id": "audit-1767302551924-22",
+    "timestamp": "2025-12-31T09:22:31.924Z",
+    "user": "John Manager",
+    "action": "UPDATE",
+    "resource": "Escalation",
+    "resourceId": "1022",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.228"
+  },
+  {
+    "id": "audit-1767302551924-5",
+    "timestamp": "2025-12-31T08:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "VIEW_PII",
+    "resource": "Announcement",
+    "resourceId": "1005",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.31"
+  },
+  {
+    "id": "audit-1767302551924-1",
+    "timestamp": "2025-12-30T23:22:31.924Z",
+    "user": "John Manager",
+    "action": "DELETE",
+    "resource": "Announcement",
+    "resourceId": "1001",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.85"
+  },
+  {
+    "id": "audit-1767302551924-48",
+    "timestamp": "2025-12-30T18:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGIN",
+    "resource": "Conversation",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.189"
+  },
+  {
+    "id": "audit-1767302551924-42",
+    "timestamp": "2025-12-30T12:22:31.924Z",
+    "user": "John Manager",
+    "action": "VIEW",
+    "resource": "Escalation",
+    "resourceId": "1042",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.47"
+  },
+  {
+    "id": "audit-1767302551924-31",
+    "timestamp": "2025-12-30T09:22:31.924Z",
+    "user": "John Manager",
+    "action": "LOGOUT",
+    "resource": "Escalation",
+    "resourceId": "",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.207"
+  },
+  {
+    "id": "audit-1767302551924-8",
+    "timestamp": "2025-12-30T08:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "LOGIN",
+    "resource": "Announcement",
+    "resourceId": "",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.223"
+  },
+  {
+    "id": "audit-1767302551924-20",
+    "timestamp": "2025-12-30T08:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGOUT",
+    "resource": "Settings",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.84"
+  },
+  {
+    "id": "audit-1767302551924-40",
+    "timestamp": "2025-12-30T06:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGOUT",
+    "resource": "Settings",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.113"
+  },
+  {
+    "id": "audit-1767302551924-10",
+    "timestamp": "2025-12-30T04:22:31.924Z",
+    "user": "John Manager",
+    "action": "DELETE",
+    "resource": "Settings",
+    "resourceId": "1010",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.101"
+  },
+  {
+    "id": "audit-1767302551924-25",
+    "timestamp": "2025-12-30T01:22:31.924Z",
+    "user": "John Manager",
+    "action": "VIEW",
+    "resource": "Announcement",
+    "resourceId": "1025",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.187"
+  },
+  {
+    "id": "audit-1767302551924-18",
+    "timestamp": "2025-12-29T23:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGOUT",
+    "resource": "Escalation",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.217"
+  },
+  {
+    "id": "audit-1767302551924-7",
+    "timestamp": "2025-12-29T15:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "VIEW_PII",
+    "resource": "Announcement",
+    "resourceId": "1007",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.24"
+  },
+  {
+    "id": "audit-1767302551924-44",
+    "timestamp": "2025-12-29T14:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGIN",
+    "resource": "FAQ",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.16"
+  },
+  {
+    "id": "audit-1767302551924-12",
+    "timestamp": "2025-12-29T06:22:31.924Z",
+    "user": "Admin User",
+    "action": "VIEW",
+    "resource": "Conversation",
+    "resourceId": "1012",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.252"
+  },
+  {
+    "id": "audit-1767302551924-26",
+    "timestamp": "2025-12-29T06:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "VIEW_PII",
+    "resource": "Escalation",
+    "resourceId": "1026",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.254"
+  },
+  {
+    "id": "audit-1767302551924-19",
+    "timestamp": "2025-12-29T04:22:31.924Z",
+    "user": "John Manager",
+    "action": "EXPORT",
+    "resource": "Settings",
+    "resourceId": "1019",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.105"
+  },
+  {
+    "id": "audit-1767302551924-27",
+    "timestamp": "2025-12-29T01:22:31.924Z",
+    "user": "John Manager",
+    "action": "DELETE",
+    "resource": "FAQ",
+    "resourceId": "1027",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.32"
+  },
+  {
+    "id": "audit-1767302551924-45",
+    "timestamp": "2025-12-28T21:22:31.924Z",
+    "user": "Admin User",
+    "action": "CREATE",
+    "resource": "Settings",
+    "resourceId": "1045",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.230"
+  },
+  {
+    "id": "audit-1767302551924-37",
+    "timestamp": "2025-12-28T17:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "EXPORT",
+    "resource": "FAQ",
+    "resourceId": "1037",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.138"
+  },
+  {
+    "id": "audit-1767302551924-36",
+    "timestamp": "2025-12-28T14:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGOUT",
+    "resource": "Conversation",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.16"
+  },
+  {
+    "id": "audit-1767302551924-0",
+    "timestamp": "2025-12-28T07:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "LOGIN",
+    "resource": "FAQ",
+    "resourceId": "",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.86"
+  },
+  {
+    "id": "audit-1767302551924-13",
+    "timestamp": "2025-12-28T07:22:31.924Z",
+    "user": "John Manager",
+    "action": "UPDATE",
+    "resource": "FAQ",
+    "resourceId": "1013",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.235"
+  },
+  {
+    "id": "audit-1767302551924-6",
+    "timestamp": "2025-12-28T03:22:31.924Z",
+    "user": "John Manager",
+    "action": "DELETE",
+    "resource": "Announcement",
+    "resourceId": "1006",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.75"
+  },
+  {
+    "id": "audit-1767302551924-2",
+    "timestamp": "2025-12-28T00:22:31.924Z",
+    "user": "John Manager",
+    "action": "UPDATE",
+    "resource": "Escalation",
+    "resourceId": "1002",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.231"
+  },
+  {
+    "id": "audit-1767302551924-21",
+    "timestamp": "2025-12-28T00:22:31.924Z",
+    "user": "John Manager",
+    "action": "VIEW_PII",
+    "resource": "Announcement",
+    "resourceId": "1021",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.11"
+  },
+  {
+    "id": "audit-1767302551924-24",
+    "timestamp": "2025-12-27T18:22:31.924Z",
+    "user": "John Manager",
+    "action": "UPDATE",
+    "resource": "Conversation",
+    "resourceId": "1024",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.175"
+  },
+  {
+    "id": "audit-1767302551924-39",
+    "timestamp": "2025-12-27T18:22:31.924Z",
+    "user": "Admin User",
+    "action": "CREATE",
+    "resource": "FAQ",
+    "resourceId": "1039",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.200"
+  },
+  {
+    "id": "audit-1767302551924-49",
+    "timestamp": "2025-12-27T12:22:31.924Z",
+    "user": "John Manager",
+    "action": "VIEW",
+    "resource": "Conversation",
+    "resourceId": "1049",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.225"
+  },
+  {
+    "id": "audit-1767302551924-35",
+    "timestamp": "2025-12-27T09:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "EXPORT",
+    "resource": "FAQ",
+    "resourceId": "1035",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.119"
+  },
+  {
+    "id": "audit-1767302551924-46",
+    "timestamp": "2025-12-27T08:22:31.924Z",
+    "user": "John Manager",
+    "action": "DELETE",
+    "resource": "Escalation",
+    "resourceId": "1046",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.120"
+  },
+  {
+    "id": "audit-1767302551924-17",
+    "timestamp": "2025-12-27T01:22:31.924Z",
+    "user": "Admin User",
+    "action": "UPDATE",
+    "resource": "Announcement",
+    "resourceId": "1017",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.67"
+  },
+  {
+    "id": "audit-1767302551924-16",
+    "timestamp": "2025-12-26T22:22:31.924Z",
+    "user": "John Manager",
+    "action": "UPDATE",
+    "resource": "Conversation",
+    "resourceId": "1016",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.187"
+  },
+  {
+    "id": "audit-1767302551924-9",
+    "timestamp": "2025-12-26T18:22:31.924Z",
+    "user": "Admin User",
+    "action": "VIEW",
+    "resource": "Settings",
+    "resourceId": "1009",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.139"
+  },
+  {
+    "id": "audit-1767302551924-38",
+    "timestamp": "2025-12-26T15:22:31.924Z",
+    "user": "Admin User",
+    "action": "VIEW",
+    "resource": "FAQ",
+    "resourceId": "1038",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.181"
+  },
+  {
+    "id": "audit-1767302551924-30",
+    "timestamp": "2025-12-26T05:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGOUT",
+    "resource": "Conversation",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.63"
+  },
+  {
+    "id": "audit-1767302551924-15",
+    "timestamp": "2025-12-26T03:22:31.924Z",
+    "user": "John Manager",
+    "action": "LOGIN",
+    "resource": "Conversation",
+    "resourceId": "",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.46"
+  },
+  {
+    "id": "audit-1767302551924-34",
+    "timestamp": "2025-12-26T00:22:31.924Z",
+    "user": "Admin User",
+    "action": "UPDATE",
+    "resource": "Analytics",
+    "resourceId": "1034",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.167"
+  },
+  {
+    "id": "audit-1767302551924-3",
+    "timestamp": "2025-12-25T23:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "UPDATE",
+    "resource": "Escalation",
+    "resourceId": "1003",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.86"
+  },
+  {
+    "id": "audit-1767302551924-33",
+    "timestamp": "2025-12-25T23:22:31.924Z",
+    "user": "John Manager",
+    "action": "EXPORT",
+    "resource": "Settings",
+    "resourceId": "1033",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.44"
+  }
+]

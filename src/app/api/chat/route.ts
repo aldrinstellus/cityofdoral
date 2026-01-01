@@ -3,6 +3,7 @@ import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { detectLanguage, getSystemPrompt } from '@/lib/i18n';
 import { analyzeSentiment } from '@/lib/sentiment';
+import { getSettings } from '@/lib/data-store';
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -128,6 +129,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { messages, language: requestedLanguage, domain } = body;
 
+    // Load admin settings for LLM and behavior configuration
+    const settings = await getSettings();
+
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json(
         { error: 'Messages array is required' },
@@ -152,8 +156,10 @@ export async function POST(request: NextRequest) {
     // Detect language from user message
     const detectedLanguage = requestedLanguage || detectLanguage(userQuery);
 
-    // Analyze sentiment
-    const sentiment = analyzeSentiment(userQuery);
+    // Analyze sentiment (if enabled in admin settings)
+    const sentiment = settings.chatbot.enableSentimentAnalysis
+      ? analyzeSentiment(userQuery)
+      : { category: 'neutral' as const, score: 0, confidence: 1 };
 
     // Fetch relevant knowledge (with domain filtering for multi-URL support)
     const knowledgeResults = await getKnowledgeContext(userQuery, 5, domain);
@@ -173,20 +179,30 @@ export async function POST(request: NextRequest) {
 
     let assistantMessage: string;
 
-    // Try OpenAI first, fallback to Claude if it fails (ITN 3.2.3 LLM Backup)
-    try {
-      const completion = await getOpenAI().chat.completions.create({
-        model: 'gpt-4o-mini',
-        messages: openaiMessages,
-        temperature: 0.7,
-        max_tokens: 1000,
-      });
+    // Get LLM settings from admin panel
+    const llmSettings = settings.llm;
+    const temperature = llmSettings.temperature;
+    const maxTokens = llmSettings.maxTokens;
 
-      assistantMessage = completion.choices[0]?.message?.content || '';
-    } catch (openaiError) {
-      console.error('OpenAI API error, attempting Claude fallback:', openaiError);
+    // Map model names to API model IDs
+    const getClaudeModel = (model: string): string => {
+      if (model === 'claude-3-opus') return 'claude-3-opus-20240229';
+      if (model === 'claude-3-sonnet') return 'claude-3-sonnet-20240229';
+      return 'claude-3-haiku-20240307'; // default
+    };
 
-      // Try Claude fallback
+    const getOpenAIModel = (model: string): string => {
+      if (model === 'gpt-4o') return 'gpt-4o';
+      return 'gpt-4o-mini'; // default
+    };
+
+    // Determine which LLM to use based on admin settings
+    const useClaude = llmSettings.primaryLLM.startsWith('claude');
+    const useOpenAIFallback = llmSettings.backupLLM.startsWith('gpt') || llmSettings.backupLLM === 'gpt-4o' || llmSettings.backupLLM === 'gpt-4o-mini';
+    const useClaudeFallback = llmSettings.backupLLM.startsWith('claude');
+
+    // Try primary LLM first, then fallback (ITN 3.2.3 LLM Support)
+    if (useClaude) {
       const claudeClient = getAnthropic();
       if (claudeClient) {
         try {
@@ -196,8 +212,8 @@ export async function POST(request: NextRequest) {
           }));
 
           const claudeResponse = await claudeClient.messages.create({
-            model: 'claude-3-haiku-20240307',
-            max_tokens: 1000,
+            model: getClaudeModel(llmSettings.primaryLLM),
+            max_tokens: maxTokens,
             system: systemPrompt,
             messages: claudeMessages,
           });
@@ -205,14 +221,66 @@ export async function POST(request: NextRequest) {
           assistantMessage = claudeResponse.content[0].type === 'text'
             ? claudeResponse.content[0].text
             : '';
-          console.log('Successfully used Claude fallback');
         } catch (claudeError) {
-          console.error('Claude fallback also failed:', claudeError);
+          console.error('Claude API error, attempting fallback:', claudeError);
           assistantMessage = '';
         }
       } else {
-        console.warn('No Claude API key configured for fallback');
         assistantMessage = '';
+      }
+    } else {
+      // OpenAI is primary
+      try {
+        const completion = await getOpenAI().chat.completions.create({
+          model: getOpenAIModel(llmSettings.primaryLLM),
+          messages: openaiMessages,
+          temperature,
+          max_tokens: maxTokens,
+        });
+        assistantMessage = completion.choices[0]?.message?.content || '';
+      } catch (openaiError) {
+        console.error('OpenAI API error, attempting fallback:', openaiError);
+        assistantMessage = '';
+      }
+    }
+
+    // Try fallback if primary failed
+    if (!assistantMessage && llmSettings.backupLLM !== 'none') {
+      if (useOpenAIFallback) {
+        try {
+          const completion = await getOpenAI().chat.completions.create({
+            model: getOpenAIModel(llmSettings.backupLLM),
+            messages: openaiMessages,
+            temperature,
+            max_tokens: maxTokens,
+          });
+          assistantMessage = completion.choices[0]?.message?.content || '';
+        } catch (openaiError) {
+          console.error('OpenAI fallback failed:', openaiError);
+        }
+      } else if (useClaudeFallback) {
+        const claudeClient = getAnthropic();
+        if (claudeClient) {
+          try {
+            const claudeMessages = messages.map((m: ChatMessage) => ({
+              role: m.role as 'user' | 'assistant',
+              content: m.content,
+            }));
+
+            const claudeResponse = await claudeClient.messages.create({
+              model: getClaudeModel(llmSettings.backupLLM),
+              max_tokens: maxTokens,
+              system: systemPrompt,
+              messages: claudeMessages,
+            });
+
+            assistantMessage = claudeResponse.content[0].type === 'text'
+              ? claudeResponse.content[0].text
+              : '';
+          } catch (claudeError) {
+            console.error('Claude fallback failed:', claudeError);
+          }
+        }
       }
     }
 
@@ -230,7 +298,9 @@ export async function POST(request: NextRequest) {
       section: r.section,
     }));
 
-    const escalate = sentiment.category === 'negative' || sentiment.category === 'urgent';
+    // Determine if should escalate based on admin settings
+    const escalate = settings.chatbot.autoEscalateNegative &&
+      (sentiment.category === 'negative' || sentiment.category === 'urgent');
 
     // Log conversation for audit trail (ITN 3.1.3)
     const sessionId = body.sessionId || `session_${Date.now()}`;

@@ -16,17 +16,124 @@
 (function() {
   'use strict';
 
-  // Configuration
+  // Configuration - will be overridden by admin settings
   const CONFIG = {
     apiUrl: 'http://localhost:3000/api/chat',
     feedbackUrl: 'http://localhost:3000/api/feedback',
     logUrl: 'http://localhost:3000/api/log',
+    settingsUrl: 'http://localhost:3000/api/settings',
     defaultLanguage: 'en',
     storageKey: 'doral_chat_history',
     sessionKey: 'doral_chat_session',
     maxMessages: 50,
-    historyExpiry: 24 * 60 * 60 * 1000 // 24 hours in ms
+    historyExpiry: 24 * 60 * 60 * 1000, // 24 hours in ms
+    // Dynamic settings from admin (will be loaded on init)
+    primaryColor: '#1a237e',
+    position: 'bottom-right',
+    showSources: true,
+    showFeedback: true,
+    welcomeMessageEn: null, // Custom welcome message (English)
+    welcomeMessageEs: null, // Custom welcome message (Spanish)
+    sessionTimeout: 30, // minutes
+    settingsLoaded: false
   };
+
+  // Load settings from admin panel
+  async function loadWidgetConfig() {
+    try {
+      const response = await fetch(CONFIG.settingsUrl);
+      if (!response.ok) {
+        console.warn('[DoralChat] Failed to load settings, using defaults');
+        return;
+      }
+      const settings = await response.json();
+
+      // Apply settings to CONFIG
+      if (settings.appearance) {
+        CONFIG.primaryColor = settings.appearance.primaryColor || CONFIG.primaryColor;
+        CONFIG.position = settings.appearance.position || CONFIG.position;
+        CONFIG.showSources = settings.appearance.showSources ?? CONFIG.showSources;
+        CONFIG.showFeedback = settings.appearance.showFeedback ?? CONFIG.showFeedback;
+      }
+
+      if (settings.general) {
+        CONFIG.defaultLanguage = settings.general.defaultLanguage || CONFIG.defaultLanguage;
+        CONFIG.welcomeMessageEn = settings.general.welcomeMessage || null;
+        CONFIG.welcomeMessageEs = settings.general.welcomeMessageEs || null;
+      }
+
+      if (settings.chatbot) {
+        CONFIG.maxMessages = settings.chatbot.maxMessagesPerSession || CONFIG.maxMessages;
+        CONFIG.sessionTimeout = settings.chatbot.sessionTimeout || CONFIG.sessionTimeout;
+        CONFIG.historyExpiry = (settings.chatbot.sessionTimeout || 30) * 60 * 1000;
+      }
+
+      CONFIG.settingsLoaded = true;
+
+      // Apply dynamic styles
+      applyDynamicStyles();
+
+    } catch (error) {
+      console.warn('[DoralChat] Error loading settings:', error);
+    }
+  }
+
+  // Apply dynamic CSS based on admin settings
+  function applyDynamicStyles() {
+    const styleId = 'doral-dynamic-styles';
+    let styleEl = document.getElementById(styleId);
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = styleId;
+      document.head.appendChild(styleEl);
+    }
+
+    // Calculate position values
+    const isLeft = CONFIG.position.includes('left');
+    const isTop = CONFIG.position.includes('top');
+
+    styleEl.textContent = `
+      :root {
+        --doral-primary: ${CONFIG.primaryColor};
+        --doral-primary-dark: ${darkenColor(CONFIG.primaryColor, 30)};
+        --doral-primary-light: ${lightenColor(CONFIG.primaryColor, 30)};
+        --doral-bg-chat-user: ${CONFIG.primaryColor};
+        --doral-focus: ${lightenColor(CONFIG.primaryColor, 15)};
+        --doral-focus-ring: ${CONFIG.primaryColor}66;
+        --doral-hover: ${lightenColor(CONFIG.primaryColor, 50)};
+      }
+
+      .doral-chat-fab {
+        ${isLeft ? 'left: 24px; right: auto;' : 'right: 24px; left: auto;'}
+        ${isTop ? 'top: 24px; bottom: auto;' : 'bottom: 24px; top: auto;'}
+      }
+
+      .doral-chat-panel {
+        ${isLeft ? 'left: 24px; right: auto;' : 'right: 24px; left: auto;'}
+        ${isTop ? 'top: 100px; bottom: auto;' : 'bottom: 100px; top: auto;'}
+      }
+    `;
+  }
+
+  // Helper: Darken a hex color
+  function darkenColor(hex, percent) {
+    const num = parseInt(hex.replace('#', ''), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = Math.max((num >> 16) - amt, 0);
+    const G = Math.max((num >> 8 & 0x00FF) - amt, 0);
+    const B = Math.max((num & 0x0000FF) - amt, 0);
+    return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
+  }
+
+  // Helper: Lighten a hex color
+  function lightenColor(hex, percent) {
+    const num = parseInt(hex.replace('#', ''), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = Math.min((num >> 16) + amt, 255);
+    const G = Math.min((num >> 8 & 0x00FF) + amt, 255);
+    const B = Math.min((num & 0x0000FF) + amt, 255);
+    return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
+  }
 
   // Generate unique IDs
   function generateId(prefix = 'id') {
@@ -357,7 +464,13 @@
 
   // ==================== INITIALIZATION ====================
 
-  function init() {
+  async function init() {
+    // Load admin settings first (async, non-blocking)
+    await loadWidgetConfig();
+
+    // Set default language from config
+    state.language = CONFIG.defaultLanguage;
+
     // Get or create session
     const session = getSession();
     state.sessionId = session.id;
@@ -645,7 +758,14 @@
 
   function addWelcomeMessage() {
     const labels = LABELS[state.language];
-    addMessage('assistant', labels.welcome, {}, false);
+    // Use custom welcome message from admin settings if available
+    let welcomeMessage = labels.welcome;
+    if (state.language === 'en' && CONFIG.welcomeMessageEn) {
+      welcomeMessage = CONFIG.welcomeMessageEn;
+    } else if (state.language === 'es' && CONFIG.welcomeMessageEs) {
+      welcomeMessage = CONFIG.welcomeMessageEs;
+    }
+    addMessage('assistant', welcomeMessage, {}, false);
   }
 
   function addMessage(role, content, data = {}, save = true) {
@@ -718,8 +838,8 @@
         <span class="doral-chat-time">${formatTime(message.timestamp)}</span>
     `;
 
-    // Add sources for assistant messages
-    if (!isUser && message.sources && message.sources.length > 0) {
+    // Add sources for assistant messages (if enabled in admin settings)
+    if (!isUser && message.sources && message.sources.length > 0 && CONFIG.showSources) {
       html += `
         <div class="doral-chat-sources">
           <span class="doral-chat-sources-label">${labels.sources}:</span>
@@ -749,9 +869,9 @@
       `;
     }
 
-    // Add feedback buttons for assistant messages (except welcome)
+    // Add feedback buttons for assistant messages (except welcome, if enabled in admin settings)
     const msgIndex = state.messages.indexOf(message);
-    if (!isUser && msgIndex > 0) {
+    if (!isUser && msgIndex > 0 && CONFIG.showFeedback) {
       const feedbackClass = message.feedback ? `doral-feedback-given` : '';
       html += `
         <div class="doral-chat-feedback ${feedbackClass}">

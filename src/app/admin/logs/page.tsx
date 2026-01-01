@@ -145,13 +145,47 @@ export default function ConversationLogs() {
     return true;
   });
 
-  const handleExport = () => {
+  const handleExportJSON = () => {
     const dataStr = JSON.stringify(filteredConversations, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
     link.download = `conversations-${new Date().toISOString().split("T")[0]}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleExportCSV = () => {
+    // CSV headers
+    const headers = ["ID", "Session ID", "Language", "Sentiment", "Escalated", "Feedback", "Timestamp", "Duration (s)", "Message Count", "First User Message"];
+
+    // Map conversations to CSV rows
+    const rows = filteredConversations.map((conv) => [
+      conv.id,
+      conv.sessionId,
+      conv.language,
+      conv.sentiment,
+      conv.escalated ? "Yes" : "No",
+      conv.feedback || "N/A",
+      new Date(conv.timestamp).toLocaleString(),
+      conv.duration || "N/A",
+      conv.messages.length,
+      // Get first user message, escape quotes
+      conv.messages.find((m) => m.role === "user")?.content.replace(/"/g, '""').slice(0, 200) || "",
+    ]);
+
+    // Convert to CSV string
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `conversations-${new Date().toISOString().split("T")[0]}.csv`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -215,15 +249,26 @@ export default function ConversationLogs() {
           </div>
           <p className="text-[#666666] mt-1 text-[15px]">Audit trail of all chatbot interactions</p>
         </div>
-        <motion.button
-          whileHover={{ scale: 1.02, y: -2 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleExport}
-          className="h-11 px-6 bg-gradient-to-r from-white to-blue-50/50 border border-[#E7EBF0] text-[#363535] text-sm font-medium rounded-xl hover:shadow-lg hover:border-[#000080]/30 transition-all duration-300 flex items-center gap-2 w-fit"
-        >
-          <Download className="h-4 w-4" />
-          Export JSON
-        </motion.button>
+        <div className="flex items-center gap-2">
+          <motion.button
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleExportJSON}
+            className="h-11 px-5 bg-gradient-to-r from-white to-blue-50/50 border border-[#E7EBF0] text-[#363535] text-sm font-medium rounded-xl hover:shadow-lg hover:border-[#000080]/30 transition-all duration-300 flex items-center gap-2"
+          >
+            <Download className="h-4 w-4" />
+            Export JSON
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleExportCSV}
+            className="h-11 px-5 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2"
+          >
+            <Download className="h-4 w-4" />
+            Export CSV
+          </motion.button>
+        </div>
       </motion.div>
 
       {/* Stats */}

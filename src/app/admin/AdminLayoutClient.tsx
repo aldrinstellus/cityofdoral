@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { Toaster } from "sonner";
 import {
   LayoutDashboard,
   FileText,
@@ -19,10 +20,12 @@ import {
   Shield,
   ChevronRight,
   Home,
+  BarChart3,
 } from "lucide-react";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/content", label: "Content", icon: FileText },
   { href: "/admin/logs", label: "Conversations", icon: MessageSquare },
   { href: "/admin/escalations", label: "Escalations", icon: AlertTriangle, badge: true },
@@ -34,6 +37,7 @@ const navItems = [
 // Breadcrumb configuration
 const breadcrumbLabels: Record<string, string> = {
   admin: "Dashboard",
+  analytics: "Analytics",
   content: "Content Management",
   logs: "Conversations",
   escalations: "Escalations",
@@ -377,6 +381,27 @@ export default function AdminLayoutClient({
           {children}
         </motion.div>
       </main>
+
+      {/* Toast Notifications */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "white",
+            border: "1px solid #E7EBF0",
+            borderRadius: "12px",
+            boxShadow: "0 4px 20px -4px rgba(0,0,128,0.15)",
+          },
+          classNames: {
+            success: "border-l-4 border-l-green-500",
+            error: "border-l-4 border-l-red-500",
+            warning: "border-l-4 border-l-amber-500",
+            info: "border-l-4 border-l-blue-500",
+          },
+        }}
+        richColors
+        closeButton
+      />
     </div>
   );
 }

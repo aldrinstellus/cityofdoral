@@ -7749,7 +7749,2263 @@
       "userId": "web_js9yj7z3s",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0",
       "referrer": "https://cityofdoral.com"
+    },
+    {
+      "id": "conv_1767301951150_tokr60kbg",
+      "sessionId": "session_1767301951150",
+      "startTime": "2026-01-01T21:12:31.150Z",
+      "endTime": "2026-01-01T21:12:31.150Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-01T21:12:31.150Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:31.150Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301951774_jz4uegclh",
+      "sessionId": "session_1767301951774",
+      "startTime": "2026-01-01T21:12:31.774Z",
+      "endTime": "2026-01-01T21:12:31.774Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-01T21:12:31.774Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:31.774Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301952368_ukh2x98sm",
+      "sessionId": "session_1767301952368",
+      "startTime": "2026-01-01T21:12:32.368Z",
+      "endTime": "2026-01-01T21:12:32.368Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Where is Doral located?",
+          "timestamp": "2026-01-01T21:12:32.368Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:32.368Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301952961_i2tnj5av6",
+      "sessionId": "session_1767301952961",
+      "startTime": "2026-01-01T21:12:32.961Z",
+      "endTime": "2026-01-01T21:12:32.961Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What events are happening this month?",
+          "timestamp": "2026-01-01T21:12:32.961Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:32.961Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301953546_tzoke40rj",
+      "sessionId": "session_1767301953546",
+      "startTime": "2026-01-01T21:12:33.546Z",
+      "endTime": "2026-01-01T21:12:33.546Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Tell me about parks in Doral",
+          "timestamp": "2026-01-01T21:12:33.546Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:33.546Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301954138_97rn2yptp",
+      "sessionId": "session_1767301954138",
+      "startTime": "2026-01-01T21:12:34.138Z",
+      "endTime": "2026-01-01T21:12:34.138Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Cuales son los horarios del ayuntamiento?",
+          "timestamp": "2026-01-01T21:12:34.138Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Lo siento, no pude procesar su solicitud. Por favor intente de nuevo.",
+          "timestamp": "2026-01-01T21:12:34.138Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301954734_ytfc9js0o",
+      "sessionId": "session_1767301954734",
+      "startTime": "2026-01-01T21:12:34.734Z",
+      "endTime": "2026-01-01T21:12:34.734Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Como solicito un permiso de construccion?",
+          "timestamp": "2026-01-01T21:12:34.734Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Lo siento, no pude procesar su solicitud. Por favor intente de nuevo.",
+          "timestamp": "2026-01-01T21:12:34.734Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301955338_22jy2omnx",
+      "sessionId": "session_1767301955338",
+      "startTime": "2026-01-01T21:12:35.338Z",
+      "endTime": "2026-01-01T21:12:35.338Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Donde estan los parques?",
+          "timestamp": "2026-01-01T21:12:35.338Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Lo siento, no pude procesar su solicitud. Por favor intente de nuevo.",
+          "timestamp": "2026-01-01T21:12:35.338Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301955929_6romnqtb9",
+      "sessionId": "session_1767301955929",
+      "startTime": "2026-01-01T21:12:35.929Z",
+      "endTime": "2026-01-01T21:12:35.929Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Que eventos hay en la ciudad?",
+          "timestamp": "2026-01-01T21:12:35.929Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Lo siento, no pude procesar su solicitud. Por favor intente de nuevo.",
+          "timestamp": "2026-01-01T21:12:35.929Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301956520_nfjgqox8w",
+      "sessionId": "session_1767301956520",
+      "startTime": "2026-01-01T21:12:36.520Z",
+      "endTime": "2026-01-01T21:12:36.520Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I contact the police department?",
+          "timestamp": "2026-01-01T21:12:36.520Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:36.520Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301957104_xvesgwruq",
+      "sessionId": "session_1767301957104",
+      "startTime": "2026-01-01T21:12:37.104Z",
+      "endTime": "2026-01-01T21:12:37.104Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What does the Parks and Recreation department offer?",
+          "timestamp": "2026-01-01T21:12:37.104Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:37.104Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301957685_l8wz1clen",
+      "sessionId": "session_1767301957685",
+      "startTime": "2026-01-01T21:12:37.685Z",
+      "endTime": "2026-01-01T21:12:37.685Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I pay my water bill?",
+          "timestamp": "2026-01-01T21:12:37.685Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:37.685Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301958265_wsdhlofl3",
+      "sessionId": "session_1767301958265",
+      "startTime": "2026-01-01T21:12:38.265Z",
+      "endTime": "2026-01-01T21:12:38.265Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Building code violations",
+          "timestamp": "2026-01-01T21:12:38.265Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:38.265Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301958839_lvxm6sn5q",
+      "sessionId": "session_1767301958839",
+      "startTime": "2026-01-01T21:12:38.839Z",
+      "endTime": "2026-01-01T21:12:38.839Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Business license requirements",
+          "timestamp": "2026-01-01T21:12:38.839Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:38.839Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301959450_ueas4gv6r",
+      "sessionId": "session_1767301959450",
+      "startTime": "2026-01-01T21:12:39.450Z",
+      "endTime": "2026-01-01T21:12:39.450Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I get a permit for a home renovation?",
+          "timestamp": "2026-01-01T21:12:39.450Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:39.450Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301960033_r148ty9e8",
+      "sessionId": "session_1767301960033",
+      "startTime": "2026-01-01T21:12:40.033Z",
+      "endTime": "2026-01-01T21:12:40.033Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What documents do I need for a business license?",
+          "timestamp": "2026-01-01T21:12:40.033Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:40.033Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301960629_u5v90n5el",
+      "sessionId": "session_1767301960629",
+      "startTime": "2026-01-01T21:12:40.629Z",
+      "endTime": "2026-01-01T21:12:40.629Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How can I report a pothole?",
+          "timestamp": "2026-01-01T21:12:40.629Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:40.629Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301961205_gtfcpxr6m",
+      "sessionId": "session_1767301961205",
+      "startTime": "2026-01-01T21:12:41.205Z",
+      "endTime": "2026-01-01T21:12:41.205Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Garbage collection schedule",
+          "timestamp": "2026-01-01T21:12:41.205Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:41.205Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301961794_cfevaxe2u",
+      "sessionId": "session_1767301961794",
+      "startTime": "2026-01-01T21:12:41.794Z",
+      "endTime": "2026-01-01T21:12:41.794Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "This is terrible service, I need to speak to someone NOW!",
+          "timestamp": "2026-01-01T21:12:41.794Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:41.794Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301962386_d6s1burik",
+      "sessionId": "session_1767301962386",
+      "startTime": "2026-01-01T21:12:42.386Z",
+      "endTime": "2026-01-01T21:12:42.386Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "URGENT: My water has been shut off!",
+          "timestamp": "2026-01-01T21:12:42.386Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:42.386Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301962965_pm4gs3kup",
+      "sessionId": "session_1767301962965",
+      "startTime": "2026-01-01T21:12:42.965Z",
+      "endTime": "2026-01-01T21:12:42.965Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I am very frustrated with the permit process",
+          "timestamp": "2026-01-01T21:12:42.965Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:42.965Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301963547_ek6j4akb0",
+      "sessionId": "session_1767301963547",
+      "startTime": "2026-01-01T21:12:43.547Z",
+      "endTime": "2026-01-01T21:12:43.547Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Thank you for your help!",
+          "timestamp": "2026-01-01T21:12:43.547Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:43.547Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "positive",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301964126_cb0gyw6vg",
+      "sessionId": "session_1767301964126",
+      "startTime": "2026-01-01T21:12:44.126Z",
+      "endTime": "2026-01-01T21:12:44.126Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Tell me about the history of Doral",
+          "timestamp": "2026-01-01T21:12:44.126Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:44.126Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301964719_qbeudt4wp",
+      "sessionId": "session_1767301964719",
+      "startTime": "2026-01-01T21:12:44.719Z",
+      "endTime": "2026-01-01T21:12:44.719Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the Best of the Best program?",
+          "timestamp": "2026-01-01T21:12:44.719Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:44.719Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301965307_yox2vjszl",
+      "sessionId": "session_1767301965307",
+      "startTime": "2026-01-01T21:12:45.307Z",
+      "endTime": "2026-01-01T21:12:45.307Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Community assistance programs available",
+          "timestamp": "2026-01-01T21:12:45.307Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:45.307Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301965901_78xzre5u4",
+      "sessionId": "session_1767301965901",
+      "startTime": "2026-01-01T21:12:45.901Z",
+      "endTime": "2026-01-01T21:12:45.901Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Mayor of Doral",
+          "timestamp": "2026-01-01T21:12:45.901Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:45.901Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301966474_9k8747dyn",
+      "sessionId": "session_1767301966474",
+      "startTime": "2026-01-01T21:12:46.474Z",
+      "endTime": "2026-01-01T21:12:46.474Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "a",
+          "timestamp": "2026-01-01T21:12:46.474Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:46.474Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301967047_wb4o9cls6",
+      "sessionId": "session_1767301967047",
+      "startTime": "2026-01-01T21:12:47.047Z",
+      "endTime": "2026-01-01T21:12:47.047Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "asdfghjkl random gibberish xyz123",
+          "timestamp": "2026-01-01T21:12:47.047Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:47.047Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301967626_5mu8yhjtz",
+      "sessionId": "session_1767301967626",
+      "startTime": "2026-01-01T21:12:47.626Z",
+      "endTime": "2026-01-01T21:12:47.626Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the meaning of life?",
+          "timestamp": "2026-01-01T21:12:47.626Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:47.626Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301968205_63tymuqmd",
+      "sessionId": "session_1767301968205",
+      "startTime": "2026-01-01T21:12:48.205Z",
+      "endTime": "2026-01-01T21:12:48.205Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Police non-emergency number",
+          "timestamp": "2026-01-01T21:12:48.205Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:48.205Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301968791_xpe5f3tg1",
+      "sessionId": "session_1767301968791",
+      "startTime": "2026-01-01T21:12:48.791Z",
+      "endTime": "2026-01-01T21:12:48.791Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Report a crime",
+          "timestamp": "2026-01-01T21:12:48.791Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:12:48.791Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767301991897_k30x126go",
+      "sessionId": "session_1767301991897",
+      "startTime": "2026-01-01T21:13:11.897Z",
+      "endTime": "2026-01-01T21:13:11.897Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "hello",
+          "timestamp": "2026-01-01T21:13:11.897Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-01T21:13:11.897Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304812713_j9j6qeybr",
+      "sessionId": "session_1767304812713",
+      "startTime": "2026-01-01T22:00:12.713Z",
+      "endTime": "2026-01-01T22:00:12.713Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-01T22:00:12.713Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City Hall for the City of Doral is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number for City Hall is (305) 593-6725, but I do not have specific information about the regular business hours. I would recommend contacting City Hall directly to inquire about their current operating hours.",
+          "timestamp": "2026-01-01T22:00:12.713Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304816368_qqg25t3vi",
+      "sessionId": "session_1767304816368",
+      "startTime": "2026-01-01T22:00:16.368Z",
+      "endTime": "2026-01-01T22:00:16.368Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-01T22:00:16.368Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in the City of Doral, here are the steps:\n\n1. Gather the required documents and forms:\n- Completed permit application\n- Site plans showing the entire property, dimensions, existing and proposed buildings, parking, etc.\n- Building plans including floor plans, elevations, and landscape plans\n- Boundary survey, no older than 1 year\n- Any required additional documents like traffic studies, covenant restrictions, etc.\n\n2. Submit the permit application and documents:\n- You can submit the application and plans electronically through the Citizen Self-Service (CSS) portal on the city website.\n- If submitting in person, bring 6 sets of plans and the completed application to the Building Department at City Hall.\n\n3. Pay the permit fees:\n- Permit fees are based on the scope of work. You can use the fee calculator on the city website to estimate the costs.\n- Fees can be paid online through CSS or in person at the Building Department.\n\n4. Wait for permit review and approval:\n- City staff will review the plans and application. You may receive comments that need to be addressed.\n- Once approved, you will receive the permit, which must be displayed on the job site.\n\n5. Schedule inspections:\n- You must schedule required inspections throughout the construction process. This can be done through CSS or by calling the Building Department.\n\nFor more detailed information and contacts, I recommend reviewing the \"Solicitud y formularios de revisión de desarrollo\" and \"Vídeos y guías tutoriales\" sections on the city website.",
+          "timestamp": "2026-01-01T22:00:16.368Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304818303_5wc53hifk",
+      "sessionId": "session_1767304818303",
+      "startTime": "2026-01-01T22:00:18.303Z",
+      "endTime": "2026-01-01T22:00:18.303Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Where is Doral located?",
+          "timestamp": "2026-01-01T22:00:18.303Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Doral is located in Miami-Dade County, Florida. The city covers an area of 15 square miles and is situated between the streets 36 and 74 Northwest, and between Northwest 79 Avenue and 117 Avenue.",
+          "timestamp": "2026-01-01T22:00:18.303Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304821275_bzo4c4cbl",
+      "sessionId": "session_1767304821275",
+      "startTime": "2026-01-01T22:00:21.275Z",
+      "endTime": "2026-01-01T22:00:21.275Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What events are happening this month?",
+          "timestamp": "2026-01-01T22:00:21.275Z"
+        },
+        {
+          "role": "assistant",
+          "content": "According to the context, here are some of the city events happening this month:\n\nIn February 2025, the scheduled city events include:\n- [Source 2] 002-2025 LTC February City Events - This Letter to Council informs the Mayor and City Councilmembers on the scheduled city events taking place during the month of February.\n\nIn March 2025, the scheduled city events include: \n- [Source 5] 005-2025 LTC March City Events 2025 - This Letter to Council informs the Mayor and City Councilmembers on the scheduled city events taking place during the month of March.\n\nIn June 2025, the scheduled city events include:\n- [Source 5] 006-2025 LTC June City Events 2025 - This Letter to Council informs the Mayor and City Councilmembers on the scheduled city events taking place during the month of June.\n\nI recommend checking the city website or contacting the city for the most up-to-date information on upcoming events.",
+          "timestamp": "2026-01-01T22:00:21.275Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304824356_aikt0s81p",
+      "sessionId": "session_1767304824356",
+      "startTime": "2026-01-01T22:00:24.356Z",
+      "endTime": "2026-01-01T22:00:24.356Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Tell me about parks in Doral",
+          "timestamp": "2026-01-01T22:00:24.356Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are some key details about the parks in Doral:\n\n- The Parks & Recreation Department operates and maintains 11 parks in the city, with a variety of amenities.\n\n- The parks offer features like lighted artificial sports fields, basketball courts, tennis courts, volleyball courts, bike-ways, jogging trails, exercise stations, batting cages, shaded playgrounds, dog-friendly off-leash areas, and covered pavilions/picnic areas available for rentals.\n\n- In 2018, Doral voters approved a $150 million General Obligation Bond to develop new parks and enhance existing ones. Multiple projects have been completed and there is ongoing progress on the remaining bond projects.\n\n- Doral Legacy Park is a popular park that offers a 20'x40', 30'x40', and 40'x40' covered pavilions available to rent for events, parties, and gatherings. Rental rates and availability information is provided on the city website.\n\n- The parks are open 7 days a week, with varying hours depending on the specific park. Contact information for the Parks & Recreation Department is available on the city website if residents have any other questions.\n\nDoes this summary cover the key details you were looking for about parks in Doral? Let me know if you need any clarification or have additional questions.",
+          "timestamp": "2026-01-01T22:00:24.356Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304826520_b2sca5q39",
+      "sessionId": "session_1767304826520",
+      "startTime": "2026-01-01T22:00:26.520Z",
+      "endTime": "2026-01-01T22:00:26.520Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Cuales son los horarios del ayuntamiento?",
+          "timestamp": "2026-01-01T22:00:26.520Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Según la información proporcionada, el horario de atención del City Hall de la Ciudad de Doral es:\n\n- Lunes a Viernes: 10:00 am - 9:00 pm\n- Sábados: 10:00 am - 5:00 pm\n- Domingos: Cerrado\n\nEl número de teléfono principal del City Hall es (305) 593-6725.",
+          "timestamp": "2026-01-01T22:00:26.520Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304830600_h608phj7w",
+      "sessionId": "session_1767304830600",
+      "startTime": "2026-01-01T22:00:30.600Z",
+      "endTime": "2026-01-01T22:00:30.600Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Como solicito un permiso de construccion?",
+          "timestamp": "2026-01-01T22:00:30.600Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí le explico los pasos para solicitar un permiso de construcción en la Ciudad de Doral:\n\n1. Regístrese en el Portal de Atención al Cliente (CSS) de la ciudad. Esto le permitirá presentar su solicitud en línea.\n\n2. Prepare todos los documentos requeridos en formato PDF, como la Solicitud de Permiso de la Ciudad de Doral, planos firmados digitalmente, documentos del Condado de Miami-Dade, etc.\n\n3. Si es un contratista, asegúrese de estar registrado como contratista en la ciudad. Puede encontrar el formulario de registro en la página web.\n\n4. Complete y firme la Solicitud de Permiso de la Ciudad de Doral. También deberá presentar cualquier otro formulario adicional según el tipo de trabajo.\n\n5. Si es un permiso de propietario-constructor, complete y presente la Declaración Jurada del Propietario-Constructor.\n\n6. Registre el Aviso de Comienzo (NOC) ante la Secretaría de Tribunales del Condado de Miami-Dade, si el valor del trabajo es superior a $2,500 (o $15,000 para HVAC).\n\n7. Envíe todos los documentos a través del Portal de Atención al Cliente de la ciudad. Asegúrese de nombrar apropiadamente cada archivo.\n\n8. Una vez presentada la solicitud, el Departamento de Construcción la revisará y le informará sobre el proceso de revisión y aprobación.\n\nSi tiene alguna pregunta adicional, puede comunicarse con el Departamento de Construcción de la Ciudad de Doral al 305-593-6700.",
+          "timestamp": "2026-01-01T22:00:30.600Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304834377_dvdgyt8jb",
+      "sessionId": "session_1767304834377",
+      "startTime": "2026-01-01T22:00:34.377Z",
+      "endTime": "2026-01-01T22:00:34.377Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Donde estan los parques?",
+          "timestamp": "2026-01-01T22:00:34.377Z"
+        },
+        {
+          "role": "assistant",
+          "content": "De acuerdo a la información proporcionada, la Ciudad de Doral opera y mantiene 11 parques con una gran variedad de servicios e instalaciones:\n\n- Doral Central Park: El parque más grande de la ciudad, con 32 hectáreas, e incluye un campus de bienestar, anfiteatro, áreas de juego, canchas deportivas, etc.\n\n- Downtown Doral Park: Parque pasivo de 1,2 hectáreas junto al Centro de Gobierno, ideal para picnics y caminatas.\n\n- Doral Meadow Park: Parque con campos deportivos para ligas juveniles y de adultos.\n\n- Doral Cultural Arts Center: Centro multiusos con galería de arte, sala multiusos y espacios al aire libre.\n\n- Morgan Levy Park: Cuenta con populares campos de fútbol que han atraído a 60,000 residentes.\n\n- Veterans Park: Parque del vecindario que honra a los veteranos.\n\n- Doral Legacy Park: Futuro parque de más de 18 acres para deportes, artes y naturaleza.\n\n- Doral White Course Park: Parque con putting green y zona de juegos infantiles.\n\n- Trails & Tails Park: Primera instalación de Doral que admite perros sin correa.\n\n- MAU Park: Pequeño parque pasivo de 0,68 acres junto a la universidad.\n\nLa ciudad cuenta con una amplia gama de parques y espacios verdes para que los residentes disfruten de diversas actividades recreativas y culturales.",
+          "timestamp": "2026-01-01T22:00:34.377Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304838028_3k617emsm",
+      "sessionId": "session_1767304838028",
+      "startTime": "2026-01-01T22:00:38.028Z",
+      "endTime": "2026-01-01T22:00:38.028Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Que eventos hay en la ciudad?",
+          "timestamp": "2026-01-01T22:00:38.028Z"
+        },
+        {
+          "role": "assistant",
+          "content": "De acuerdo a la información proporcionada, la Ciudad de Doral ofrece una variedad de eventos y actividades a través de su Departamento de Parques y Recreación:\n\n- Eventos especiales como conciertos, festivales, carreras, caminatas, triatlones, circos, carnavales, espectáculos y exhibiciones. Para realizar un evento especial se requiere obtener un permiso y cumplir con ciertos requisitos.\n\n- Programas y clases para adultos y adolescentes, como actividades de deportes, fitness, artes y cultura.\n\n- Campamentos de temporada para niños de todas las edades.\n\n- Alquiler de parques e instalaciones para eventos privados y celebraciones.\n\n- Eventos comunitarios y familiares que se celebran a lo largo del año, como los listados para el Parque Legacy de Doral:\n    - Zumba\n    - Entrenamiento de VXN\n    - Clases de yoga\n    - Programas de baloncesto, bingo, ajedrez, artes y más.\n\nAsí mismo, el sitio web menciona que el Departamento de Parques y Recreación está siempre organizando nuevos programas y eventos, por lo que se recomienda consultar la página web o suscribirse a la lista de correos para mantenerse informado.",
+          "timestamp": "2026-01-01T22:00:38.028Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304840333_frxrmkulx",
+      "sessionId": "session_1767304840333",
+      "startTime": "2026-01-01T22:00:40.333Z",
+      "endTime": "2026-01-01T22:00:40.333Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I contact the police department?",
+          "timestamp": "2026-01-01T22:00:40.333Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To contact the Doral Police Department, you can:\n\n- Call the non-emergency number at (305) 593-6699. This is for non-emergency situations.\n\n- For emergencies, always call 911.\n\n- You can also visit the Doral Police Department in person at City Hall, located at 8401 NW 53rd Terrace, Doral, FL 33166.\n\nThe Doral Police Department is available 24 hours a day, 7 days a week to assist residents and visitors. For non-emergency situations, the non-emergency number is the best way to reach them.",
+          "timestamp": "2026-01-01T22:00:40.333Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304843114_5ixvp195o",
+      "sessionId": "session_1767304843114",
+      "startTime": "2026-01-01T22:00:43.114Z",
+      "endTime": "2026-01-01T22:00:43.114Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What does the Parks and Recreation department offer?",
+          "timestamp": "2026-01-01T22:00:43.114Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The Parks and Recreation Department of the City of Doral offers a variety of amenities and services:\n\n- 11 parks with features like community centers, lighted artificial sports fields, basketball courts, tennis courts, volleyball courts, bike-ways, jogging trails, exercise stations, batting cages, shaded playgrounds, dog parks, and covered pavilions/picnic areas available for rentals.\n\n- The department's mission is to provide \"World Class Parks and Recreation Facilities, Programs and Events for People of all Ages and Abilities.\"\n\n- They offer a variety of recreation and fitness programs that residents can participate in. The city recently issued an RFP (Request for Proposals) seeking qualified vendors to provide these types of programs.\n\n- The parks host numerous community events and activities throughout the year for residents to enjoy.\n\n- The department is responsible for the operation and maintenance of the city's park facilities and amenities.\n\nOverall, the Parks and Recreation Department aims to provide high-quality parks, programs, and events that enhance the quality of life and recreational opportunities for Doral's residents and visitors.",
+          "timestamp": "2026-01-01T22:00:43.114Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304846102_2e4xyuzhj",
+      "sessionId": "session_1767304846102",
+      "startTime": "2026-01-01T22:00:46.102Z",
+      "endTime": "2026-01-01T22:00:46.102Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I pay my water bill?",
+          "timestamp": "2026-01-01T22:00:46.102Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the options for paying your water bill with the City of Doral:\n\n- Online: You can pay your water bill online through the city's website. There is a link to the \"Pay Water Bill\" section where you can make a payment securely.\n\n- By Phone: You can call the main City Hall number at (305) 593-6725 and select the option to pay your water bill over the phone.\n\n- In Person: You can visit City Hall located at 8401 NW 53rd Terrace, Doral, FL 33166 and make your payment at the Finance Department counter.\n\n- By Mail: You can mail your payment to City of Doral, 8401 NW 53rd Terrace, Doral, FL 33166. Be sure to include your account number on the payment.\n\nThe city accepts various payment methods including credit/debit cards, electronic checks, and cash/check payments made in person. I'd recommend checking the city's website or calling City Hall if you have any other questions about paying your water bill.",
+          "timestamp": "2026-01-01T22:00:46.102Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304849065_7vuxflef9",
+      "sessionId": "session_1767304849065",
+      "startTime": "2026-01-01T22:00:49.065Z",
+      "endTime": "2026-01-01T22:00:49.065Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Building code violations",
+          "timestamp": "2026-01-01T22:00:49.065Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Okay, here is some information about building code violations in the City of Doral:\n\n- The City of Doral has a Code Compliance Department that enforces the city's codes and ordinances, including building codes.\n\n- If a resident or business is found to be in violation of the building code, the Code Compliance Department can issue a civil violation notice. This typically results in a fine that must be paid.\n\n- Some common building code violations include:\n- Performing construction or renovations without the proper permits\n- Failing to maintain a property in good condition\n- Violating zoning regulations for residential or commercial properties\n\n- To report a potential building code violation, residents can contact the Code Compliance Department at (305) 593-6699. They have a complaint process to investigate alleged violations.\n\n- The city also has a \"Keep Doral Beautiful\" campaign that recognizes businesses that have made significant improvements to their properties. This helps promote code compliance.\n\n- For more details on building codes, violations, and the enforcement process, I'd recommend checking the city's Code of Ordinances or contacting the Code Compliance Department directly.\n\nLet me know if you need any other information about building code violations and enforcement in Doral.",
+          "timestamp": "2026-01-01T22:00:49.065Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304851879_ulmfpwwo1",
+      "sessionId": "session_1767304851879",
+      "startTime": "2026-01-01T22:00:51.879Z",
+      "endTime": "2026-01-01T22:00:51.879Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Business license requirements",
+          "timestamp": "2026-01-01T22:00:51.879Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Okay, here are the key business license requirements for operating a business in the City of Doral:\n\nTo operate a business within the City of Doral, you will need:\n\n1. A Business Tax Receipt (BTR) issued by the Licensing Division of the City of Doral. The BTR needs to be renewed annually on October 1.\n\n2. A Certificate of Use (Zoning Use Permit). This is a one-time permit required for the business location.\n\nIf the business already obtained a Certificate of Use from Miami-Dade County and is still operating at the same address, they do not need to get a new one from the City of Doral. However, the BTR is still required from the City.\n\nThe City also has a \"Home Based Business Ordinance\" that requires a special license to operate a business out of a residential home. This allows for an office use, but not for visiting customers or storing merchandise.\n\nI'd recommend contacting the City of Doral Licensing Division at (305) 593-6725 if you have any other specific questions about the business license requirements.",
+          "timestamp": "2026-01-01T22:00:51.879Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304854609_nc45v2sux",
+      "sessionId": "session_1767304854609",
+      "startTime": "2026-01-01T22:00:54.609Z",
+      "endTime": "2026-01-01T22:00:54.609Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I get a permit for a home renovation?",
+          "timestamp": "2026-01-01T22:00:54.609Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To get a permit for a home renovation in Doral, you'll need to follow these steps:\n\n1. Gather the required documents. This includes plans, drawings, and a completed permit application. The \"Requisitos de presentación del plan de desarrollo del sitio\" document outlines the specific requirements.\n\n2. Submit the permit application and documents. You can do this online through the Building Department Self-Service Portal on the City of Doral website. \n\n3. Pay the applicable permit fees. The permit fees are outlined in the \"Tarifas\" document on the website.\n\n4. Once the permit is approved, you can begin the renovation work. \n\n5. Schedule any required inspections during the construction process by contacting the Building Department.\n\n6. After the work is completed, request a final inspection to close out the permit.\n\nThe process is designed to ensure renovations are done safely and in compliance with local building codes. Let me know if you need any clarification or have additional questions!",
+          "timestamp": "2026-01-01T22:00:54.609Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304857239_ecz4fbp3u",
+      "sessionId": "session_1767304857239",
+      "startTime": "2026-01-01T22:00:57.239Z",
+      "endTime": "2026-01-01T22:00:57.239Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What documents do I need for a business license?",
+          "timestamp": "2026-01-01T22:00:57.239Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To obtain a business license in the City of Doral, you will need the following documents:\n\n1. DERM (Department of Environmental Resource Management) approval - This confirms your business use is approved for the requested location.\n\n2. Fire Inspection approval - You must obtain a fire inspection report and approval before submitting your business license application. \n\n3. Corporate documents from the State of Florida - This includes your Articles of Incorporation or other registration documents.\n\n4. Any other relevant state or local licenses/permits required for your specific type of business.\n\nOnce you have obtained these required approvals and documents, you can create an account on the Citizen Self-Service Portal and apply for your City of Doral Business Tax Receipt (BTR) online. The licensing division will provide you with the necessary steps to complete the application process.\n\nLet me know if you have any other questions! The key is to make sure you have the DERM and Fire Inspection approvals secured before applying for your City of Doral business license.",
+          "timestamp": "2026-01-01T22:00:57.239Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304860283_1dlqy6o4w",
+      "sessionId": "session_1767304860283",
+      "startTime": "2026-01-01T22:01:00.283Z",
+      "endTime": "2026-01-01T22:01:00.283Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How can I report a pothole?",
+          "timestamp": "2026-01-01T22:01:00.283Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the steps to report a pothole in the City of Doral:\n\nYou can report a pothole through the Doral 311 system. This allows you to submit a detailed request with the specific location. You can access Doral 311 in the following ways:\n\n- Online: Visit the city's website and use the \"Report a Concern\" form\n- Phone: Call 311 or (305) 593-6680\n- Email: Send an email to codecompliance@cityofdoral.com\n- In-person: Visit the Code Compliance Department on the 2nd floor of the Doral Government Center\n\nWhen reporting the pothole, be sure to provide the exact address or location, along with any other details that could help the city identify and address the issue. The Code Compliance Department will then forward the request to the appropriate department for repair.\n\nThe City of Doral aims to respond to pothole reports in a timely manner to maintain the safety and quality of the roads. Let me know if you have any other questions!",
+          "timestamp": "2026-01-01T22:01:00.283Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304862408_y7usxkgx8",
+      "sessionId": "session_1767304862408",
+      "startTime": "2026-01-01T22:01:02.408Z",
+      "endTime": "2026-01-01T22:01:02.408Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Garbage collection schedule",
+          "timestamp": "2026-01-01T22:01:02.408Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key details about the garbage collection schedule in the City of Doral:\n\n- Garbage containers must not be placed at the curb for pickup before 12:00 pm on the day prior to pickup.\n- Garbage containers must be removed before 11:59 pm on the day of pickup.\n- The city has specific rules about when and where garbage containers can be placed for collection.\n\nFor more detailed information on the garbage collection schedule and rules, I recommend contacting the city's Public Works Department at (305) 593-6723. They can provide the full schedule and any other specifics you may need.",
+          "timestamp": "2026-01-01T22:01:02.408Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304864772_5mdfh5i4n",
+      "sessionId": "session_1767304864772",
+      "startTime": "2026-01-01T22:01:04.772Z",
+      "endTime": "2026-01-01T22:01:04.772Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "This is terrible service, I need to speak to someone NOW!",
+          "timestamp": "2026-01-01T22:01:04.772Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize for the frustration you are experiencing. As the City of Doral Virtual Assistant, I'm here to help provide information to the best of my abilities. However, I understand there may be times when speaking to a live representative would be more helpful. \n\nPlease feel free to provide me with more details about your situation and I will do my best to assist you or direct you to the appropriate department that can better address your needs. My goal is to provide you with a positive experience, so if I am unable to resolve your issue, I will be happy to connect you with a human representative who can further assist you.\n\nHow can I help you today? What specific information or assistance do you need?",
+          "timestamp": "2026-01-01T22:01:04.772Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304868166_qyyty1ogn",
+      "sessionId": "session_1767304868166",
+      "startTime": "2026-01-01T22:01:08.166Z",
+      "endTime": "2026-01-01T22:01:08.166Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "URGENT: My water has been shut off!",
+          "timestamp": "2026-01-01T22:01:08.166Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I'm so sorry to hear that your water has been shut off. That must be very frustrating and inconvenient. Let me do my best to assist you.\n\nFirst, I would recommend contacting the Doral Water and Sewer Department as soon as possible. Their phone number is (305) 593-6750. They should be able to help you troubleshoot the issue and get your water service restored quickly.\n\nIn the meantime, here are a few suggestions that may help:\n\n- Contact your neighbors to see if their water is also shut off. This could indicate a larger issue affecting the neighborhood.\n\n- Check if there are any scheduled water shutoffs or maintenance work happening in your area that could be causing the disruption.\n\n- If it's just your home, check your water meter and main shut-off valve to see if you can identify the source of the problem.\n\n- Consider filling up some buckets or containers with water from a neighbor or other source so you have water available for essential needs.\n\nPlease let me know if you have any other questions. I'm happy to provide any other assistance I can or connect you with a human representative from the city who can further assist you. Resolving a water service disruption is a top priority, so don't hesitate to reach out for help.",
+          "timestamp": "2026-01-01T22:01:08.166Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304870549_5eo5xx2uh",
+      "sessionId": "session_1767304870549",
+      "startTime": "2026-01-01T22:01:10.549Z",
+      "endTime": "2026-01-01T22:01:10.549Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I am very frustrated with the permit process",
+          "timestamp": "2026-01-01T22:01:10.549Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I understand your frustration with the permit process. Navigating the requirements and steps can be challenging. A few things that may help:\n\n- Review the detailed permit submittal guidelines and tutorials on the city website. This can clarify the necessary documents and process.\n\n- Consider hiring a licensed contractor to handle the permit application. They are familiar with the requirements and can often get permits approved more efficiently.\n\n- If you have specific questions or issues, I recommend contacting the Building Department directly. The staff there can provide guidance and help resolve any problems you're encountering.\n\nThe city wants to make the permit process as smooth as possible. Please don't hesitate to reach out to the Building Department for assistance. They are there to help residents and businesses successfully complete their projects.",
+          "timestamp": "2026-01-01T22:01:10.549Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304872338_s79kqwrzb",
+      "sessionId": "session_1767304872338",
+      "startTime": "2026-01-01T22:01:12.338Z",
+      "endTime": "2026-01-01T22:01:12.338Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Thank you for your help!",
+          "timestamp": "2026-01-01T22:01:12.338Z"
+        },
+        {
+          "role": "assistant",
+          "content": "You're very welcome! I'm glad I could provide helpful information about the City of Doral. Please don't hesitate to reach out if you have any other questions. I'm here to assist residents, visitors, and business owners like yourself with information about city services, events, permits, parks, and more. Have a great rest of your day!",
+          "timestamp": "2026-01-01T22:01:12.338Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "positive",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304876859_3zvu3wmna",
+      "sessionId": "session_1767304876859",
+      "startTime": "2026-01-01T22:01:16.859Z",
+      "endTime": "2026-01-01T22:01:16.859Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Tell me about the history of Doral",
+          "timestamp": "2026-01-01T22:01:16.859Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here is a summary of the history of Doral:\n\nIn the late 1950s, real estate pioneers Doris and Alfred Kaskel purchased 2,400 acres of swampland in what is now Doral for around $49,000, with the intention of building a world-class golf course and hotel. In 1962, they opened the Doral Hotel and Country Club, which featured the Blue, Red and Par 3 golf courses. This became the first structure in the Doral area.\n\nIn the early 1980s, Doral started experiencing its first growth when Bill, the Kaskels' grandson, developed Doral Estates, followed by a joint venture with Lennar Homes to build Doral Park. Younger families began moving to the area, but had to travel to purchase even basic necessities, as there were no stores, schools or parks.\n\nFrom 1983-1985, a building moratorium was imposed to protect the well fields. Once lifted, Doral saw tremendous growth. The West Dade Federation of Homeowner Associations was formed in 1989 to address the community's needs and advocate for improvements like a police station instead of a jail, higher development standards, and more lighting, roads and landscaping.\n\nIn 2002, the Governor appointed José \"Pepe\" Cancio Sr. to the County Commission, which helped spur the incorporation of Doral. In January 2003, 85% of voters approved the incorporation of Doral as its own city, with its own local government and services.",
+          "timestamp": "2026-01-01T22:01:16.859Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304879285_97kok4vxy",
+      "sessionId": "session_1767304879285",
+      "startTime": "2026-01-01T22:01:19.285Z",
+      "endTime": "2026-01-01T22:01:19.285Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the Best of the Best program?",
+          "timestamp": "2026-01-01T22:01:19.285Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City of Doral does not appear to have a \"Best of the Best\" program mentioned in the provided context. The information covers various community assistance programs offered by the city, including:\n\n- Community Organization (CBO) Grant Program\n- Façade Improvement Grant Program \n- City of Doral PTSA Grant Program\n- School Supplies Donation Program\n\nThere is no mention of a \"Best of the Best\" program in the context provided. If you need more information about programs and services offered by the City of Doral, I'd recommend checking the city's website or contacting the main City Hall number at (305) 593-6725.",
+          "timestamp": "2026-01-01T22:01:19.285Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304881950_nm2dxigvz",
+      "sessionId": "session_1767304881950",
+      "startTime": "2026-01-01T22:01:21.950Z",
+      "endTime": "2026-01-01T22:01:21.950Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Community assistance programs available",
+          "timestamp": "2026-01-01T22:01:21.950Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City of Doral provides several community assistance programs for businesses, non-profit organizations, homeowners associations, and school PTSAs through its grant programs. Some key information:\n\n- The Economic Development division assists with planning, analysis, implementation, and development of various projects related to revitalization, community development, and redevelopment in the city.\n\n- The city offers grant programs to provide assistance to eligible businesses, non-profits, HOAs, and school PTSAs. \n\n- Businesses interested in locating or expanding in Doral can access a database of available commercial properties through the city's website.\n\n- The city also hosts grand opening and ribbon-cutting ceremonies to help new businesses celebrate their launch and connect with the community.\n\nFor more details on the specific community assistance programs and how to apply, I'd recommend contacting the Economic Development division at economic.development@cityofdoral.com or (305) 593-6725. They can provide the most up-to-date information on the available resources.",
+          "timestamp": "2026-01-01T22:01:21.950Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304885002_i61kwc8pq",
+      "sessionId": "session_1767304885002",
+      "startTime": "2026-01-01T22:01:25.002Z",
+      "endTime": "2026-01-01T22:01:25.002Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Mayor of Doral",
+          "timestamp": "2026-01-01T22:01:25.002Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key details about the Mayor of Doral:\n\nChristi Fraga is the current Mayor of Doral, Florida. She was first elected as Mayor in 2022, becoming the first woman to hold the position. In 2024, she was re-elected with 80% of the vote, the highest percentage in Doral's history.\n\nMayor Fraga has deep roots in the Doral community, having lived there with her Cuban-American family for over 20 years. Prior to becoming Mayor, she served on the Doral City Council for 8 years, including 3 years as Vice Mayor.\n\nAs Mayor, Christi Fraga is committed to smart growth, supporting local businesses, and ensuring Doral remains a safe and opportunity-filled city. She has championed initiatives focused on youth, women, seniors, and improving the quality of life for all Doral residents.\n\nYou can contact Mayor Christi Fraga at City Hall by phone at (305) 593-6725 x3002 or by email at Christi.Fraga@cityofdoral.com.",
+          "timestamp": "2026-01-01T22:01:25.002Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304886737_0ildzsjl2",
+      "sessionId": "session_1767304886737",
+      "startTime": "2026-01-01T22:01:26.737Z",
+      "endTime": "2026-01-01T22:01:26.737Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "a",
+          "timestamp": "2026-01-01T22:01:26.737Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I don't have enough information to provide a meaningful response with just the letter 'a'. Could you please provide more details about what you are looking for? I'd be happy to assist you further once I have a clear understanding of your question or request.",
+          "timestamp": "2026-01-01T22:01:26.737Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304888574_7j3no08r9",
+      "sessionId": "session_1767304888574",
+      "startTime": "2026-01-01T22:01:28.574Z",
+      "endTime": "2026-01-01T22:01:28.574Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "asdfghjkl random gibberish xyz123",
+          "timestamp": "2026-01-01T22:01:28.574Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, but I do not understand the meaning of your message. As the City of Doral Virtual Assistant, I am here to provide helpful information to residents, visitors, and business owners about city services, events, permits, parks, and more. If you have a specific question or request, please let me know and I'll do my best to assist you. Otherwise, I'd be happy to provide general information about the City of Doral. How else can I help you today?",
+          "timestamp": "2026-01-01T22:01:28.574Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304890826_p3h4ten5n",
+      "sessionId": "session_1767304890826",
+      "startTime": "2026-01-01T22:01:30.826Z",
+      "endTime": "2026-01-01T22:01:30.826Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the meaning of life?",
+          "timestamp": "2026-01-01T22:01:30.826Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I don't have a definitive answer to the meaning of life, as that is a profound philosophical question that humans have debated for centuries. Different religions, philosophies, and individuals have offered various perspectives. Ultimately, I believe the meaning of life is something each person has to explore and determine for themselves based on their own experiences, values, and beliefs. My role is to provide helpful information to you, not to make claims about the inherent meaning of human existence. I encourage you to continue your own reflections on this deep and complex question.",
+          "timestamp": "2026-01-01T22:01:30.826Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304892832_g50z0nxrx",
+      "sessionId": "session_1767304892832",
+      "startTime": "2026-01-01T22:01:32.832Z",
+      "endTime": "2026-01-01T22:01:32.832Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Police non-emergency number",
+          "timestamp": "2026-01-01T22:01:32.832Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The Doral Police non-emergency number is (305) 593-6699.\n\nThis number can be used for any non-emergency situations that require police assistance, such as reporting a crime, suspicious activity, or requesting information. For emergencies, you should always call 911.\n\nIf you need any other information about the Doral Police Department, you can visit their website at cityofdoral.com/police or contact City Hall at (305) 593-6725. Let me know if there's anything else I can help with!",
+          "timestamp": "2026-01-01T22:01:32.832Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767304895453_9h5d2jw2r",
+      "sessionId": "session_1767304895453",
+      "startTime": "2026-01-01T22:01:35.453Z",
+      "endTime": "2026-01-01T22:01:35.453Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Report a crime",
+          "timestamp": "2026-01-01T22:01:35.453Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I'm sorry to hear you need to report a crime. Here are the steps to do that with the Doral Police Department:\n\nNon-Emergency Number: (305) 593-6699\nThis number is for non-emergency situations where you need to report a crime or incident that is not an immediate threat. The operators can assist you with filing a report.\n\nFor emergencies where there is a threat to safety or an in-progress crime, always call 911 immediately.\n\nWhen reporting a crime, be prepared to provide as many details as possible, such as:\n- What happened \n- When and where it occurred\n- Description of any suspects or vehicles involved\n- Your contact information in case they need to follow up\n\nThe police department has a dedicated Crime Mapping tool on their website that allows you to view recent crime activity in your area. This can also be a helpful resource.\n\nPlease let me know if you have any other questions! I'm here to assist you in getting the help you need.",
+          "timestamp": "2026-01-01T22:01:35.453Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305473524_m5clh1ehy",
+      "sessionId": "session_1767305473524",
+      "startTime": "2026-01-01T22:11:13.524Z",
+      "endTime": "2026-01-01T22:11:13.524Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-01T22:11:13.524Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City Hall of Doral is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number for City Hall is (305) 593-6725, but I do not have specific information about the hours of operation. The best way to get the current City Hall hours would be to check the city website at cityofdoral.com or call the main number.",
+          "timestamp": "2026-01-01T22:11:13.524Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305476913_i3ulbfl52",
+      "sessionId": "session_1767305476913",
+      "startTime": "2026-01-01T22:11:16.913Z",
+      "endTime": "2026-01-01T22:11:16.913Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-01T22:11:16.913Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key steps to apply for a building permit in the City of Doral:\n\n1. Gather the required application materials, including a completed permit application, site plans, building plans, surveys, and any other relevant documents. The \"Solicitud y formularios de revisión de desarrollo\" page has a detailed checklist of what's needed.\n\n2. Submit the completed application packet to the City of Doral Permit Center. This can be done in person at City Hall (8401 NW 53rd Terrace) or electronically through the Citizen Self-Service (CSS) online portal.\n\n3. Pay the applicable permit fees. The \"Informe de utilización de la tarifa del permiso\" page has information on the permit fee schedule.\n\n4. Once the application is submitted, the plans will be reviewed by the appropriate City departments. You may need to address any comments or revisions requested.\n\n5. After the permit is approved, you can schedule the necessary inspections throughout the construction process.\n\n6. When all work is complete, you can request a final inspection and obtain the Certificate of Occupancy or Completion.\n\nFor more detailed guidance, I recommend reviewing the instructional videos and guides on the \"Videos y guías tutoriales\" page of the City of Doral website. You can also contact the Permit Center at (305) 593-6700 if you have any other questions.",
+          "timestamp": "2026-01-01T22:11:16.913Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305478554_74kcnx7v0",
+      "sessionId": "session_1767305478554",
+      "startTime": "2026-01-01T22:11:18.554Z",
+      "endTime": "2026-01-01T22:11:18.554Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Where is Doral located?",
+          "timestamp": "2026-01-01T22:11:18.554Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Doral is located in Miami-Dade County, Florida. It is a city that covers approximately 15 square miles and is situated between the Everglades and the Miami International Airport.",
+          "timestamp": "2026-01-01T22:11:18.554Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305481211_2sr6cv6h2",
+      "sessionId": "session_1767305481211",
+      "startTime": "2026-01-01T22:11:21.211Z",
+      "endTime": "2026-01-01T22:11:21.211Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What events are happening this month?",
+          "timestamp": "2026-01-01T22:11:21.211Z"
+        },
+        {
+          "role": "assistant",
+          "content": "According to the information provided, here are the upcoming city events for this month:\n\nFor February 2025:\n- LTC 002-2025 lists the scheduled city events for February 2025, including:\n- [list out the specific events mentioned in LTC 002-2025]\n\nFor March 2025: \n- LTC 005-2025 lists the scheduled city events for March 2025, including:\n- [list out the specific events mentioned in LTC 005-2025]\n\nIf you need any additional details on these events, I recommend contacting the City of Doral at (305) 593-6725 or visiting their website at www.cityofdoral.com. Let me know if you have any other questions!",
+          "timestamp": "2026-01-01T22:11:21.211Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305484440_u0f6e3azb",
+      "sessionId": "session_1767305484440",
+      "startTime": "2026-01-01T22:11:24.440Z",
+      "endTime": "2026-01-01T22:11:24.440Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Tell me about parks in Doral",
+          "timestamp": "2026-01-01T22:11:24.440Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are some key details about the parks in Doral:\n\n- The Parks & Recreation Department operates and maintains 11 parks in the city, offering a variety of amenities.\n\n- The parks include features like a community center, lighted artificial sports fields, basketball courts, tennis courts, volleyball courts, bike-ways, jogging trails, exercise stations, batting cages, shaded playgrounds, dog-friendly off-leash areas, and covered pavilions/picnic tables available for rentals.\n\n- In 2018, Doral voters approved a $150 million General Obligation Bond to develop new parks and enhance existing ones. Multiple park bond projects have been completed, with more in progress.\n\n- Doral Legacy Park is one of the city's parks, featuring covered pavilions of different sizes that can be rented for events, parties, and gatherings. The pavilions accommodate between 60-100 people.\n\n- For more details on the parks, their amenities, hours, and rental information, residents can visit the Parks & Recreation section of the city's website or call (305) 341-3601.",
+          "timestamp": "2026-01-01T22:11:24.440Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305486412_8l4ii2adz",
+      "sessionId": "session_1767305486412",
+      "startTime": "2026-01-01T22:11:26.412Z",
+      "endTime": "2026-01-01T22:11:26.412Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Cuales son los horarios del ayuntamiento?",
+          "timestamp": "2026-01-01T22:11:26.412Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Según la información proporcionada, el horario de atención del City Hall de Doral es:\n\n- Lunes a viernes: 10:00 am - 9:00 pm\n- Sábados: 10:00 am - 5:00 pm \n- Domingos: Cerrado\n\nEl número de teléfono principal del City Hall es (305) 593-6725.",
+          "timestamp": "2026-01-01T22:11:26.412Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305490887_ahi2enegr",
+      "sessionId": "session_1767305490887",
+      "startTime": "2026-01-01T22:11:30.887Z",
+      "endTime": "2026-01-01T22:11:30.887Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Como solicito un permiso de construccion?",
+          "timestamp": "2026-01-01T22:11:30.887Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Para solicitar un permiso de construcción en la Ciudad de Doral, debes seguir estos pasos:\n\n1. Regístrate en el Portal de Atención al Cliente de la Ciudad de Doral. Esto te permitirá acceder al sistema para presentar la solicitud.\n\n2. Asegúrate de que todos los documentos necesarios estén en formato PDF y bien organizados. Esto incluye:\n- Formulario de Solicitud de Permiso de la Ciudad de Doral\n- Cualquier otro formulario requerido según el alcance del trabajo\n- Planos firmados digitalmente por un profesional de diseño\n- Aviso de Inicio (NOC) registrado ante la Secretaría de Tribunales del Condado de Miami-Dade (si el valor del proyecto es superior a $2,500)\n- Declaración Jurada del Propietario-Constructor, si aplica\n\n3. Si el proyecto requiere aprobación del Condado de Miami-Dade, debes descargar y completar la Solicitud de Permiso Municipal del Condado y enviarla a través del Portal de Carga de Documentos del Condado.\n\n4. Una vez tengas todos los documentos listos, envíalos a través del Portal de Atención al Cliente de la Ciudad de Doral.\n\nRecuerda nombrar adecuadamente cada archivo según las convenciones de nomenclatura. Si tienes alguna duda, puedes comunicarte con el Departamento de Construcción de la Ciudad de Doral al 305-593-6700 o por correo electrónico.",
+          "timestamp": "2026-01-01T22:11:30.887Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305494553_8lv0fkvvh",
+      "sessionId": "session_1767305494553",
+      "startTime": "2026-01-01T22:11:34.553Z",
+      "endTime": "2026-01-01T22:11:34.553Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Donde estan los parques?",
+          "timestamp": "2026-01-01T22:11:34.553Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Según la información proporcionada en las fuentes, la Ciudad de Doral cuenta con varios parques e instalaciones recreativas:\n\n- Doral Central Park: El parque más grande de la ciudad, con 32 hectáreas. Ofrece una amplia variedad de servicios como un campus de bienestar, un anfiteatro, pabellones para picnics, áreas de juegos infantiles, canchas deportivas, un parque de patinaje y una rampa para kayaks.\n\n- Doral Downtown Park: Parque pasivo de 1,2 hectáreas ubicado junto al Centro de Gobierno, ideal para picnics familiares y paseos. \n\n- Doral Meadow Park: Parque con campos deportivos para ligas juveniles y de adultos.\n\n- Centro de Artes Culturales de Doral: Moderno centro multiusos con galería de arte, sala de usos múltiples, patios y jardines al aire libre.\n\n- Morgan Levy Park: Cuenta con populares campos de fútbol que han atraído a unos 60,000 residentes.\n\n- Parque de los Veteranos, Parque Legacy de Doral, Parque White Course y Parque Trails & Tails, entre otros.\n\nPuedes encontrar más detalles sobre la ubicación, servicios y características de cada parque en la información proporcionada.",
+          "timestamp": "2026-01-01T22:11:34.553Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305497696_ucom9979h",
+      "sessionId": "session_1767305497696",
+      "startTime": "2026-01-01T22:11:37.696Z",
+      "endTime": "2026-01-01T22:11:37.696Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Que eventos hay en la ciudad?",
+          "timestamp": "2026-01-01T22:11:37.696Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Según la información proporcionada, la Ciudad de Doral organiza diversos eventos especiales a lo largo del año, como:\n\n- Conciertos, festivales, carreras, caminatas, triatlones, circos, carnavales, espectáculos y otras actividades o reuniones similares que se celebren en recintos urbanos, al aire libre o en estructuras temporales.\n\nAlgunos ejemplos específicos de eventos que se mencionan son:\n\n- Zumba con Julie Richetelli (13 de enero de 2026)\n- Entrenamiento de VXN con Ballerina Rock Girl (17 de enero de 2026)\n- Miércoles de bienestar: Yoga refrescante (21 de enero de 2026)\n- Zumba (27 de enero de 2026)\n\nEstos eventos se realizan en el Parque Legacy de Doral. \n\nLa ciudad también ofrece una amplia programación de actividades, clases y deportes para todas las edades en sus diversos parques e instalaciones, como el Centro Acuático, el Centro de Artes Culturales y el Centro Comunitario.",
+          "timestamp": "2026-01-01T22:11:37.696Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305500396_nmx865rkj",
+      "sessionId": "session_1767305500396",
+      "startTime": "2026-01-01T22:11:40.396Z",
+      "endTime": "2026-01-01T22:11:40.396Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I contact the police department?",
+          "timestamp": "2026-01-01T22:11:40.396Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To contact the Doral Police Department, you have the following options:\n\nFor non-emergencies, call the non-emergency number at (305) 593-6699. This number can be used to report crimes, request a police report, or make general inquiries.\n\nFor emergencies, always call 911 immediately. The 911 system will dispatch police, fire, or emergency medical services as needed.\n\nThe Doral Police Department is located at the Doral Government Center, 8401 NW 53rd Terrace, Doral, FL 33166. You can visit the police department in person during normal business hours.\n\nThe police department's main phone number is (305) 593-6699. This can be used for non-emergency matters.\n\nFor any police-related questions or concerns, you can also contact the department through these methods. Emergency situations should always be reported by calling 911 right away.",
+          "timestamp": "2026-01-01T22:11:40.396Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305502748_uxzf1hdxf",
+      "sessionId": "session_1767305502748",
+      "startTime": "2026-01-01T22:11:42.748Z",
+      "endTime": "2026-01-01T22:11:42.748Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What does the Parks and Recreation department offer?",
+          "timestamp": "2026-01-01T22:11:42.748Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The Parks & Recreation Department of the City of Doral operates and maintains 11 parks with a variety of amenities, including:\n\n- Community center\n- Lighted artificial sports fields\n- Basketball courts\n- Tennis courts \n- Volleyball courts\n- Bike-ways\n- Jogging trails\n- Exercise stations\n- Batting cages\n- Shaded playgrounds\n- Dog-friendly off-leash areas\n- Covered pavilions and picnic tables available for rentals\n\nThe mission of the Parks & Recreation Department is to provide world-class parks, recreation facilities, programs, and events for people of all ages and abilities.",
+          "timestamp": "2026-01-01T22:11:42.748Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305506545_vow43ds9w",
+      "sessionId": "session_1767305506545",
+      "startTime": "2026-01-01T22:11:46.545Z",
+      "endTime": "2026-01-01T22:11:46.545Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I pay my water bill?",
+          "timestamp": "2026-01-01T22:11:46.545Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the main ways to pay your water bill in the City of Doral:\n\n- Online: You can pay your water bill online through the city's website at www.cityofdoral.com. There is a link to the online payment portal where you can securely make a payment using a credit/debit card or e-check.\n\n- By Phone: You can pay your water bill over the phone by calling the city's main number at (305) 593-6725. Follow the prompts to make a payment.\n\n- In Person: You can pay your water bill in person at City Hall, located at 8401 NW 53rd Terrace, Doral, FL 33166. City Hall is open Monday-Friday, 8am-5pm.\n\n- By Mail: You can mail your payment to the City of Doral, P.O. Box 568069, Miami, FL 33256-8069. Be sure to include your account number on the payment.\n\nLet me know if you need any other information about paying your water bill in Doral.",
+          "timestamp": "2026-01-01T22:11:46.545Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305510199_oxnzlfhvm",
+      "sessionId": "session_1767305510199",
+      "startTime": "2026-01-01T22:11:50.199Z",
+      "endTime": "2026-01-01T22:11:50.199Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Building code violations",
+          "timestamp": "2026-01-01T22:11:50.199Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are some key points about building code violations in the City of Doral:\n\n- The Code Compliance Department is responsible for enforcing the city's building codes and ordinances. They can issue citations for any code violations observed.\n\n- Some common building code violations include illegal construction, unpermitted work, unsafe conditions, and zoning violations. These can result in fines and penalties.\n\n- Residents can report suspected code violations to the Code Compliance Department. However, the city no longer accepts anonymous complaints - the reporter's name and address must be provided.\n\n- The city has specific regulations around home-based businesses, construction/demolition noise, and the placement of signs/flyers. These are outlined in the city's code of ordinances.\n\n- If you receive a code violation, you can pay the associated fine online through the city's website. Unpaid fines may result in liens or further enforcement action.\n\nFor more detailed information on building codes, permits, and the code enforcement process, I'd recommend contacting the Code Compliance Department directly at (305) 593-6699. They can provide personalized guidance based on your specific situation.",
+          "timestamp": "2026-01-01T22:11:50.199Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305513297_r12q7dzq1",
+      "sessionId": "session_1767305513297",
+      "startTime": "2026-01-01T22:11:53.297Z",
+      "endTime": "2026-01-01T22:11:53.297Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Business license requirements",
+          "timestamp": "2026-01-01T22:11:53.297Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key business license requirements for operating a business in the City of Doral:\n\n- You need a Business Tax Receipt (BTR) issued by the Licensing Division of the City of Doral. The BTR is renewed annually on October 1st.\n\n- You also need a Certificate of Use (Zoning Use Permit) from the City of Doral. This is a one-time permit.\n\n- If the business previously obtained a Certificate of Use from Miami-Dade County and is still at the same location, the business does not need to obtain a new Certificate of Use from the City of Doral, but the BTR is still required.\n\n- For home-based businesses, you must first obtain a home-based business license from the City of Doral Licensing Division. This license only allows for an office, not for visiting customers or storing merchandise.\n\nThe City has specific ordinances regulating business operations, signage, construction hours, and more. I'd recommend reviewing the information on the city website or contacting the Licensing Division at (305) 593-6725 if you have any other questions about the business license requirements.",
+          "timestamp": "2026-01-01T22:11:53.297Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305516774_c0dezjsrt",
+      "sessionId": "session_1767305516774",
+      "startTime": "2026-01-01T22:11:56.774Z",
+      "endTime": "2026-01-01T22:11:56.774Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I get a permit for a home renovation?",
+          "timestamp": "2026-01-01T22:11:56.774Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To get a permit for a home renovation in the City of Doral, you'll need to follow these steps:\n\n1. Review the \"Solicitud y formularios de revisión de desarrollo\" (Development Review Application and Forms) section on the city website. This provides information on the required documents and submission process for development permits.\n\n2. Gather the necessary documents, which may include:\n- Completed permit application\n- Site plans showing the proposed changes\n- Building plans and elevations\n- Landscape plans\n- Boundary survey\n- Traffic impact study (if applicable)\n- Homeowner's association approval (if required)\n\n3. Submit your complete permit application online through the Building Department's Self-Service Portal. You can find a link to the portal on the city's website.\n\n4. Pay the applicable permit fees, which are outlined in the \"Tarifas\" (Fees) document on the website.\n\n5. Wait for the permit to be reviewed and approved by the Building Department. The timeline can vary depending on the scope of work.\n\n6. Once the permit is approved, you can begin the approved renovation work. Be sure to post the permit visibly on the property during construction.\n\nIf you have any questions or need assistance during the process, you can contact the Building Department at (305) 593-6700 or visit City Hall at 8401 NW 53rd Terrace.",
+          "timestamp": "2026-01-01T22:11:56.774Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305519554_3ys5dsbvu",
+      "sessionId": "session_1767305519554",
+      "startTime": "2026-01-01T22:11:59.554Z",
+      "endTime": "2026-01-01T22:11:59.554Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What documents do I need for a business license?",
+          "timestamp": "2026-01-01T22:11:59.554Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To obtain a business license in the City of Doral, you will need the following documents:\n\n1. DERM (Department of Environmental Resource Management) approval\n2. Fire Inspection approval\n3. Corporate documents from the State of Florida (e.g. Articles of Incorporation)\n4. Proof of ownership or lease for the business location\n\nThe process is as follows:\n\n1. First, you need to get approval for the business use at the requested location. Contact the Licensing Division at btrlicensing@cityofdoral.com, and they will let you know if you need Planning and Zoning approval.\n\n2. Once you have the necessary approvals, you can obtain the DERM and Fire Inspection approvals. \n\n3. After getting those approvals, you can create an account on the Citizen Self-Service Portal and apply for your business license under the \"Licenses\" section.\n\n4. Make sure to have all the required documents ready when submitting your application online.\n\nLet me know if you need any clarification or have additional questions!",
+          "timestamp": "2026-01-01T22:11:59.554Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305522455_eh3htmq35",
+      "sessionId": "session_1767305522455",
+      "startTime": "2026-01-01T22:12:02.455Z",
+      "endTime": "2026-01-01T22:12:02.455Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How can I report a pothole?",
+          "timestamp": "2026-01-01T22:12:02.455Z"
+        },
+        {
+          "role": "assistant",
+          "content": "There are a few ways you can report a pothole in the City of Doral:\n\n1. Use the Doral 311 service - This allows you to submit a detailed request about the pothole location and issue. You can access Doral 311 online or by calling 311.\n\n2. Contact the Public Works Department directly:\n- Phone: 305-593-6723\n- Email: publicworks@cityofdoral.com\n\n3. Visit the Government Center in person on the 2nd floor and speak to a staff member about the pothole.\n\nThe Public Works Department will send crews to inspect and repair potholes on city-maintained roads. For potholes on county or state roads, they will coordinate with the appropriate agency to get them addressed.\n\nLet me know if you need any other assistance reporting the pothole or have additional questions!",
+          "timestamp": "2026-01-01T22:12:02.455Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305524842_zj5grerad",
+      "sessionId": "session_1767305524842",
+      "startTime": "2026-01-01T22:12:04.842Z",
+      "endTime": "2026-01-01T22:12:04.842Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Garbage collection schedule",
+          "timestamp": "2026-01-01T22:12:04.842Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key details about garbage collection in Doral, Florida:\n\n- Garbage containers should not be placed at the curb for pickup before 12:00 pm the day prior to pickup.\n- Garbage containers must be removed from the curb by 11:59 pm on the day of pickup.\n- The city's noise ordinance must be adhered to for garbage collection.\n\nFor more specific information on your garbage/recycling pickup schedule, I'd recommend contacting the Department of Public Works at (305) 593-6790. They can provide details on your neighborhood's pickup days and any other questions you may have.",
+          "timestamp": "2026-01-01T22:12:04.842Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305527231_782dr3zzm",
+      "sessionId": "session_1767305527231",
+      "startTime": "2026-01-01T22:12:07.231Z",
+      "endTime": "2026-01-01T22:12:07.231Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "This is terrible service, I need to speak to someone NOW!",
+          "timestamp": "2026-01-01T22:12:07.231Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize for the frustration you are experiencing. As the City of Doral Virtual Assistant, I'm here to help, but I understand there may be times when speaking directly to a human representative is necessary. \n\nLet me try to assist you as best I can. What is the nature of your issue? Is there a specific city service or department you need help with? I would be happy to provide the relevant contact information or guide you to the appropriate resources. My goal is to resolve your inquiry as efficiently as possible. \n\nIf I am unable to adequately address your needs, I will be glad to connect you with a human representative from the City of Doral who can further assist you. Please let me know how I can best help you today.",
+          "timestamp": "2026-01-01T22:12:07.231Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305530180_egkgxq59v",
+      "sessionId": "session_1767305530180",
+      "startTime": "2026-01-01T22:12:10.180Z",
+      "endTime": "2026-01-01T22:12:10.180Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "URGENT: My water has been shut off!",
+          "timestamp": "2026-01-01T22:12:10.180Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I'm very sorry to hear that your water has been shut off. That must be very inconvenient and frustrating. Let me try to help you get this resolved as quickly as possible.\n\nFirst, I would recommend contacting the Doral Police Department's non-emergency number at (305) 593-6699. They may be able to provide guidance or connect you with the right city department to get your water restored.\n\nYou can also try contacting the Doral Public Works Department directly at (305) 593-6725. They should be able to look into what happened and walk you through the steps to get your water turned back on.\n\nIf you are unable to reach someone or need additional assistance, I would be happy to connect you with a live representative from the city who can further assist you. Please let me know if that would be helpful, and I will transfer you right away.\n\nThe city wants to make sure all residents have access to essential services like water, so they will work quickly to get this resolved for you. Please don't hesitate to reach out if you need any other help.",
+          "timestamp": "2026-01-01T22:12:10.180Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305533055_cs8ltimz3",
+      "sessionId": "session_1767305533055",
+      "startTime": "2026-01-01T22:12:13.055Z",
+      "endTime": "2026-01-01T22:12:13.055Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I am very frustrated with the permit process",
+          "timestamp": "2026-01-01T22:12:13.055Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I understand your frustration with the permit process. Obtaining permits can certainly be a complex and time-consuming task. However, I'm here to help guide you through it as best I can. \n\nThe City of Doral is committed to assisting residents and businesses with their permitting needs. Could you please provide more details about the specific issues you're facing? That will help me better understand your situation and provide more tailored guidance.\n\nSome common challenges with the permit process include:\n- Difficulty navigating the requirements and paperwork\n- Long review times \n- Issues with rejected or denied permits\n- Trouble scheduling inspections\n\nPlease let me know the specifics, and I'll do my best to offer suggestions or direct you to the appropriate resources to help resolve your permitting concerns. My goal is to ensure you have a smooth and successful experience. How can I assist you further?",
+          "timestamp": "2026-01-01T22:12:13.055Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "negative",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305534967_hd9zx7sl1",
+      "sessionId": "session_1767305534967",
+      "startTime": "2026-01-01T22:12:14.967Z",
+      "endTime": "2026-01-01T22:12:14.967Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Thank you for your help!",
+          "timestamp": "2026-01-01T22:12:14.967Z"
+        },
+        {
+          "role": "assistant",
+          "content": "You're welcome! I'm happy I could provide the information you were looking for. Please let me know if there's anything else I can assist you with regarding city services, events, permits, parks, or other topics related to the City of Doral. I'm here to help in any way I can.",
+          "timestamp": "2026-01-01T22:12:14.967Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "positive",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305539512_77o3dpier",
+      "sessionId": "session_1767305539512",
+      "startTime": "2026-01-01T22:12:19.512Z",
+      "endTime": "2026-01-01T22:12:19.512Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Tell me about the history of Doral",
+          "timestamp": "2026-01-01T22:12:19.512Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here is a summary of the history of Doral, Florida:\n\nIn the late 1950s, real estate pioneers Doris and Alfred Kaskel purchased 2,400 acres of swampland in what is now Doral for around $49,000. Their intention was to build a world-class golf course and hotel. In 1962, the Kaskels' dream came true when they opened the Doral Hotel and Country Club, featuring the Blue, Red and Par 3 golf courses. They named it \"Doral,\" a combination of their first names.\n\nThe Doral Hotel and Country Club became a popular destination, and in its second year, the Kaskels hosted the first Doral Open Invitational, Florida's major PGA event. Over the years, the golf resort has changed ownership but remains internationally known, especially for its iconic Blue Monster golf course.\n\nIn the early 1980s, Doral started to see its first real growth when Doris and Alfred's grandson, Bill, developed Doral Estates, followed by a joint venture with Lennar Homes to build Doral Park. These new communities were named after the original Doral Hotel. As younger families moved in, the area lacked basic amenities like stores, schools and parks.\n\nFrom 1983-1985, a county-imposed building moratorium aimed to protect the well fields, but once lifted, Doral experienced tremendous growth. The West Dade Federation of Homeowner Associations was formed in 1989 to advocate for the community's interests, leading to the construction of a police station instead of a jail and the implementation of higher development standards.\n\nIn 2002, the Governor appointed José \"Pepe\" Cancio, Sr. to the County Commission, which helped spur the incorporation of Doral as its own city. In January 2003, 85% of Doral voters approved incorporation, and the city officially became the City of Doral.",
+          "timestamp": "2026-01-01T22:12:19.512Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305541672_dx0wbtd2l",
+      "sessionId": "session_1767305541672",
+      "startTime": "2026-01-01T22:12:21.672Z",
+      "endTime": "2026-01-01T22:12:21.672Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the Best of the Best program?",
+          "timestamp": "2026-01-01T22:12:21.672Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I did not find any information about a \"Best of the Best\" program in the provided context. The context covers various community assistance programs offered by the City of Doral, such as the Community Based Organization (CBO) Grant Program, the Façade Improvement Grant Program, the City of Doral PTSA Grant Program, and the School Supplies Donation Program, but does not mention a \"Best of the Best\" program.",
+          "timestamp": "2026-01-01T22:12:21.672Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305545456_ogngrjghg",
+      "sessionId": "session_1767305545456",
+      "startTime": "2026-01-01T22:12:25.456Z",
+      "endTime": "2026-01-01T22:12:25.456Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Community assistance programs available",
+          "timestamp": "2026-01-01T22:12:25.456Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City of Doral provides several community assistance programs and grant opportunities:\n\nGrants for Businesses, Non-Profits, HOAs, and School PTSAs\nThe Economic Development division offers grant programs to provide assistance to businesses, non-profit organizations, homeowners associations, and school PTSAs in the city.\n\nComposting Training Program\nThe city has partnered with the University of Florida to launch a new Composting Training Program for residents.\n\nKeep Doral Beautiful Award\nThe Code Compliance Department gives a monthly \"Keep Doral Beautiful Award\" to recognize businesses that have significantly improved their property.\n\nFor more information on these and other community assistance programs, I'd recommend contacting the Economic Development division at (305) 593-6725 or economic.development@cityofdoral.com.",
+          "timestamp": "2026-01-01T22:12:25.456Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305548972_5bq0809u8",
+      "sessionId": "session_1767305548972",
+      "startTime": "2026-01-01T22:12:28.972Z",
+      "endTime": "2026-01-01T22:12:28.972Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Mayor of Doral",
+          "timestamp": "2026-01-01T22:12:28.972Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key details about the Mayor of Doral:\n\nThe Mayor of Doral is Christi Fraga. She was first elected as Mayor in 2022, becoming the first woman to hold the position. In November 2024, she was re-elected with 80% of the vote, the highest percentage in Doral's history.\n\nSome key information about Mayor Christi Fraga:\n\n- She has deep roots in the Doral community, having lived there with her Cuban-American family for over 20 years. \n- Prior to becoming Mayor, she served on the Doral City Council for 8 years, including a stint as Vice Mayor.\n- She is passionate about empowering youth, women, and seniors in Doral. She established the Youth Advisory Board and led initiatives like the Women's Alliance Group.\n- Her leadership and dedication to education led her to serve on the Miami-Dade School Board, where she advocated for increased resources for special needs students and financial literacy.\n- As Mayor, she is committed to smart growth, supporting local businesses, and ensuring Doral remains a safe and opportunity-filled city.\n\nThe Mayor's contact information is:\n- Telephone: (305) 593-6725 x3002\n- Email: Christi.Fraga@cityofdoral.com",
+          "timestamp": "2026-01-01T22:12:28.972Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305551576_hlfenmqoh",
+      "sessionId": "session_1767305551576",
+      "startTime": "2026-01-01T22:12:31.576Z",
+      "endTime": "2026-01-01T22:12:31.576Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "a",
+          "timestamp": "2026-01-01T22:12:31.576Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Lo siento, no puedo procesar una entrada tan corta. Por favor, proporcióneme una pregunta o solicitud completa para que pueda asistirle adecuadamente.",
+          "timestamp": "2026-01-01T22:12:31.576Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305553665_rgwz2tthy",
+      "sessionId": "session_1767305553665",
+      "startTime": "2026-01-01T22:12:33.665Z",
+      "endTime": "2026-01-01T22:12:33.665Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "asdfghjkl random gibberish xyz123",
+          "timestamp": "2026-01-01T22:12:33.665Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I'm sorry, I don't understand the meaning of that message. As the City of Doral Virtual Assistant, I'm here to provide helpful information to residents, visitors, and business owners about city services, events, permits, parks, and more. If you have a specific question or need assistance with something related to the City of Doral, please let me know and I'll do my best to help.",
+          "timestamp": "2026-01-01T22:12:33.665Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305555989_t02d4ggf6",
+      "sessionId": "session_1767305555989",
+      "startTime": "2026-01-01T22:12:35.989Z",
+      "endTime": "2026-01-01T22:12:35.989Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the meaning of life?",
+          "timestamp": "2026-01-01T22:12:35.989Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I do not have a definitive answer to the meaning of life. That is a deep philosophical question that has been pondered by thinkers throughout human history, and there is no universally agreed upon answer. Different religions, philosophies, and individuals have their own perspectives on the purpose and meaning of human existence. Ultimately, I believe the meaning of life is something each person must explore and determine for themselves based on their own experiences, beliefs, and worldviews. There is no single, objective meaning of life that applies to everyone.",
+          "timestamp": "2026-01-01T22:12:35.989Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305557630_pjnx1torm",
+      "sessionId": "session_1767305557630",
+      "startTime": "2026-01-01T22:12:37.630Z",
+      "endTime": "2026-01-01T22:12:37.630Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Police non-emergency number",
+          "timestamp": "2026-01-01T22:12:37.630Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The non-emergency phone number for the Doral Police Department is (305) 593-6699.\n\nFor emergencies, always call 911.\n\nIf you have any other questions or need further assistance, please let me know. I'm happy to help connect you with the right department or provide any other information I can.",
+          "timestamp": "2026-01-01T22:12:37.630Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767305560881_lq2bttj04",
+      "sessionId": "session_1767305560881",
+      "startTime": "2026-01-01T22:12:40.881Z",
+      "endTime": "2026-01-01T22:12:40.881Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Report a crime",
+          "timestamp": "2026-01-01T22:12:40.881Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I'm sorry to hear that you need to report a crime. Here are the steps to do that:\n\nFor emergencies, please call 911 right away. The Doral Police Department will respond immediately.\n\nFor non-emergency situations, you can call the Doral Police Department's non-emergency number at (305) 593-6699. They have officers available 24/7 to assist you.\n\nYou can also report crimes online through the Doral Police Department's website at www.cityofdoral.com/police. Click on the \"Report a Crime\" link to file an online report.\n\nWhen reporting a crime, be prepared to provide details like:\n- What happened \n- When and where it occurred\n- Any information about the suspect(s)\n- Your contact information in case they need to follow up\n\nThe Doral Police Department is committed to responding quickly and professionally to all reports of crime. Please don't hesitate to contact them if you need assistance. Let me know if you have any other questions!",
+          "timestamp": "2026-01-01T22:12:40.881Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "node",
+      "referrer": "unknown"
     }
   ],
-  "lastUpdated": "2026-01-01T10:28:41.969Z"
+  "lastUpdated": "2026-01-01T22:12:40.887Z"
 }

@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
+import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   Bell,
   Plus,
@@ -19,7 +21,11 @@ import {
   EyeOff,
   Sparkles,
   Zap,
+  Loader2,
+  CheckSquare,
+  Square,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Announcement {
   id: string;
@@ -91,82 +97,246 @@ function AnimatedCounter({ value, duration = 1 }: { value: number; duration?: nu
   return <span>{displayValue}</span>;
 }
 
-// Initialize announcements from localStorage or defaults
-function getInitialAnnouncements(): Announcement[] {
-  if (typeof window === "undefined") return [];
-  const stored = localStorage.getItem("doral-announcements");
-  if (stored) {
-    return JSON.parse(stored);
-  }
-  const defaults: Announcement[] = [
-    {
-      id: "1",
-      title: "City Hall Holiday Hours",
-      message: "City Hall will be closed on January 1st for New Year's Day. Regular hours resume January 2nd.",
-      type: "info",
-      priority: "medium",
-      language: "both",
-      isActive: true,
-      startDate: "2026-01-01",
-      endDate: "2026-01-02",
-      createdAt: new Date().toISOString(),
-      showInChat: true,
-    },
-    {
-      id: "2",
-      title: "System Maintenance Notice",
-      message: "The e-Permitting portal will be undergoing maintenance this weekend. Some services may be temporarily unavailable.",
-      type: "warning",
-      priority: "high",
-      language: "both",
-      isActive: false,
-      startDate: "2026-01-05",
-      endDate: "2026-01-06",
-      createdAt: new Date().toISOString(),
-      showInChat: true,
-    },
-  ];
-  localStorage.setItem("doral-announcements", JSON.stringify(defaults));
-  return defaults;
+// API response type
+interface APIAnnouncement {
+  id: string;
+  title: string;
+  content: string;
+  type: "info" | "warning" | "urgent";
+  startDate: string;
+  endDate: string;
+  targetAudience: "all" | "residents" | "businesses";
+  language: "en" | "es" | "both";
+  isActive: boolean;
+  views: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export default function Announcements() {
-  const [announcements, setAnnouncements] = useState<Announcement[]>(getInitialAnnouncements);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [filterActive, setFilterActive] = useState<"all" | "active" | "inactive">("all");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const { confirm, DialogComponent } = useConfirmDialog();
 
-  const saveAnnouncements = (updated: Announcement[]) => {
-    setAnnouncements(updated);
-    localStorage.setItem("doral-announcements", JSON.stringify(updated));
-  };
+  // Map API type to component type
+  const mapApiToComponent = (api: APIAnnouncement): Announcement => ({
+    id: api.id,
+    title: api.title,
+    message: api.content,
+    type: api.type === "urgent" ? "alert" : api.type,
+    priority: api.type === "urgent" ? "high" : api.type === "warning" ? "medium" : "low",
+    language: api.language || "both",
+    isActive: api.isActive,
+    startDate: api.startDate.split("T")[0],
+    endDate: api.endDate.split("T")[0],
+    createdAt: api.createdAt,
+    showInChat: true,
+  });
 
-  const handleSave = (announcement: Announcement) => {
-    let updated: Announcement[];
-    if (editingAnnouncement) {
-      updated = announcements.map((a) => (a.id === announcement.id ? announcement : a));
-    } else {
-      announcement.id = Date.now().toString();
-      announcement.createdAt = new Date().toISOString();
-      updated = [announcement, ...announcements];
+  // Fetch announcements from API
+  const fetchAnnouncements = useCallback(async () => {
+    try {
+      const response = await fetch("/api/announcements");
+      if (response.ok) {
+        const data = await response.json();
+        const mapped = data.announcements.map(mapApiToComponent);
+        setAnnouncements(mapped);
+      }
+    } catch (error) {
+      console.error("Failed to fetch announcements:", error);
+    } finally {
+      setLoading(false);
     }
-    saveAnnouncements(updated);
-    setEditingAnnouncement(null);
-    setShowAddForm(false);
+  }, []);
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, [fetchAnnouncements]);
+
+  const handleSave = async (announcement: Announcement) => {
+    setSaving(true);
+    try {
+      const apiData = {
+        id: announcement.id,
+        title: announcement.title,
+        content: announcement.message,
+        type: announcement.type === "alert" ? "urgent" : announcement.type === "success" ? "info" : announcement.type,
+        startDate: announcement.startDate,
+        endDate: announcement.endDate,
+        targetAudience: "all",
+        language: announcement.language,
+        isActive: announcement.isActive,
+      };
+
+      if (editingAnnouncement) {
+        const response = await fetch("/api/announcements", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(apiData),
+        });
+        if (response.ok) {
+          await fetchAnnouncements();
+          toast.success("Announcement updated successfully");
+        } else {
+          toast.error("Failed to update announcement");
+        }
+      } else {
+        const response = await fetch("/api/announcements", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(apiData),
+        });
+        if (response.ok) {
+          await fetchAnnouncements();
+          toast.success("Announcement created successfully");
+        } else {
+          toast.error("Failed to create announcement");
+        }
+      }
+      setEditingAnnouncement(null);
+      setShowAddForm(false);
+    } catch (error) {
+      console.error("Failed to save announcement:", error);
+      toast.error("An error occurred while saving the announcement");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this announcement?")) {
-      const updated = announcements.filter((a) => a.id !== id);
-      saveAnnouncements(updated);
+    const announcement = announcements.find((a) => a.id === id);
+    confirm({
+      title: "Delete Announcement",
+      description: `Are you sure you want to delete "${announcement?.title?.slice(0, 50)}..."? This action cannot be undone.`,
+      confirmLabel: "Delete",
+      variant: "danger",
+      onConfirm: async () => {
+        try {
+          const response = await fetch(`/api/announcements?id=${id}`, {
+            method: "DELETE",
+          });
+          if (response.ok) {
+            await fetchAnnouncements();
+            toast.success("Announcement deleted successfully");
+          } else {
+            toast.error("Failed to delete announcement");
+          }
+        } catch (error) {
+          console.error("Failed to delete announcement:", error);
+          toast.error("An error occurred while deleting the announcement");
+        }
+      },
+    });
+  };
+
+  const handleToggleActive = async (id: string) => {
+    const announcement = announcements.find((a) => a.id === id);
+    if (!announcement) return;
+
+    try {
+      const response = await fetch("/api/announcements", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id,
+          isActive: !announcement.isActive,
+        }),
+      });
+      if (response.ok) {
+        await fetchAnnouncements();
+        toast.success(`Announcement ${announcement.isActive ? "deactivated" : "activated"} successfully`);
+      } else {
+        toast.error("Failed to update announcement status");
+      }
+    } catch (error) {
+      console.error("Failed to toggle announcement:", error);
+      toast.error("An error occurred while updating the announcement");
     }
   };
 
-  const handleToggleActive = (id: string) => {
-    const updated = announcements.map((a) =>
-      a.id === id ? { ...a, isActive: !a.isActive } : a
-    );
-    saveAnnouncements(updated);
+  const handleLanguageChange = async (id: string, newLang: "en" | "es" | "both") => {
+    try {
+      const response = await fetch("/api/announcements", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, language: newLang }),
+      });
+      if (response.ok) {
+        await fetchAnnouncements();
+        toast.success(`Language updated to ${newLang === "both" ? "EN/ES" : newLang.toUpperCase()}`);
+      } else {
+        toast.error("Failed to update language");
+      }
+    } catch (error) {
+      console.error("Failed to update language:", error);
+      toast.error("An error occurred while updating language");
+    }
+  };
+
+  // Bulk selection handlers
+  const handleSelectAll = () => {
+    if (selectedIds.size === filteredAnnouncements.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filteredAnnouncements.map((a) => a.id)));
+    }
+  };
+
+  const handleSelectOne = (id: string) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const handleBulkDelete = () => {
+    confirm({
+      title: "Delete Selected Announcements",
+      description: `Are you sure you want to delete ${selectedIds.size} announcement(s)? This action cannot be undone.`,
+      confirmLabel: "Delete All",
+      variant: "danger",
+      onConfirm: async () => {
+        try {
+          const deletePromises = Array.from(selectedIds).map((id) =>
+            fetch(`/api/announcements?id=${id}`, { method: "DELETE" })
+          );
+          await Promise.all(deletePromises);
+          await fetchAnnouncements();
+          setSelectedIds(new Set());
+          toast.success(`${selectedIds.size} announcement(s) deleted successfully`);
+        } catch (error) {
+          console.error("Failed to bulk delete:", error);
+          toast.error("An error occurred while deleting announcements");
+        }
+      },
+    });
+  };
+
+  const handleBulkToggleActive = async (activate: boolean) => {
+    try {
+      const updatePromises = Array.from(selectedIds).map((id) =>
+        fetch("/api/announcements", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, isActive: activate }),
+        })
+      );
+      await Promise.all(updatePromises);
+      await fetchAnnouncements();
+      setSelectedIds(new Set());
+      toast.success(`${selectedIds.size} announcement(s) ${activate ? "activated" : "deactivated"}`);
+    } catch (error) {
+      console.error("Failed to bulk update:", error);
+      toast.error("An error occurred while updating announcements");
+    }
   };
 
   const filteredAnnouncements = announcements.filter((a) => {
@@ -180,6 +350,7 @@ export default function Announcements() {
 
   return (
     <div className="p-6 lg:p-8 max-w-[1600px] mx-auto">
+      {DialogComponent}
       {/* Page Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -293,14 +464,107 @@ export default function Announcements() {
                 setEditingAnnouncement(null);
                 setShowAddForm(false);
               }}
+              saving={saving}
             />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Bulk Action Bar */}
+      <AnimatePresence>
+        {selectedIds.size > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto" }}
+            exit={{ opacity: 0, y: -10, height: 0 }}
+            className="mb-4 overflow-hidden"
+          >
+            <div className="flex items-center justify-between bg-gradient-to-r from-[#000080]/5 to-[#1D4F91]/5 border border-[#000080]/20 rounded-xl px-4 py-3">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleSelectAll}
+                  className="flex items-center gap-2 text-sm text-[#000080] hover:text-[#1D4F91] transition-colors"
+                >
+                  {selectedIds.size === filteredAnnouncements.length ? (
+                    <CheckSquare className="h-4 w-4" />
+                  ) : (
+                    <Square className="h-4 w-4" />
+                  )}
+                  {selectedIds.size === filteredAnnouncements.length ? "Deselect All" : "Select All"}
+                </button>
+                <span className="text-sm text-[#666666]">
+                  {selectedIds.size} of {filteredAnnouncements.length} selected
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => handleBulkToggleActive(true)}
+                  className="h-9 px-4 bg-[#006A52] text-white text-sm font-medium rounded-lg hover:bg-[#005a45] transition-colors flex items-center gap-2"
+                >
+                  <Eye className="h-4 w-4" />
+                  Activate
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => handleBulkToggleActive(false)}
+                  className="h-9 px-4 bg-gray-500 text-white text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2"
+                >
+                  <EyeOff className="h-4 w-4" />
+                  Deactivate
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleBulkDelete}
+                  className="h-9 px-4 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete
+                </motion.button>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Announcements List */}
       <div className="space-y-4">
-        {filteredAnnouncements.length === 0 ? (
+        {loading ? (
+          <>
+            {[...Array(3)].map((_, idx) => (
+              <div
+                key={idx}
+                className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] p-5 shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)]"
+              >
+                <div className="flex items-start gap-4">
+                  <Skeleton className="h-5 w-5 mt-1 bg-gray-200" />
+                  <Skeleton className="h-14 w-14 rounded-xl bg-gray-200" />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Skeleton className="h-5 w-48 bg-gray-200" />
+                      <Skeleton className="h-5 w-20 rounded-lg bg-gray-100" />
+                    </div>
+                    <Skeleton className="h-4 w-full mb-2 bg-gray-100" />
+                    <Skeleton className="h-4 w-3/4 mb-3 bg-gray-100" />
+                    <div className="flex items-center gap-3">
+                      <Skeleton className="h-6 w-32 rounded-lg bg-gray-100" />
+                      <Skeleton className="h-6 w-28 rounded-lg bg-gray-100" />
+                      <Skeleton className="h-6 w-16 rounded-lg bg-gray-100" />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Skeleton className="h-9 w-9 rounded-lg bg-gray-200" />
+                    <Skeleton className="h-9 w-9 rounded-lg bg-gray-200" />
+                    <Skeleton className="h-9 w-9 rounded-lg bg-gray-200" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </>
+        ) : filteredAnnouncements.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -328,6 +592,27 @@ export default function Announcements() {
                 } ${announcement.priority === "high" && announcement.isActive ? `shadow-lg ${config.glow}` : ""}`}
               >
                 <div className="flex items-start gap-4">
+                  {/* Selection Checkbox */}
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelectOne(announcement.id);
+                    }}
+                    className={`flex-shrink-0 mt-1 ${
+                      selectedIds.has(announcement.id)
+                        ? "text-[#000080]"
+                        : "text-gray-300 hover:text-gray-400"
+                    } transition-colors`}
+                  >
+                    {selectedIds.has(announcement.id) ? (
+                      <CheckSquare className="h-5 w-5" />
+                    ) : (
+                      <Square className="h-5 w-5" />
+                    )}
+                  </motion.button>
+
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     className={`p-3.5 rounded-xl ${config.bg} ${config.border} border flex-shrink-0 shadow-sm`}
@@ -370,10 +655,7 @@ export default function Announcements() {
                           onClick={(e) => {
                             e.stopPropagation();
                             const newLang = announcement.language === "en" ? "both" : announcement.language === "both" ? "es" : "en";
-                            const updated = announcements.map((a) =>
-                              a.id === announcement.id ? { ...a, language: newLang as "en" | "es" | "both" } : a
-                            );
-                            saveAnnouncements(updated);
+                            handleLanguageChange(announcement.id, newLang);
                           }}
                           className={`px-2 py-0.5 text-xs font-medium rounded transition-all ${
                             announcement.language === "en" || announcement.language === "both"
@@ -388,10 +670,7 @@ export default function Announcements() {
                           onClick={(e) => {
                             e.stopPropagation();
                             const newLang = announcement.language === "es" ? "both" : announcement.language === "both" ? "en" : "es";
-                            const updated = announcements.map((a) =>
-                              a.id === announcement.id ? { ...a, language: newLang as "en" | "es" | "both" } : a
-                            );
-                            saveAnnouncements(updated);
+                            handleLanguageChange(announcement.id, newLang);
                           }}
                           className={`px-2 py-0.5 text-xs font-medium rounded transition-all ${
                             announcement.language === "es" || announcement.language === "both"
@@ -462,10 +741,12 @@ function AnnouncementForm({
   announcement,
   onSave,
   onCancel,
+  saving = false,
 }: {
   announcement?: Announcement;
   onSave: (announcement: Announcement) => void;
   onCancel: () => void;
+  saving?: boolean;
 }) {
   const { today, nextWeek } = useMemo(() => {
     const now = new Date();
@@ -637,13 +918,14 @@ function AnnouncementForm({
           Cancel
         </motion.button>
         <motion.button
-          whileHover={{ scale: 1.02, y: -2 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: saving ? 1 : 1.02, y: saving ? 0 : -2 }}
+          whileTap={{ scale: saving ? 1 : 0.98 }}
           type="submit"
-          className="h-11 px-6 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2"
+          disabled={saving}
+          className="h-11 px-6 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          <Save className="h-4 w-4" />
-          Save Announcement
+          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+          {saving ? "Saving..." : "Save Announcement"}
         </motion.button>
       </div>
     </form>

@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
+import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   Settings,
   Save,
@@ -16,6 +18,11 @@ import {
   Bot,
   Clock,
   Sparkles,
+  Loader2,
+  Link2,
+  FileText,
+  History,
+  User,
 } from "lucide-react";
 
 interface ChatbotSettings {
@@ -49,6 +56,25 @@ interface ChatbotSettings {
   alertEmail: string;
   alertOnEscalation: boolean;
   alertOnNegativeFeedback: boolean;
+
+  // CRM Integration (ITN 3.1.2 - Optional)
+  crmEnabled: boolean;
+  crmProvider: "salesforce" | "dynamics" | "none";
+
+  // SharePoint Integration (ITN 3.2.5 - Optional)
+  sharePointEnabled: boolean;
+}
+
+interface SettingsHistoryLog {
+  id: string;
+  timestamp: string;
+  user: string;
+  action: string;
+  resource: string;
+  resourceId: string;
+  details: string;
+  adminUser: string;
+  adminEmail: string;
 }
 
 const defaultSettings: ChatbotSettings = {
@@ -73,38 +99,232 @@ const defaultSettings: ChatbotSettings = {
   alertEmail: "",
   alertOnEscalation: true,
   alertOnNegativeFeedback: true,
+  crmEnabled: false,
+  crmProvider: "none",
+  sharePointEnabled: false,
 };
 
-function getInitialSettings(): ChatbotSettings {
-  if (typeof window === "undefined") return defaultSettings;
-  const stored = localStorage.getItem("doral-chatbot-settings");
-  if (stored) {
-    return { ...defaultSettings, ...JSON.parse(stored) };
-  }
-  return defaultSettings;
-}
-
 export default function SettingsPage() {
-  const [settings, setSettings] = useState<ChatbotSettings>(getInitialSettings);
+  const [settings, setSettings] = useState<ChatbotSettings>(defaultSettings);
+  const [originalSettings, setOriginalSettings] = useState<ChatbotSettings>(defaultSettings);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState<string>("general");
+  const [historyLogs, setHistoryLogs] = useState<SettingsHistoryLog[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+  const { confirm, DialogComponent } = useConfirmDialog();
+
+  // Fetch settings history
+  const fetchHistory = useCallback(async () => {
+    setLoadingHistory(true);
+    try {
+      const response = await fetch("/api/audit-logs?resource=settings&days=30");
+      if (response.ok) {
+        const data = await response.json();
+        setHistoryLogs(data.logs || []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch settings history:", error);
+    } finally {
+      setLoadingHistory(false);
+    }
+  }, []);
+
+  // Fetch history when switching to history section
+  useEffect(() => {
+    if (activeSection === "history") {
+      fetchHistory();
+    }
+  }, [activeSection, fetchHistory]);
+
+  // Check if there are unsaved changes
+  const hasUnsavedChanges = JSON.stringify(settings) !== JSON.stringify(originalSettings);
+
+  // Warn before browser navigation with unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = "";
+        return "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [hasUnsavedChanges]);
+
+  // Fetch settings from API
+  const fetchSettings = useCallback(async () => {
+    try {
+      const response = await fetch("/api/settings");
+      if (response.ok) {
+        const data = await response.json();
+        // Map API settings to component settings - ALL fields
+        const loadedSettings: ChatbotSettings = {
+          // General
+          chatbotName: data.general?.botName || defaultSettings.chatbotName,
+          welcomeMessage: data.general?.welcomeMessage || defaultSettings.welcomeMessage,
+          welcomeMessageEs: data.general?.welcomeMessageEs || defaultSettings.welcomeMessageEs,
+          defaultLanguage: data.general?.defaultLanguage || defaultSettings.defaultLanguage,
+
+          // Behavior (chatbot section in API)
+          enableSentimentAnalysis: data.chatbot?.enableSentimentAnalysis ?? defaultSettings.enableSentimentAnalysis,
+          enableAutoEscalation: data.chatbot?.autoEscalateNegative ?? defaultSettings.enableAutoEscalation,
+          escalationThreshold: data.chatbot?.escalationThreshold ?? defaultSettings.escalationThreshold,
+          maxMessagesPerSession: data.chatbot?.maxMessagesPerSession ?? defaultSettings.maxMessagesPerSession,
+          sessionTimeout: data.chatbot?.sessionTimeout ?? defaultSettings.sessionTimeout,
+
+          // Appearance
+          primaryColor: data.appearance?.primaryColor || defaultSettings.primaryColor,
+          position: data.appearance?.position || defaultSettings.position,
+          showSources: data.appearance?.showSources ?? defaultSettings.showSources,
+          showFeedback: data.appearance?.showFeedback ?? defaultSettings.showFeedback,
+
+          // LLM
+          primaryLLM: data.llm?.primaryLLM === 'gpt-4o-mini' || data.llm?.primaryLLM === 'gpt-4o' ? 'openai' :
+                     (data.llm?.primaryLLM?.startsWith('claude') ? 'claude' : defaultSettings.primaryLLM),
+          backupLLM: data.llm?.backupLLM === 'gpt-4o-mini' || data.llm?.backupLLM === 'gpt-4o' ? 'openai' :
+                    (data.llm?.backupLLM === 'none' ? 'none' :
+                     (data.llm?.backupLLM?.startsWith('claude') ? 'claude' : defaultSettings.backupLLM)),
+          temperature: data.llm?.temperature ?? defaultSettings.temperature,
+          maxTokens: data.llm?.maxTokens ?? defaultSettings.maxTokens,
+
+          // Notifications
+          enableEmailAlerts: data.notifications?.emailAlerts ?? defaultSettings.enableEmailAlerts,
+          alertEmail: data.notifications?.escalationEmail || defaultSettings.alertEmail,
+          alertOnEscalation: data.notifications?.alertOnEscalation ?? defaultSettings.alertOnEscalation,
+          alertOnNegativeFeedback: data.notifications?.alertOnNegativeFeedback ?? defaultSettings.alertOnNegativeFeedback,
+
+          // Integrations
+          crmEnabled: data.integrations?.crmEnabled ?? defaultSettings.crmEnabled,
+          crmProvider: data.integrations?.crmProvider || defaultSettings.crmProvider,
+          sharePointEnabled: data.integrations?.sharePointEnabled ?? defaultSettings.sharePointEnabled,
+        };
+        setSettings(loadedSettings);
+        setOriginalSettings(loadedSettings);
+      }
+    } catch (error) {
+      console.error("Failed to fetch settings:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSettings();
+  }, [fetchSettings]);
 
   const handleSave = async () => {
     setSaving(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    localStorage.setItem("doral-chatbot-settings", JSON.stringify(settings));
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+    try {
+      // Map UI LLM selections to API model names
+      const primaryLLMModel = settings.primaryLLM === 'claude' ? 'claude-3-haiku' : 'gpt-4o-mini';
+      const backupLLMModel = settings.backupLLM === 'claude' ? 'claude-3-haiku' :
+                            (settings.backupLLM === 'openai' ? 'gpt-4o-mini' : 'none');
+
+      const response = await fetch("/api/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          general: {
+            botName: settings.chatbotName,
+            welcomeMessage: settings.welcomeMessage,
+            welcomeMessageEs: settings.welcomeMessageEs,
+            defaultLanguage: settings.defaultLanguage,
+            enableBilingual: true,
+          },
+          chatbot: {
+            maxMessagesPerSession: settings.maxMessagesPerSession,
+            sessionTimeout: settings.sessionTimeout,
+            enableSentimentAnalysis: settings.enableSentimentAnalysis,
+            autoEscalateNegative: settings.enableAutoEscalation,
+            escalationThreshold: settings.escalationThreshold,
+            responseDelay: 500,
+          },
+          appearance: {
+            primaryColor: settings.primaryColor,
+            position: settings.position,
+            showSources: settings.showSources,
+            showFeedback: settings.showFeedback,
+          },
+          llm: {
+            primaryLLM: primaryLLMModel,
+            backupLLM: backupLLMModel,
+            temperature: settings.temperature,
+            maxTokens: settings.maxTokens,
+          },
+          notifications: {
+            emailAlerts: settings.enableEmailAlerts,
+            escalationEmail: settings.alertEmail,
+            dailyDigest: true,
+            alertOnEscalation: settings.alertOnEscalation,
+            alertOnNegativeFeedback: settings.alertOnNegativeFeedback,
+          },
+          integrations: {
+            crmEnabled: settings.crmEnabled,
+            crmProvider: settings.crmProvider,
+            sharePointEnabled: settings.sharePointEnabled,
+          },
+        }),
+      });
+      if (response.ok) {
+        setSaved(true);
+        setOriginalSettings(settings); // Reset original to mark as saved
+        setTimeout(() => setSaved(false), 3000);
+        toast.success("Settings saved successfully");
+      } else {
+        toast.error("Failed to save settings");
+      }
+    } catch (error) {
+      console.error("Failed to save settings:", error);
+      toast.error("An error occurred while saving settings");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleReset = () => {
-    if (confirm("Reset all settings to defaults? This cannot be undone.")) {
-      setSettings(defaultSettings);
-      localStorage.removeItem("doral-chatbot-settings");
-    }
+    confirm({
+      title: "Reset Settings",
+      description: "Reset all settings to their default values? This action cannot be undone.",
+      confirmLabel: "Reset",
+      variant: "warning",
+      onConfirm: async () => {
+        try {
+          const response = await fetch("/api/settings", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "reset" }),
+          });
+          if (response.ok) {
+            setSettings(defaultSettings);
+            setOriginalSettings(defaultSettings);
+            setSaved(true);
+            setTimeout(() => setSaved(false), 3000);
+            toast.success("Settings reset to defaults");
+          } else {
+            toast.error("Failed to reset settings");
+          }
+        } catch (error) {
+          console.error("Failed to reset settings:", error);
+          toast.error("An error occurred while resetting settings");
+        }
+      },
+    });
   };
+
+  if (loading) {
+    return (
+      <div className="p-6 lg:p-8 max-w-[1600px] mx-auto flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-[#000080] mx-auto mb-4" />
+          <p className="text-[#666666]">Loading settings...</p>
+        </div>
+      </div>
+    );
+  }
 
   const sections = [
     { id: "general", label: "General", icon: Settings, gradient: "from-blue-500" },
@@ -112,7 +332,9 @@ export default function SettingsPage() {
     { id: "appearance", label: "Appearance", icon: Palette, gradient: "from-pink-500" },
     { id: "llm", label: "LLM Settings", icon: Database, gradient: "from-orange-500" },
     { id: "notifications", label: "Notifications", icon: Bell, gradient: "from-amber-500" },
+    { id: "integrations", label: "Integrations", icon: Link2, gradient: "from-cyan-500" },
     { id: "security", label: "Security", icon: Shield, gradient: "from-green-500" },
+    { id: "history", label: "History", icon: History, gradient: "from-gray-500" },
   ];
 
   const inputClass = "w-full h-11 px-4 bg-white border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200";
@@ -121,6 +343,7 @@ export default function SettingsPage() {
 
   return (
     <div className="p-6 lg:p-8 max-w-[1600px] mx-auto">
+      {DialogComponent}
       {/* Page Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -149,12 +372,24 @@ export default function SettingsPage() {
             <RefreshCw className="h-4 w-4" />
             Reset
           </motion.button>
+          {hasUnsavedChanges && (
+            <motion.span
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="text-amber-600 text-sm font-medium flex items-center gap-1.5"
+            >
+              <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+              Unsaved changes
+            </motion.span>
+          )}
           <motion.button
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleSave}
             disabled={saving}
-            className="h-11 px-6 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2 disabled:opacity-50"
+            className={`h-11 px-6 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2 disabled:opacity-50 ${
+              hasUnsavedChanges ? "ring-2 ring-amber-400 ring-offset-2" : ""
+            }`}
           >
             {saving ? (
               <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
@@ -608,6 +843,195 @@ export default function SettingsPage() {
               </motion.div>
             )}
 
+            {/* Integrations Settings (CRM & SharePoint) */}
+            {activeSection === "integrations" && (
+              <motion.div
+                key="integrations"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="bg-gradient-to-br from-white via-white to-cyan-50/30 rounded-xl border border-[#E7EBF0] shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] p-6"
+              >
+                <h2 className="text-lg font-semibold text-[#000034] mb-6 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center shadow-lg">
+                    <Link2 className="h-5 w-5 text-white" />
+                  </div>
+                  Integrations (Optional)
+                </h2>
+
+                <div className="space-y-6">
+                  {/* CRM Integration */}
+                  <div className="p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+                    <div className="flex items-center gap-2 text-[#1D4F91] mb-4">
+                      <Database className="h-5 w-5" />
+                      <span className="font-semibold">CRM Integration (ITN 3.1.2)</span>
+                    </div>
+
+                    <AnimatedToggleCard
+                      label="Enable CRM Sync"
+                      description="Sync escalated conversations to your CRM"
+                      checked={settings.crmEnabled}
+                      onChange={(checked) => setSettings({ ...settings, crmEnabled: checked })}
+                    />
+
+                    <AnimatePresence>
+                      {settings.crmEnabled && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-4 space-y-4 overflow-hidden"
+                        >
+                          <div>
+                            <label className={labelClass}>CRM Provider</label>
+                            <select
+                              value={settings.crmProvider}
+                              onChange={(e) =>
+                                setSettings({
+                                  ...settings,
+                                  crmProvider: e.target.value as "salesforce" | "dynamics" | "none",
+                                })
+                              }
+                              className={`${inputClass} cursor-pointer`}
+                            >
+                              <option value="none">Select Provider...</option>
+                              <option value="salesforce">Salesforce</option>
+                              <option value="dynamics">Microsoft Dynamics 365</option>
+                            </select>
+                          </div>
+
+                          {settings.crmProvider === "salesforce" && (
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="p-4 bg-white rounded-lg border border-[#E7EBF0]"
+                            >
+                              <h4 className="font-medium text-sm text-[#000034] mb-2">Salesforce Configuration</h4>
+                              <p className="text-xs text-[#666666] mb-3">
+                                Configure credentials in environment variables:
+                              </p>
+                              <ul className="text-xs text-[#999] space-y-1 font-mono">
+                                <li>SALESFORCE_INSTANCE_URL</li>
+                                <li>SALESFORCE_CLIENT_ID</li>
+                                <li>SALESFORCE_CLIENT_SECRET</li>
+                                <li>SALESFORCE_USERNAME</li>
+                                <li>SALESFORCE_PASSWORD</li>
+                                <li>SALESFORCE_SECURITY_TOKEN</li>
+                              </ul>
+                            </motion.div>
+                          )}
+
+                          {settings.crmProvider === "dynamics" && (
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="p-4 bg-white rounded-lg border border-[#E7EBF0]"
+                            >
+                              <h4 className="font-medium text-sm text-[#000034] mb-2">Dynamics 365 Configuration</h4>
+                              <p className="text-xs text-[#666666] mb-3">
+                                Configure credentials in environment variables:
+                              </p>
+                              <ul className="text-xs text-[#999] space-y-1 font-mono">
+                                <li>DYNAMICS_ORGANIZATION_URL</li>
+                                <li>DYNAMICS_CLIENT_ID</li>
+                                <li>DYNAMICS_CLIENT_SECRET</li>
+                                <li>DYNAMICS_TENANT_ID</li>
+                              </ul>
+                            </motion.div>
+                          )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* SharePoint Integration */}
+                  <div className="p-5 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
+                    <div className="flex items-center gap-2 text-[#006A52] mb-4">
+                      <FileText className="h-5 w-5" />
+                      <span className="font-semibold">SharePoint Integration (ITN 3.2.5)</span>
+                    </div>
+
+                    <AnimatedToggleCard
+                      label="Enable SharePoint Sync"
+                      description="Parse documents from SharePoint for knowledge base"
+                      checked={settings.sharePointEnabled}
+                      onChange={(checked) => setSettings({ ...settings, sharePointEnabled: checked })}
+                    />
+
+                    <AnimatePresence>
+                      {settings.sharePointEnabled && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-4 space-y-4 overflow-hidden"
+                        >
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="p-4 bg-white rounded-lg border border-[#E7EBF0]"
+                          >
+                            <h4 className="font-medium text-sm text-[#000034] mb-2">SharePoint Configuration</h4>
+                            <p className="text-xs text-[#666666] mb-3">
+                              Configure Microsoft Graph credentials in environment variables:
+                            </p>
+                            <ul className="text-xs text-[#999] space-y-1 font-mono">
+                              <li>SHAREPOINT_TENANT_ID</li>
+                              <li>SHAREPOINT_CLIENT_ID</li>
+                              <li>SHAREPOINT_CLIENT_SECRET</li>
+                              <li>SHAREPOINT_SITE_URL</li>
+                              <li>SHAREPOINT_SITE_NAME</li>
+                              <li>SHAREPOINT_LIBRARY_NAME</li>
+                            </ul>
+                          </motion.div>
+
+                          <div className="p-4 bg-white rounded-lg border border-[#E7EBF0]">
+                            <h4 className="font-medium text-sm text-[#000034] mb-2">Supported File Types</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {["PDF", "DOCX", "DOC", "XLSX", "XLS", "PPTX", "TXT", "HTML"].map((type) => (
+                                <span
+                                  key={type}
+                                  className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded"
+                                >
+                                  {type}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* API Endpoints */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="p-5 bg-gradient-to-br from-[#F5F9FD] to-blue-50/50 rounded-xl border border-[#E7EBF0]"
+                  >
+                    <h3 className="font-medium text-[#000034] mb-3 flex items-center gap-2">
+                      <Key className="h-4 w-4 text-[#1D4F91]" />
+                      Integration API Endpoints
+                    </h3>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center gap-2 font-mono text-xs">
+                        <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded">GET/POST</span>
+                        <span className="text-[#666666]">/api/crm</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-mono text-xs">
+                        <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded">GET/POST</span>
+                        <span className="text-[#666666]">/api/sharepoint</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            )}
+
             {/* Security Settings */}
             {activeSection === "security" && (
               <motion.div
@@ -673,6 +1097,105 @@ export default function SettingsPage() {
                     </ul>
                   </motion.div>
                 </div>
+              </motion.div>
+            )}
+
+            {/* History Section */}
+            {activeSection === "history" && (
+              <motion.div
+                key="history"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="bg-gradient-to-br from-white via-white to-gray-50/30 rounded-xl border border-[#E7EBF0] shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] p-6"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-lg font-semibold text-[#000034] flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center shadow-lg">
+                      <History className="h-5 w-5 text-white" />
+                    </div>
+                    Settings Change History
+                  </h2>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={fetchHistory}
+                    className="h-9 px-4 bg-white border border-[#E7EBF0] text-[#363535] text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
+                  >
+                    <RefreshCw className={`h-4 w-4 ${loadingHistory ? "animate-spin" : ""}`} />
+                    Refresh
+                  </motion.button>
+                </div>
+
+                {loadingHistory ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Loader2 className="h-8 w-8 animate-spin text-[#000080]" />
+                  </div>
+                ) : historyLogs.length === 0 ? (
+                  <div className="text-center py-12">
+                    <History className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                    <p className="text-[#666666]">No settings changes recorded yet</p>
+                    <p className="text-sm text-gray-400 mt-1">Changes to settings will appear here</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {historyLogs.slice(0, 20).map((log, idx) => {
+                      const actionColors: Record<string, string> = {
+                        UPDATE: "bg-blue-100 text-blue-700 border-blue-200",
+                        RESET: "bg-amber-100 text-amber-700 border-amber-200",
+                        CREATE: "bg-green-100 text-green-700 border-green-200",
+                        DELETE: "bg-red-100 text-red-700 border-red-200",
+                      };
+                      const color = actionColors[log.action] || "bg-gray-100 text-gray-700 border-gray-200";
+
+                      return (
+                        <motion.div
+                          key={log.id}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.03 }}
+                          className="flex items-start gap-4 p-4 bg-white border border-[#E7EBF0] rounded-xl hover:shadow-sm transition-shadow"
+                        >
+                          <div className="w-10 h-10 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
+                            <User className="h-5 w-5 text-gray-500" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1 flex-wrap">
+                              <span className="font-medium text-[#000034]">{log.adminUser}</span>
+                              <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${color}`}>
+                                {log.action}
+                              </span>
+                              <span className="text-xs text-gray-400">
+                                {log.resourceId !== "global" && log.resourceId}
+                              </span>
+                            </div>
+                            <p className="text-sm text-[#666666] truncate">
+                              {log.details ? (
+                                (() => {
+                                  try {
+                                    const parsed = JSON.parse(log.details);
+                                    if (parsed.action === "reset_to_defaults") return "Reset all settings to defaults";
+                                    const keys = Object.keys(parsed).filter(k => k !== "email");
+                                    if (keys.length > 0) return `Modified: ${keys.join(", ")}`;
+                                    return "Settings modified";
+                                  } catch {
+                                    return log.details;
+                                  }
+                                })()
+                              ) : (
+                                "Settings modified"
+                              )}
+                            </p>
+                            <p className="text-xs text-gray-400 mt-1">
+                              {new Date(log.timestamp).toLocaleString()}
+                            </p>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>

@@ -1,8 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getEscalations, saveEscalations, addAuditLog, Escalation } from "@/lib/data-store";
 
-// Reference the same in-memory storage (in production, use database)
-// This is a simplified version - in real app, use shared state or database
+// GET - Get a single escalation by ID
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const escalations = await getEscalations();
+    const escalation = escalations.find((e) => e.id === id);
 
+    if (!escalation) {
+      return NextResponse.json(
+        { error: "Escalation not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(escalation);
+  } catch (error) {
+    console.error("Error fetching escalation:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch escalation" },
+      { status: 500 }
+    );
+  }
+}
+
+// PATCH - Partial update of an escalation
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -12,27 +38,36 @@ export async function PATCH(
     const body = await request.json();
     const { status, notes, assignedTo } = body;
 
-    // In production, update database
-    // For demo, we log the update
-    console.log(`[ESCALATION UPDATE] ${id}:`, { status, notes, assignedTo });
+    const escalations = await getEscalations();
+    const index = escalations.findIndex((e) => e.id === id);
 
-    const updatedEscalation = {
-      id,
-      status,
-      notes,
-      assignedTo,
-      resolvedAt: status === "resolved" ? new Date().toISOString() : undefined,
-      updatedAt: new Date().toISOString(),
+    if (index === -1) {
+      return NextResponse.json(
+        { error: "Escalation not found" },
+        { status: 404 }
+      );
+    }
+
+    const updatedEscalation: Escalation = {
+      ...escalations[index],
+      status: status ?? escalations[index].status,
+      notes: notes ?? escalations[index].notes,
+      assignedTo: assignedTo ?? escalations[index].assignedTo,
+      resolvedAt: status === "resolved" ? new Date().toISOString() : escalations[index].resolvedAt,
     };
 
-    // Log audit action
-    console.log(`[AUDIT] UPDATE escalation:${id}`, {
+    escalations[index] = updatedEscalation;
+    await saveEscalations(escalations);
+
+    await addAuditLog("Admin", "UPDATE", "escalation", id, {
       newStatus: status,
-      notes: notes?.slice(0, 50)
+      assignedTo,
+      notes: notes?.slice(0, 50),
     });
 
     return NextResponse.json(updatedEscalation);
-  } catch {
+  } catch (error) {
+    console.error("Error updating escalation:", error);
     return NextResponse.json(
       { error: "Failed to update escalation" },
       { status: 500 }
@@ -40,15 +75,38 @@ export async function PATCH(
   }
 }
 
-export async function GET(
+// DELETE - Delete an escalation by ID
+export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
+  try {
+    const { id } = await params;
+    const escalations = await getEscalations();
+    const index = escalations.findIndex((e) => e.id === id);
 
-  // In production, fetch from database
-  return NextResponse.json({
-    id,
-    message: "Escalation details would be fetched from database",
-  });
+    if (index === -1) {
+      return NextResponse.json(
+        { error: "Escalation not found" },
+        { status: 404 }
+      );
+    }
+
+    const deletedEscalation = escalations[index];
+    escalations.splice(index, 1);
+    await saveEscalations(escalations);
+
+    await addAuditLog("Admin", "DELETE", "escalation", id, {
+      userName: deletedEscalation.userName,
+      reason: deletedEscalation.reason,
+    });
+
+    return NextResponse.json({ success: true, deleted: deletedEscalation });
+  } catch (error) {
+    console.error("Error deleting escalation:", error);
+    return NextResponse.json(
+      { error: "Failed to delete escalation" },
+      { status: 500 }
+    );
+  }
 }
