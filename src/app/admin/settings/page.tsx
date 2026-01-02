@@ -166,7 +166,7 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [activeMainTab, setActiveMainTab] = useState<MainSettingsTab>("chatbot");
+  const [activeMainTab, setActiveMainTab] = useState<MainSettingsTab>("profile");
   const [activeSection, setActiveSection] = useState<string>("general");
   const [historyLogs, setHistoryLogs] = useState<SettingsHistoryLog[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);

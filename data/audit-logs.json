@@ -1,5 +1,29 @@
 [
   {
+    "id": "log-1767343536971",
+    "timestamp": "2026-01-02T08:45:36.971Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-1",
+    "details": {
+      "url": "/About",
+      "enabled": true
+    }
+  },
+  {
+    "id": "log-1767343534537",
+    "timestamp": "2026-01-02T08:45:34.537Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-1",
+    "details": {
+      "url": "/About",
+      "enabled": false
+    }
+  },
+  {
     "id": "log-1767325899908",
     "timestamp": "2026-01-02T03:51:39.908Z",
     "user": "Admin",

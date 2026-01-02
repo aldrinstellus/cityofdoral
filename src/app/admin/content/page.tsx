@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { Pagination } from "@/components/ui/pagination";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -35,6 +35,15 @@ import {
   ArrowDown,
   Star,
   AlertCircle,
+  Upload,
+  FileUp,
+  File,
+  FileType,
+  Link,
+  ToggleLeft,
+  ToggleRight,
+  PlusCircle,
+  ChevronDown,
 } from "lucide-react";
 
 // Zod validation schema for FAQ
@@ -70,6 +79,10 @@ function SortIcon({ direction }: { direction: SortDirection }) {
 
 // Highlight matching text component
 function HighlightText({ text, highlight }: { text: string; highlight: string }) {
+  // Safety check for undefined/null text
+  if (!text) {
+    return null;
+  }
   if (!highlight.trim()) {
     return <>{text}</>;
   }
@@ -152,9 +165,76 @@ interface AutoScrapeSettings {
   nextRun: string | null;
 }
 
+interface UploadedDocument {
+  id: string;
+  filename: string;
+  originalName: string;
+  type: "pdf" | "docx" | "txt";
+  size: number;
+  chunks: number;
+  uploadedAt: string;
+}
+
+interface CrawlerURL {
+  id: string;
+  url: string;
+  fullUrl: string;
+  title: string;
+  section: string;
+  enabled: boolean;
+  isCustom: boolean;
+  lastCrawled: string | null;
+  lastStatus: "success" | "error" | "pending" | "never";
+}
+
+interface KnowledgeEntry {
+  id: string;
+  title: string;
+  content: string;
+  section: string;
+  url?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+type TabKey = "knowledge" | "faqs" | "documents" | "crawler";
+type KBSubTab = "scraped" | "custom";
+type KBLanguage = "en" | "es";
+
 export default function ContentManagement() {
-  const [activeTab, setActiveTab] = useState<"knowledge" | "faqs">("knowledge");
+  const [activeTab, setActiveTab] = useState<TabKey>("knowledge");
+  const [kbSubTab, setKbSubTab] = useState<KBSubTab>("scraped");
+  const [kbLanguage, setKbLanguage] = useState<KBLanguage>("en");
   const [knowledgeItems, setKnowledgeItems] = useState<KnowledgeItem[]>([]);
+  // Custom entries state
+  const [customEntries, setCustomEntries] = useState<KnowledgeEntry[]>([]);
+  const [customEntriesLoading, setCustomEntriesLoading] = useState(false);
+  const [showAddEntry, setShowAddEntry] = useState(false);
+  const [editingEntry, setEditingEntry] = useState<KnowledgeEntry | null>(null);
+  const [customSearchTerm, setCustomSearchTerm] = useState("");
+  const [entrySaving, setEntrySaving] = useState(false);
+  const [expandedEntrySection, setExpandedEntrySection] = useState<string | null>(null);
+  const [importing, setImporting] = useState(false);
+  const importFileRef = useRef<HTMLInputElement>(null);
+  // Documents state
+  const [documents, setDocuments] = useState<UploadedDocument[]>([]);
+  const [documentsLoading, setDocumentsLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [selectedDocIds, setSelectedDocIds] = useState<Set<string>>(new Set());
+  const [docSearchTerm, setDocSearchTerm] = useState("");
+  const [isDragging, setIsDragging] = useState(false);
+  // Crawler state
+  const [crawlerUrls, setCrawlerUrls] = useState<CrawlerURL[]>([]);
+  const [crawlerLoading, setCrawlerLoading] = useState(false);
+  const [crawlerSearchTerm, setCrawlerSearchTerm] = useState("");
+  const [crawlerSectionFilter, setCrawlerSectionFilter] = useState("all");
+  const [crawlerStatusFilter, setCrawlerStatusFilter] = useState<"all" | "enabled" | "disabled">("all");
+  const [expandedCrawlerSection, setExpandedCrawlerSection] = useState<string | null>(null);
+  const [showCrawlerSettings, setShowCrawlerSettings] = useState(false);
+  const [newCustomUrl, setNewCustomUrl] = useState("");
+  const [newCustomSection, setNewCustomSection] = useState("Other");
+  const [crawlerLanguage, setCrawlerLanguage] = useState<KBLanguage>("en");
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
   const [faqsLoading, setFaqsLoading] = useState(true);
@@ -190,22 +270,26 @@ export default function ContentManagement() {
     }));
   }, []);
 
-  useEffect(() => {
-    const fetchKnowledge = async () => {
-      try {
-        const response = await fetch("/knowledge-base.json");
-        if (response.ok) {
-          const data = await response.json();
-          setKnowledgeItems(data.pages || []);
-        }
-      } catch (error) {
-        console.error("Failed to fetch knowledge base:", error);
-      } finally {
-        setLoading(false);
+  // Fetch knowledge base based on language
+  const fetchKnowledge = useCallback(async (lang: KBLanguage = "en") => {
+    setLoading(true);
+    try {
+      const file = lang === "es" ? "/knowledge-base-es.json" : "/knowledge-base.json";
+      const response = await fetch(file);
+      if (response.ok) {
+        const data = await response.json();
+        setKnowledgeItems(data.pages || []);
       }
-    };
-    fetchKnowledge();
+    } catch (error) {
+      console.error("Failed to fetch knowledge base:", error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchKnowledge(kbLanguage);
+  }, [kbLanguage, fetchKnowledge]);
 
   // Fetch FAQs from API
   const fetchFaqs = useCallback(async () => {
@@ -238,6 +322,192 @@ export default function ContentManagement() {
   useEffect(() => {
     fetchFaqs();
   }, [fetchFaqs]);
+
+  // Fetch Custom Knowledge Entries from API
+  const fetchCustomEntries = useCallback(async () => {
+    setCustomEntriesLoading(true);
+    try {
+      const response = await fetch("/api/admin/knowledge");
+      if (response.ok) {
+        const data = await response.json();
+        setCustomEntries(data.entries || []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch custom entries:", error);
+      toast.error("Failed to load custom entries");
+    } finally {
+      setCustomEntriesLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCustomEntries();
+  }, [fetchCustomEntries]);
+
+  // Custom entries grouped by section
+  const groupedCustomEntries = customEntries.reduce((acc, entry) => {
+    const section = entry.section || "Other";
+    if (!acc[section]) acc[section] = [];
+    acc[section].push(entry);
+    return acc;
+  }, {} as Record<string, KnowledgeEntry[]>);
+
+  // Filter custom entries by search
+  const filteredCustomEntries = Object.entries(groupedCustomEntries).filter(([section, entries]) => {
+    if (!customSearchTerm) return true;
+    const search = customSearchTerm.toLowerCase();
+    return (
+      section.toLowerCase().includes(search) ||
+      entries.some((entry) => entry.title.toLowerCase().includes(search) || entry.content?.toLowerCase().includes(search))
+    );
+  });
+
+  // CRUD handlers for custom entries
+  const handleSaveEntry = async (entry: Partial<KnowledgeEntry>) => {
+    setEntrySaving(true);
+    try {
+      const isEditing = !!editingEntry;
+      const method = isEditing ? "PUT" : "POST";
+      const body = isEditing ? { ...entry, id: editingEntry.id } : entry;
+
+      const response = await fetch("/api/admin/knowledge", {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (response.ok) {
+        toast.success(isEditing ? "Entry updated successfully" : "Entry created successfully");
+        setShowAddEntry(false);
+        setEditingEntry(null);
+        fetchCustomEntries();
+      } else {
+        const data = await response.json();
+        toast.error(data.error || "Failed to save entry");
+      }
+    } catch (error) {
+      console.error("Failed to save entry:", error);
+      toast.error("Failed to save entry");
+    } finally {
+      setEntrySaving(false);
+    }
+  };
+
+  const handleDeleteEntry = (id: string) => {
+    const entry = customEntries.find((e) => e.id === id);
+    confirm({
+      title: "Delete Entry",
+      description: `Are you sure you want to delete "${entry?.title?.slice(0, 50)}..."? This action cannot be undone.`,
+      confirmLabel: "Delete",
+      variant: "danger",
+      onConfirm: async () => {
+        try {
+          const response = await fetch(`/api/admin/knowledge?id=${id}`, {
+            method: "DELETE",
+          });
+
+          if (response.ok) {
+            toast.success("Entry deleted successfully");
+            fetchCustomEntries();
+          } else {
+            toast.error("Failed to delete entry");
+          }
+        } catch (error) {
+          console.error("Failed to delete entry:", error);
+          toast.error("Failed to delete entry");
+        }
+      },
+    });
+  };
+
+  // Import knowledge entries from JSON file
+  const handleImportEntries = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setImporting(true);
+    try {
+      const text = await file.text();
+      let entries: Array<{ title: string; content: string; section: string; url?: string }>;
+
+      // Parse JSON file
+      try {
+        const parsed = JSON.parse(text);
+        // Handle both array format and object with entries/pages key
+        if (Array.isArray(parsed)) {
+          entries = parsed;
+        } else if (parsed.entries) {
+          entries = parsed.entries;
+        } else if (parsed.pages) {
+          entries = parsed.pages;
+        } else {
+          throw new Error("Invalid format");
+        }
+      } catch {
+        toast.error("Invalid JSON format. Expected an array of entries or object with entries/pages key.");
+        setImporting(false);
+        if (importFileRef.current) importFileRef.current.value = "";
+        return;
+      }
+
+      // Validate entries
+      const validEntries = entries.filter(
+        (e) => e.title && e.content && e.section
+      );
+
+      if (validEntries.length === 0) {
+        toast.error("No valid entries found. Each entry needs title, content, and section.");
+        setImporting(false);
+        if (importFileRef.current) importFileRef.current.value = "";
+        return;
+      }
+
+      // Import entries one by one
+      let successCount = 0;
+      let errorCount = 0;
+
+      for (const entry of validEntries) {
+        try {
+          const response = await fetch("/api/admin/knowledge", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              title: entry.title,
+              content: entry.content,
+              section: entry.section,
+              url: entry.url || "",
+            }),
+          });
+
+          if (response.ok) {
+            successCount++;
+          } else {
+            errorCount++;
+          }
+        } catch {
+          errorCount++;
+        }
+      }
+
+      // Show results
+      if (successCount > 0 && errorCount === 0) {
+        toast.success(`Successfully imported ${successCount} entries`);
+      } else if (successCount > 0 && errorCount > 0) {
+        toast.success(`Imported ${successCount} entries, ${errorCount} failed`);
+      } else {
+        toast.error("Failed to import entries");
+      }
+
+      // Refresh the list
+      fetchCustomEntries();
+    } catch (error) {
+      console.error("Import error:", error);
+      toast.error("Failed to import entries");
+    } finally {
+      setImporting(false);
+      if (importFileRef.current) importFileRef.current.value = "";
+    }
+  };
 
   const groupedKnowledge = knowledgeItems.reduce((acc, item) => {
     const section = item.section || "Other";
@@ -514,7 +784,8 @@ export default function ContentManagement() {
   const handleRefreshKnowledge = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/knowledge-base.json", { cache: "no-store" });
+      const file = kbLanguage === "es" ? "/knowledge-base-es.json" : "/knowledge-base.json";
+      const response = await fetch(file, { cache: "no-store" });
       if (response.ok) {
         const data = await response.json();
         setKnowledgeItems(data.pages || []);
@@ -523,6 +794,243 @@ export default function ContentManagement() {
       console.error("Failed to refresh:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Document handlers
+  const fetchDocuments = useCallback(async () => {
+    setDocumentsLoading(true);
+    try {
+      const response = await fetch("/api/admin/documents");
+      if (response.ok) {
+        const data = await response.json();
+        setDocuments(data.documents || []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch documents:", error);
+    } finally {
+      setDocumentsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === "documents") {
+      fetchDocuments();
+    }
+  }, [activeTab, fetchDocuments]);
+
+  const handleFileUpload = async (files: File[]) => {
+    const validTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword", "text/plain"];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+
+    for (const file of files) {
+      if (!validTypes.includes(file.type) && !file.name.match(/\.(pdf|docx|doc|txt)$/i)) {
+        toast.error(`Invalid file type: ${file.name}. Only PDF, DOCX, and TXT are allowed.`);
+        continue;
+      }
+      if (file.size > maxSize) {
+        toast.error(`File too large: ${file.name}. Maximum size is 10MB.`);
+        continue;
+      }
+
+      setUploading(true);
+      setUploadProgress(0);
+
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const xhr = new XMLHttpRequest();
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            setUploadProgress(Math.round((e.loaded / e.total) * 100));
+          }
+        };
+
+        await new Promise((resolve, reject) => {
+          xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              resolve(xhr.response);
+            } else {
+              reject(new Error(xhr.statusText));
+            }
+          };
+          xhr.onerror = () => reject(new Error("Upload failed"));
+          xhr.open("POST", "/api/documents");
+          xhr.send(formData);
+        });
+
+        toast.success(`Uploaded: ${file.name}`);
+        await fetchDocuments();
+      } catch (error) {
+        console.error("Upload failed:", error);
+        toast.error(`Failed to upload: ${file.name}`);
+      } finally {
+        setUploading(false);
+        setUploadProgress(0);
+      }
+    }
+  };
+
+  const handleDeleteDocument = (id: string, name: string) => {
+    confirm({
+      title: "Delete Document",
+      description: `Are you sure you want to delete "${name}"? This will remove it from the knowledge base.`,
+      confirmLabel: "Delete",
+      variant: "danger",
+      onConfirm: async () => {
+        try {
+          const response = await fetch(`/api/admin/documents?id=${encodeURIComponent(id)}`, {
+            method: "DELETE",
+          });
+          if (response.ok) {
+            await fetchDocuments();
+            toast.success("Document deleted successfully");
+          } else {
+            toast.error("Failed to delete document");
+          }
+        } catch (error) {
+          console.error("Delete failed:", error);
+          toast.error("An error occurred while deleting the document");
+        }
+      },
+    });
+  };
+
+  const handleBulkDeleteDocs = () => {
+    confirm({
+      title: "Delete Selected Documents",
+      description: `Are you sure you want to delete ${selectedDocIds.size} document(s)? This will remove them from the knowledge base.`,
+      confirmLabel: "Delete All",
+      variant: "danger",
+      onConfirm: async () => {
+        try {
+          for (const docId of selectedDocIds) {
+            await fetch(`/api/admin/documents?id=${encodeURIComponent(docId)}`, {
+              method: "DELETE",
+            });
+          }
+          await fetchDocuments();
+          setSelectedDocIds(new Set());
+          toast.success(`${selectedDocIds.size} document(s) deleted successfully`);
+        } catch (error) {
+          console.error("Bulk delete failed:", error);
+          toast.error("An error occurred while deleting documents");
+        }
+      },
+    });
+  };
+
+  // Crawler handlers
+  const fetchCrawlerUrls = useCallback(async (lang: KBLanguage = "en") => {
+    setCrawlerLoading(true);
+    try {
+      const response = await fetch(`/api/admin/crawler/urls?lang=${lang}`);
+      if (response.ok) {
+        const data = await response.json();
+        setCrawlerUrls(data.urls || []);
+      } else {
+        // Initialize from knowledge base if API doesn't exist yet
+        const urls: CrawlerURL[] = knowledgeItems.map((item, idx) => ({
+          id: `kb-${idx}`,
+          url: item.url,
+          fullUrl: `https://www.cityofdoral.com${item.url}`,
+          title: item.title,
+          section: item.section || "Other",
+          enabled: true,
+          isCustom: false,
+          lastCrawled: autoScrapeSettings.lastRun,
+          lastStatus: "success" as const,
+        }));
+        setCrawlerUrls(urls);
+      }
+    } catch (error) {
+      // Initialize from knowledge base on error
+      const urls: CrawlerURL[] = knowledgeItems.map((item, idx) => ({
+        id: `kb-${idx}`,
+        url: item.url,
+        fullUrl: `https://www.cityofdoral.com${item.url}`,
+        title: item.title,
+        section: item.section || "Other",
+        enabled: true,
+        isCustom: false,
+        lastCrawled: autoScrapeSettings.lastRun,
+        lastStatus: "success" as const,
+      }));
+      setCrawlerUrls(urls);
+    } finally {
+      setCrawlerLoading(false);
+    }
+  }, [knowledgeItems, autoScrapeSettings.lastRun]);
+
+  useEffect(() => {
+    if (activeTab === "crawler") {
+      fetchCrawlerUrls(crawlerLanguage);
+    }
+  }, [activeTab, crawlerLanguage, fetchCrawlerUrls]);
+
+  const handleToggleUrl = async (id: string) => {
+    setCrawlerUrls(prev => prev.map(u =>
+      u.id === id ? { ...u, enabled: !u.enabled } : u
+    ));
+    // Optionally persist to API
+    try {
+      await fetch("/api/admin/crawler/urls", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, enabled: !crawlerUrls.find(u => u.id === id)?.enabled }),
+      });
+    } catch (error) {
+      // Silently fail - state is already updated locally
+    }
+  };
+
+  const handleToggleSectionUrls = async (section: string, enable: boolean) => {
+    setCrawlerUrls(prev => prev.map(u =>
+      u.section === section ? { ...u, enabled: enable } : u
+    ));
+    toast.success(`${enable ? "Enabled" : "Disabled"} all URLs in ${section}`);
+    // Optionally persist to API
+    try {
+      await fetch("/api/admin/crawler/urls/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ section, enabled: enable }),
+      });
+    } catch (error) {
+      // Silently fail - state is already updated locally
+    }
+  };
+
+  const handleAddCustomUrl = async () => {
+    if (!newCustomUrl.trim()) return;
+
+    const urlPath = newCustomUrl.replace(/^https?:\/\/[^/]+/, "");
+    const newUrl: CrawlerURL = {
+      id: `custom-${Date.now()}`,
+      url: urlPath || newCustomUrl,
+      fullUrl: newCustomUrl.startsWith("http") ? newCustomUrl : `https://www.cityofdoral.com${newCustomUrl}`,
+      title: urlPath.split("/").pop()?.replace(/\.html?$/, "").replace(/-/g, " ") || "Custom Page",
+      section: newCustomSection,
+      enabled: true,
+      isCustom: true,
+      lastCrawled: null,
+      lastStatus: "never",
+    };
+
+    setCrawlerUrls(prev => [...prev, newUrl]);
+    setNewCustomUrl("");
+    toast.success("Custom URL added");
+
+    // Optionally persist to API
+    try {
+      await fetch("/api/admin/crawler/urls", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUrl),
+      });
+    } catch (error) {
+      // Silently fail - state is already updated locally
     }
   };
 
@@ -559,10 +1067,12 @@ export default function ContentManagement() {
         {[
           { key: "knowledge", icon: Database, label: "Knowledge Base", count: knowledgeItems.length },
           { key: "faqs", icon: HelpCircle, label: "Custom FAQs", count: faqs.length },
+          { key: "documents", icon: FileUp, label: "Documents", count: documents.length },
+          { key: "crawler", icon: Globe, label: "Web Crawler", count: crawlerUrls.filter(u => u.enabled).length },
         ].map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key as "knowledge" | "faqs")}
+            onClick={() => setActiveTab(tab.key as TabKey)}
             className={`relative flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
               activeTab === tab.key
                 ? "text-[#000034]"
@@ -606,10 +1116,10 @@ export default function ContentManagement() {
             {/* Stats Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               {[
-                { label: "Total Pages", value: knowledgeItems.length, color: "from-blue-500 to-blue-600" },
-                { label: "Sections", value: Object.keys(groupedKnowledge).length, color: "from-purple-500 to-violet-600" },
-                { label: "Last Scraped", value: autoScrapeSettings.lastRun ? "3 days ago" : "Never", isText: true, color: "from-amber-500 to-orange-500" },
-                { label: "Auto-Scrape", value: autoScrapeSettings.enabled ? "Active" : "Off", isText: true, color: autoScrapeSettings.enabled ? "from-green-500 to-emerald-600" : "from-gray-400 to-gray-500" },
+                { label: "Scraped Pages", value: knowledgeItems.length, color: "from-blue-500 to-blue-600", icon: Globe },
+                { label: "Custom Entries", value: customEntries.length, color: "from-purple-500 to-violet-600", icon: FileText },
+                { label: "Total Sections", value: Object.keys(groupedKnowledge).length + Object.keys(groupedCustomEntries).length, color: "from-amber-500 to-orange-500", icon: Layers },
+                { label: "Auto-Scrape", value: autoScrapeSettings.enabled ? "Active" : "Off", isText: true, color: autoScrapeSettings.enabled ? "from-green-500 to-emerald-600" : "from-gray-400 to-gray-500", icon: Zap },
               ].map((stat, idx) => (
                 <motion.div
                   key={stat.label}
@@ -619,7 +1129,7 @@ export default function ContentManagement() {
                   className="bg-white rounded-xl border border-[#E7EBF0] p-4 shadow-sm"
                 >
                   <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center mb-3`}>
-                    <Database className="h-5 w-5 text-white" />
+                    <stat.icon className="h-5 w-5 text-white" />
                   </div>
                   <p className="text-2xl font-bold text-[#000034]">
                     {stat.isText ? stat.value : <AnimatedCounter value={stat.value as number} />}
@@ -629,6 +1139,35 @@ export default function ContentManagement() {
               ))}
             </div>
 
+            {/* Sub-Tab Toggle */}
+            <div className="flex gap-2 mb-6">
+              {[
+                { key: "scraped" as const, label: "Scraped Pages", icon: Globe, count: knowledgeItems.length },
+                { key: "custom" as const, label: "Custom Entries", icon: FileText, count: customEntries.length },
+              ].map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setKbSubTab(tab.key)}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                    kbSubTab === tab.key
+                      ? "bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white shadow-md"
+                      : "bg-white border border-[#E7EBF0] text-[#363535] hover:bg-gray-50"
+                  }`}
+                >
+                  <tab.icon className="h-4 w-4" />
+                  {tab.label}
+                  <span className={`ml-1 px-2 py-0.5 rounded-full text-xs ${
+                    kbSubTab === tab.key ? "bg-white/20 text-white" : "bg-gray-100 text-gray-600"
+                  }`}>
+                    {tab.count}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            {/* Scraped Pages Sub-Tab */}
+            {kbSubTab === "scraped" && (
+              <>
             {/* Search and Actions Bar */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -648,6 +1187,29 @@ export default function ContentManagement() {
                   />
                 </div>
                 <div className="flex flex-wrap gap-3">
+                  {/* Language Toggle */}
+                  <div className="flex items-center h-10 bg-white border border-[#E7EBF0] rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => setKbLanguage("en")}
+                      className={`h-full px-4 text-sm font-medium transition-all flex items-center gap-2 ${
+                        kbLanguage === "en"
+                          ? "bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white"
+                          : "text-[#363535] hover:bg-gray-50"
+                      }`}
+                    >
+                      EN
+                    </button>
+                    <button
+                      onClick={() => setKbLanguage("es")}
+                      className={`h-full px-4 text-sm font-medium transition-all flex items-center gap-2 ${
+                        kbLanguage === "es"
+                          ? "bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white"
+                          : "text-[#363535] hover:bg-gray-50"
+                      }`}
+                    >
+                      ES
+                    </button>
+                  </div>
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -876,6 +1438,349 @@ export default function ContentManagement() {
                 </div>
               )}
             </motion.div>
+              </>
+            )}
+
+            {/* Custom Entries Sub-Tab */}
+            {kbSubTab === "custom" && (
+              <>
+                {/* Search and Add Bar */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="bg-white rounded-xl border border-[#E7EBF0] p-4 mb-6 shadow-sm"
+                >
+                  <div className="flex flex-col lg:flex-row gap-4">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                      <input
+                        type="text"
+                        placeholder="Search custom entries..."
+                        value={customSearchTerm}
+                        onChange={(e) => setCustomSearchTerm(e.target.value)}
+                        className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+                      />
+                    </div>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => importFileRef.current?.click()}
+                      disabled={importing}
+                      className="h-10 px-4 bg-white border border-[#E7EBF0] text-[#363535] text-sm font-medium rounded-lg hover:bg-gray-50 transition-all duration-200 flex items-center gap-2 disabled:opacity-50"
+                    >
+                      {importing ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Upload className="h-4 w-4" />
+                      )}
+                      {importing ? "Importing..." : "Import"}
+                    </motion.button>
+                    <input
+                      ref={importFileRef}
+                      type="file"
+                      accept=".json"
+                      onChange={handleImportEntries}
+                      className="hidden"
+                    />
+                    <motion.button
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => {
+                        setEditingEntry(null);
+                        setShowAddEntry(true);
+                      }}
+                      className="h-10 px-5 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2"
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add Entry
+                    </motion.button>
+                  </div>
+                </motion.div>
+
+                {/* Custom Entries List */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="bg-white rounded-xl border border-[#E7EBF0] shadow-sm overflow-hidden"
+                >
+                  {customEntriesLoading ? (
+                    <div className="p-12 text-center">
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      >
+                        <RefreshCw className="h-8 w-8 text-[#000080] mx-auto mb-3" />
+                      </motion.div>
+                      <p className="text-[#666666] text-sm">Loading custom entries...</p>
+                    </div>
+                  ) : customEntries.length === 0 ? (
+                    <div className="px-6 py-12 text-center">
+                      <FileText className="h-12 w-12 mx-auto mb-3 text-[#E7EBF0]" />
+                      <p className="text-[#666666] text-sm mb-4">No custom entries yet</p>
+                      <button
+                        onClick={() => {
+                          setEditingEntry(null);
+                          setShowAddEntry(true);
+                        }}
+                        className="text-[#000080] text-sm font-medium hover:underline"
+                      >
+                        Create your first entry
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="divide-y divide-[#E7EBF0]">
+                      {filteredCustomEntries.length === 0 ? (
+                        <div className="px-6 py-12 text-center">
+                          <Search className="h-12 w-12 mx-auto mb-3 text-[#E7EBF0]" />
+                          <p className="text-[#666666] text-sm">No entries match your search</p>
+                        </div>
+                      ) : (
+                        filteredCustomEntries.map(([section, entries], sectionIdx) => (
+                          <motion.div
+                            key={section}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: sectionIdx * 0.05 }}
+                          >
+                            <button
+                              onClick={() => setExpandedEntrySection(expandedEntrySection === section ? null : section)}
+                              className="w-full px-6 py-4 flex items-center justify-between hover:bg-[#F5F9FD] transition-colors"
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center">
+                                  <Layers className="h-5 w-5 text-white" />
+                                </div>
+                                <div className="text-left">
+                                  <h3 className="font-semibold text-[#000034]">
+                                    <HighlightText text={section} highlight={customSearchTerm} />
+                                  </h3>
+                                  <p className="text-sm text-[#666666]">{entries.length} entries</p>
+                                </div>
+                              </div>
+                              <motion.div
+                                animate={{ rotate: expandedEntrySection === section ? 90 : 0 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                <ChevronRight className="h-5 w-5 text-[#999]" />
+                              </motion.div>
+                            </button>
+
+                            <AnimatePresence>
+                              {expandedEntrySection === section && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.3 }}
+                                  className="overflow-hidden bg-[#F5F9FD] border-t border-[#E7EBF0]"
+                                >
+                                  <div className="divide-y divide-[#E7EBF0]">
+                                    {entries.map((entry, entryIdx) => (
+                                      <motion.div
+                                        key={entry.id}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: entryIdx * 0.05 }}
+                                        className="px-6 py-4 bg-white hover:bg-gray-50"
+                                      >
+                                        <div className="flex items-start justify-between gap-4">
+                                          <div className="flex-1 min-w-0">
+                                            <h4 className="font-medium text-[#000034] mb-1">
+                                              <HighlightText text={entry.title} highlight={customSearchTerm} />
+                                            </h4>
+                                            <p className="text-sm text-[#666666] line-clamp-2 mb-2">
+                                              <HighlightText text={entry.content} highlight={customSearchTerm} />
+                                            </p>
+                                            <div className="flex items-center gap-3 text-xs text-[#999]">
+                                              <span className="flex items-center gap-1">
+                                                <Clock className="h-3 w-3" />
+                                                {new Date(entry.updatedAt).toLocaleDateString()}
+                                              </span>
+                                              {entry.url && (
+                                                <a
+                                                  href={entry.url}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="flex items-center gap-1 text-[#1D4F91] hover:underline"
+                                                >
+                                                  <Link className="h-3 w-3" />
+                                                  Reference
+                                                </a>
+                                              )}
+                                            </div>
+                                          </div>
+                                          <div className="flex items-center gap-2">
+                                            <motion.button
+                                              whileHover={{ scale: 1.1 }}
+                                              whileTap={{ scale: 0.9 }}
+                                              onClick={() => {
+                                                setEditingEntry(entry);
+                                                setShowAddEntry(true);
+                                              }}
+                                              className="p-2 text-[#1D4F91] hover:bg-blue-100 rounded-lg transition-colors"
+                                            >
+                                              <Edit2 className="h-4 w-4" />
+                                            </motion.button>
+                                            <motion.button
+                                              whileHover={{ scale: 1.1 }}
+                                              whileTap={{ scale: 0.9 }}
+                                              onClick={() => handleDeleteEntry(entry.id)}
+                                              className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                            >
+                                              <Trash2 className="h-4 w-4" />
+                                            </motion.button>
+                                          </div>
+                                        </div>
+                                      </motion.div>
+                                    ))}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </motion.div>
+                        ))
+                      )}
+                    </div>
+                  )}
+                </motion.div>
+              </>
+            )}
+
+            {/* Add/Edit Entry Modal */}
+            <AnimatePresence>
+              {showAddEntry && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+                  onClick={() => {
+                    setShowAddEntry(false);
+                    setEditingEntry(null);
+                  }}
+                >
+                  <motion.div
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.95, opacity: 0 }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+                  >
+                    <div className="p-6 border-b border-[#E7EBF0]">
+                      <div className="flex items-center justify-between">
+                        <h2 className="text-xl font-bold text-[#000034]">
+                          {editingEntry ? "Edit Entry" : "Add New Entry"}
+                        </h2>
+                        <button
+                          onClick={() => {
+                            setShowAddEntry(false);
+                            setEditingEntry(null);
+                          }}
+                          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        >
+                          <X className="h-5 w-5 text-[#666666]" />
+                        </button>
+                      </div>
+                    </div>
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        const formData = new FormData(e.currentTarget);
+                        handleSaveEntry({
+                          title: formData.get("title") as string,
+                          content: formData.get("content") as string,
+                          section: formData.get("section") as string,
+                          url: formData.get("url") as string,
+                        });
+                      }}
+                      className="p-6 space-y-4"
+                    >
+                      <div>
+                        <label className="block text-sm font-medium text-[#363535] mb-2">Title *</label>
+                        <input
+                          type="text"
+                          name="title"
+                          defaultValue={editingEntry?.title || ""}
+                          required
+                          className="w-full h-11 px-4 border border-[#E7EBF0] rounded-lg text-sm text-[#363535] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10"
+                          placeholder="Enter a descriptive title"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-[#363535] mb-2">Section *</label>
+                        <select
+                          name="section"
+                          defaultValue={editingEntry?.section || ""}
+                          required
+                          className="w-full h-11 px-4 border border-[#E7EBF0] rounded-lg text-sm text-[#363535] focus:outline-none focus:border-[#000080] cursor-pointer"
+                        >
+                          <option value="">Select a section</option>
+                          <option value="Government">Government</option>
+                          <option value="Residents">Residents</option>
+                          <option value="Businesses">Businesses</option>
+                          <option value="Visitors">Visitors</option>
+                          <option value="Services">Services</option>
+                          <option value="About">About</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-[#363535] mb-2">Content *</label>
+                        <textarea
+                          name="content"
+                          defaultValue={editingEntry?.content || ""}
+                          required
+                          rows={6}
+                          className="w-full px-4 py-3 border border-[#E7EBF0] rounded-lg text-sm text-[#363535] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 resize-none"
+                          placeholder="Enter the knowledge base content..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-[#363535] mb-2">Reference URL (optional)</label>
+                        <input
+                          type="url"
+                          name="url"
+                          defaultValue={editingEntry?.url || ""}
+                          className="w-full h-11 px-4 border border-[#E7EBF0] rounded-lg text-sm text-[#363535] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10"
+                          placeholder="https://example.com/reference"
+                        />
+                      </div>
+                      <div className="flex justify-end gap-3 pt-4">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowAddEntry(false);
+                            setEditingEntry(null);
+                          }}
+                          className="px-5 py-2.5 border border-[#E7EBF0] text-[#363535] rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={entrySaving}
+                          className="px-5 py-2.5 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white rounded-lg text-sm font-medium hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50"
+                        >
+                          {entrySaving ? (
+                            <>
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              Saving...
+                            </>
+                          ) : (
+                            <>
+                              <Save className="h-4 w-4" />
+                              {editingEntry ? "Update Entry" : "Create Entry"}
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </form>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
 
@@ -1270,9 +2175,698 @@ export default function ContentManagement() {
             </motion.div>
           </motion.div>
         )}
+
+        {/* Documents Tab */}
+        {activeTab === "documents" && (
+          <motion.div
+            key="documents"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Stats Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              {[
+                { label: "Total Documents", value: documents.length, color: "from-blue-500 to-blue-600", icon: FileText },
+                { label: "PDFs", value: documents.filter(d => d.type === "pdf").length, color: "from-red-500 to-rose-600", icon: File },
+                { label: "Word Docs", value: documents.filter(d => d.type === "docx").length, color: "from-blue-600 to-indigo-600", icon: FileType },
+                { label: "Total Chunks", value: documents.reduce((acc, d) => acc + d.chunks, 0), color: "from-purple-500 to-violet-600", icon: Layers },
+              ].map((stat, idx) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="bg-white rounded-xl border border-[#E7EBF0] p-4 shadow-sm"
+                >
+                  <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center mb-3`}>
+                    <stat.icon className="h-5 w-5 text-white" />
+                  </div>
+                  <p className="text-2xl font-bold text-[#000034]">
+                    <AnimatedCounter value={stat.value} />
+                  </p>
+                  <p className="text-sm text-[#666666]">{stat.label}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Upload Zone */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mb-6"
+            >
+              <div
+                onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                onDragLeave={() => setIsDragging(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsDragging(false);
+                  const files = Array.from(e.dataTransfer.files);
+                  handleFileUpload(files);
+                }}
+                className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
+                  isDragging
+                    ? "border-[#000080] bg-blue-50/50"
+                    : "border-[#E7EBF0] bg-white hover:border-[#000080]/50 hover:bg-[#F5F9FD]"
+                }`}
+              >
+                <input
+                  type="file"
+                  id="file-upload"
+                  multiple
+                  accept=".pdf,.docx,.doc,.txt"
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      handleFileUpload(Array.from(e.target.files));
+                    }
+                  }}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <div className="flex flex-col items-center">
+                  <motion.div
+                    animate={isDragging ? { scale: 1.1, y: -5 } : { scale: 1, y: 0 }}
+                    className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
+                      isDragging ? "bg-[#000080]" : "bg-gradient-to-br from-[#000080] to-[#1D4F91]"
+                    }`}
+                  >
+                    <Upload className="h-8 w-8 text-white" />
+                  </motion.div>
+                  <p className="text-lg font-medium text-[#000034] mb-1">
+                    {isDragging ? "Drop files here" : "Drag and drop files here"}
+                  </p>
+                  <p className="text-sm text-[#666666] mb-3">or click to browse</p>
+                  <p className="text-xs text-[#999]">PDF, DOCX, TXT (max 10MB each)</p>
+                </div>
+                {uploading && (
+                  <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-xl">
+                    <div className="text-center">
+                      <Loader2 className="h-8 w-8 text-[#000080] animate-spin mx-auto mb-2" />
+                      <p className="text-sm text-[#000034]">Uploading... {uploadProgress}%</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+
+            {/* Search Bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+              className="bg-white rounded-xl border border-[#E7EBF0] p-4 mb-6 shadow-sm"
+            >
+              <div className="flex flex-col lg:flex-row gap-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                  <input
+                    type="text"
+                    placeholder="Search documents..."
+                    value={docSearchTerm}
+                    onChange={(e) => setDocSearchTerm(e.target.value)}
+                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+                  />
+                </div>
+                {selectedDocIds.size > 0 && (
+                  <motion.button
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleBulkDeleteDocs}
+                    className="h-10 px-4 bg-red-50 border border-red-200 text-red-600 text-sm font-medium rounded-lg hover:bg-red-100 transition-all flex items-center gap-2"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Delete Selected ({selectedDocIds.size})
+                  </motion.button>
+                )}
+              </div>
+            </motion.div>
+
+            {/* Documents Table */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white rounded-xl border border-[#E7EBF0] shadow-sm overflow-hidden"
+            >
+              {documentsLoading ? (
+                <div className="p-12 text-center">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  >
+                    <RefreshCw className="h-8 w-8 text-[#000080] mx-auto mb-3" />
+                  </motion.div>
+                  <p className="text-[#666666] text-sm">Loading documents...</p>
+                </div>
+              ) : documents.length === 0 ? (
+                <div className="px-6 py-12 text-center">
+                  <FileUp className="h-12 w-12 mx-auto mb-3 text-[#E7EBF0]" />
+                  <p className="text-[#666666] text-sm">No documents uploaded yet</p>
+                  <p className="text-xs text-[#999] mt-1">Upload PDF, DOCX, or TXT files to enhance the knowledge base</p>
+                </div>
+              ) : (
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gradient-to-r from-[#1D4F91] to-[#000080] text-white text-left text-sm">
+                      <th className="px-4 py-4 w-12">
+                        <input
+                          type="checkbox"
+                          checked={selectedDocIds.size === documents.length && documents.length > 0}
+                          onChange={() => {
+                            if (selectedDocIds.size === documents.length) {
+                              setSelectedDocIds(new Set());
+                            } else {
+                              setSelectedDocIds(new Set(documents.map(d => d.id)));
+                            }
+                          }}
+                          className="w-4 h-4 rounded border-white/30"
+                        />
+                      </th>
+                      <th className="px-6 py-4 font-medium">Document Name</th>
+                      <th className="px-6 py-4 font-medium w-24">Type</th>
+                      <th className="px-6 py-4 font-medium w-24">Size</th>
+                      <th className="px-6 py-4 font-medium w-24">Chunks</th>
+                      <th className="px-6 py-4 font-medium w-32">Uploaded</th>
+                      <th className="px-6 py-4 font-medium w-20">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#E7EBF0]">
+                    {documents
+                      .filter(d => docSearchTerm ? d.originalName.toLowerCase().includes(docSearchTerm.toLowerCase()) : true)
+                      .map((doc, idx) => (
+                        <motion.tr
+                          key={doc.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.03 }}
+                          className={`${idx % 2 === 0 ? "bg-white" : "bg-[#F5F9FD]/50"} hover:bg-blue-50/50 transition-colors ${selectedDocIds.has(doc.id) ? "bg-blue-50/80" : ""}`}
+                        >
+                          <td className="px-4 py-4">
+                            <input
+                              type="checkbox"
+                              checked={selectedDocIds.has(doc.id)}
+                              onChange={() => {
+                                const newSelected = new Set(selectedDocIds);
+                                if (newSelected.has(doc.id)) {
+                                  newSelected.delete(doc.id);
+                                } else {
+                                  newSelected.add(doc.id);
+                                }
+                                setSelectedDocIds(newSelected);
+                              }}
+                              className="w-4 h-4 rounded border-gray-300"
+                            />
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                                doc.type === "pdf" ? "bg-red-100 text-red-600" :
+                                doc.type === "docx" ? "bg-blue-100 text-blue-600" :
+                                "bg-gray-100 text-gray-600"
+                              }`}>
+                                {doc.type === "pdf" ? <File className="h-5 w-5" /> :
+                                 doc.type === "docx" ? <FileType className="h-5 w-5" /> :
+                                 <FileText className="h-5 w-5" />}
+                              </div>
+                              <span className="font-medium text-[#000034]">{doc.originalName}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`px-2.5 py-1 text-xs rounded-lg font-medium uppercase ${
+                              doc.type === "pdf" ? "bg-red-100 text-red-600" :
+                              doc.type === "docx" ? "bg-blue-100 text-blue-600" :
+                              "bg-gray-100 text-gray-600"
+                            }`}>
+                              {doc.type}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-[#666666]">
+                            {formatFileSize(doc.size)}
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className="px-2.5 py-1 bg-purple-100 text-purple-600 text-xs rounded-lg font-medium">
+                              {doc.chunks} chunks
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-[#666666]">
+                            {new Date(doc.uploadedAt).toLocaleDateString()}
+                          </td>
+                          <td className="px-6 py-4">
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() => handleDeleteDocument(doc.id, doc.originalName)}
+                              className="w-8 h-8 flex items-center justify-center text-[#666666] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </motion.button>
+                          </td>
+                        </motion.tr>
+                      ))}
+                  </tbody>
+                </table>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+
+        {/* Web Crawler Tab */}
+        {activeTab === "crawler" && (
+          <motion.div
+            key="crawler"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Stats Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              {[
+                { label: "Total URLs", value: crawlerUrls.length, color: "from-blue-500 to-blue-600" },
+                { label: "Enabled", value: crawlerUrls.filter(u => u.enabled).length, color: "from-green-500 to-emerald-600" },
+                { label: "Disabled", value: crawlerUrls.filter(u => !u.enabled).length, color: "from-gray-400 to-gray-500" },
+                { label: "Last Crawl", value: autoScrapeSettings.lastRun ? "12h ago" : "Never", isText: true, color: "from-amber-500 to-orange-500" },
+              ].map((stat, idx) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="bg-white rounded-xl border border-[#E7EBF0] p-4 shadow-sm"
+                >
+                  <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center mb-3`}>
+                    <Globe className="h-5 w-5 text-white" />
+                  </div>
+                  <p className="text-2xl font-bold text-[#000034]">
+                    {stat.isText ? stat.value : <AnimatedCounter value={stat.value as number} />}
+                  </p>
+                  <p className="text-sm text-[#666666]">{stat.label}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Search, Filters, and Actions */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-xl border border-[#E7EBF0] p-4 mb-6 shadow-sm"
+            >
+              <div className="flex flex-col lg:flex-row gap-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                  <input
+                    type="text"
+                    placeholder="Search URLs..."
+                    value={crawlerSearchTerm}
+                    onChange={(e) => setCrawlerSearchTerm(e.target.value)}
+                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+                  />
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <select
+                    value={crawlerSectionFilter}
+                    onChange={(e) => setCrawlerSectionFilter(e.target.value)}
+                    className="h-10 px-3 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] focus:outline-none focus:border-[#000080] cursor-pointer"
+                  >
+                    <option value="all">All Sections</option>
+                    {Array.from(new Set(crawlerUrls.map(u => u.section))).map(section => (
+                      <option key={section} value={section}>{section}</option>
+                    ))}
+                  </select>
+                  <select
+                    value={crawlerStatusFilter}
+                    onChange={(e) => setCrawlerStatusFilter(e.target.value as "all" | "enabled" | "disabled")}
+                    className="h-10 px-3 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] focus:outline-none focus:border-[#000080] cursor-pointer"
+                  >
+                    <option value="all">All Status</option>
+                    <option value="enabled">Enabled</option>
+                    <option value="disabled">Disabled</option>
+                  </select>
+                  {/* Language Toggle */}
+                  <div className="flex items-center h-10 bg-white border border-[#E7EBF0] rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => setCrawlerLanguage("en")}
+                      className={`h-full px-4 text-sm font-medium transition-all flex items-center gap-2 ${
+                        crawlerLanguage === "en"
+                          ? "bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white"
+                          : "text-[#363535] hover:bg-gray-50"
+                      }`}
+                    >
+                      EN
+                    </button>
+                    <button
+                      onClick={() => setCrawlerLanguage("es")}
+                      className={`h-full px-4 text-sm font-medium transition-all flex items-center gap-2 ${
+                        crawlerLanguage === "es"
+                          ? "bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white"
+                          : "text-[#363535] hover:bg-gray-50"
+                      }`}
+                    >
+                      ES
+                    </button>
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setShowCrawlerSettings(!showCrawlerSettings)}
+                    className={`h-10 px-4 border rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                      autoScrapeSettings.enabled
+                        ? "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                        : "bg-white border-[#E7EBF0] text-[#363535] hover:bg-gray-50"
+                    }`}
+                  >
+                    <Settings className="h-4 w-4" />
+                    Auto-Scrape
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleRefreshKnowledge}
+                    disabled={loading}
+                    className="h-10 px-5 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2 disabled:opacity-50"
+                  >
+                    <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+                    Scrape Now
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Auto-Scrape Settings Panel */}
+            <AnimatePresence>
+              {showCrawlerSettings && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: "auto" }}
+                  exit={{ opacity: 0, y: -20, height: 0 }}
+                  className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] shadow-lg p-6 mb-6 overflow-hidden"
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-semibold text-[#000034] flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#000080] to-[#1D4F91] flex items-center justify-center">
+                        <Settings className="h-4 w-4 text-white" />
+                      </div>
+                      Auto-Scrape Settings
+                    </h3>
+                    <button
+                      onClick={() => setShowCrawlerSettings(false)}
+                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      <X className="h-4 w-4 text-[#666666]" />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-[#363535] mb-2">Status</label>
+                      <button
+                        onClick={() => setAutoScrapeSettings({
+                          ...autoScrapeSettings,
+                          enabled: !autoScrapeSettings.enabled
+                        })}
+                        className={`w-full h-11 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${
+                          autoScrapeSettings.enabled
+                            ? "bg-green-500 text-white hover:bg-green-600"
+                            : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                        }`}
+                      >
+                        {autoScrapeSettings.enabled ? (
+                          <>
+                            <Check className="h-4 w-4" /> Enabled
+                          </>
+                        ) : (
+                          <>Disabled</>
+                        )}
+                      </button>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-[#363535] mb-2">Frequency</label>
+                      <select
+                        value={autoScrapeSettings.frequency}
+                        onChange={(e) => setAutoScrapeSettings({
+                          ...autoScrapeSettings,
+                          frequency: e.target.value as "daily" | "weekly" | "monthly"
+                        })}
+                        className="w-full h-11 px-4 border border-[#E7EBF0] rounded-lg text-sm bg-white focus:outline-none focus:border-[#000080] cursor-pointer"
+                      >
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-[#363535] mb-2">Last Run</label>
+                      <div className="h-11 px-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg flex items-center text-sm text-[#363535]">
+                        <Clock className="h-4 w-4 text-[#666666] mr-2" />
+                        {autoScrapeSettings.lastRun
+                          ? new Date(autoScrapeSettings.lastRun).toLocaleDateString()
+                          : "Never"}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-[#363535] mb-2">Next Run</label>
+                      <div className="h-11 px-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg flex items-center text-sm text-[#363535]">
+                        <Calendar className="h-4 w-4 text-[#666666] mr-2" />
+                        {autoScrapeSettings.enabled && autoScrapeSettings.nextRun
+                          ? new Date(autoScrapeSettings.nextRun).toLocaleDateString()
+                          : "—"}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* URL List by Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white rounded-xl border border-[#E7EBF0] shadow-sm overflow-hidden mb-6"
+            >
+              {crawlerLoading ? (
+                <div className="p-12 text-center">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  >
+                    <RefreshCw className="h-8 w-8 text-[#000080] mx-auto mb-3" />
+                  </motion.div>
+                  <p className="text-[#666666] text-sm">Loading crawler URLs...</p>
+                </div>
+              ) : crawlerUrls.length === 0 ? (
+                <div className="px-6 py-12 text-center">
+                  <Globe className="h-12 w-12 mx-auto mb-3 text-[#E7EBF0]" />
+                  <p className="text-[#666666] text-sm">No URLs configured for crawling</p>
+                  <p className="text-xs text-[#999] mt-1">URLs will be populated from the knowledge base</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-[#E7EBF0]">
+                  {Object.entries(
+                    crawlerUrls
+                      .filter(u => {
+                        if (crawlerSectionFilter !== "all" && u.section !== crawlerSectionFilter) return false;
+                        if (crawlerStatusFilter === "enabled" && !u.enabled) return false;
+                        if (crawlerStatusFilter === "disabled" && u.enabled) return false;
+                        if (crawlerSearchTerm && !u.url.toLowerCase().includes(crawlerSearchTerm.toLowerCase()) && !u.title.toLowerCase().includes(crawlerSearchTerm.toLowerCase())) return false;
+                        return true;
+                      })
+                      .reduce((acc, url) => {
+                        if (!acc[url.section]) acc[url.section] = [];
+                        acc[url.section].push(url);
+                        return acc;
+                      }, {} as Record<string, CrawlerURL[]>)
+                  ).map(([section, urls], sectionIdx) => (
+                    <motion.div
+                      key={section}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: sectionIdx * 0.05 }}
+                    >
+                      <motion.button
+                        whileHover={{ backgroundColor: "rgba(0, 0, 128, 0.03)" }}
+                        onClick={() => setExpandedCrawlerSection(expandedCrawlerSection === section ? null : section)}
+                        className="w-full px-6 py-4 flex items-center justify-between transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <motion.div
+                            animate={{ rotate: expandedCrawlerSection === section ? 90 : 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <ChevronRight className="h-4 w-4 text-[#666666]" />
+                          </motion.div>
+                          <span className="font-medium text-[#000034]">{section}</span>
+                          <span className="px-2.5 py-1 bg-gradient-to-r from-[#F3F4F6] to-[#E7EBF0] text-[#666666] text-xs rounded-full font-medium">
+                            {urls.length} URLs
+                          </span>
+                          <span className={`px-2.5 py-1 text-xs rounded-full font-medium ${
+                            urls.every(u => u.enabled) ? "bg-green-100 text-green-600" :
+                            urls.every(u => !u.enabled) ? "bg-gray-100 text-gray-600" :
+                            "bg-amber-100 text-amber-600"
+                          }`}>
+                            {urls.filter(u => u.enabled).length}/{urls.length} enabled
+                          </span>
+                        </div>
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleToggleSectionUrls(section, !urls.every(u => u.enabled));
+                          }}
+                          className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                            urls.every(u => u.enabled)
+                              ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                              : "bg-green-100 text-green-600 hover:bg-green-200"
+                          }`}
+                        >
+                          {urls.every(u => u.enabled) ? "Disable All" : "Enable All"}
+                        </motion.button>
+                      </motion.button>
+
+                      <AnimatePresence>
+                        {expandedCrawlerSection === section && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="bg-gradient-to-b from-[#F5F9FD] to-white border-t border-[#E7EBF0] overflow-hidden"
+                          >
+                            <div className="divide-y divide-[#E7EBF0]">
+                              {urls.map((url, idx) => (
+                                <motion.div
+                                  key={url.id}
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: idx * 0.02 }}
+                                  className={`px-6 py-3 flex items-center justify-between ${idx % 2 === 0 ? "bg-white" : "bg-[#F5F9FD]/50"}`}
+                                >
+                                  <div className="flex items-center gap-4 flex-1 min-w-0">
+                                    <button
+                                      onClick={() => handleToggleUrl(url.id)}
+                                      className={`flex-shrink-0 w-12 h-6 rounded-full transition-colors relative ${
+                                        url.enabled ? "bg-green-500" : "bg-gray-300"
+                                      }`}
+                                    >
+                                      <motion.div
+                                        animate={{ x: url.enabled ? 24 : 2 }}
+                                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                        className="absolute top-1 w-4 h-4 bg-white rounded-full shadow"
+                                      />
+                                    </button>
+                                    <div className="min-w-0 flex-1">
+                                      <p className="text-sm font-medium text-[#000034] truncate">{url.title || url.url}</p>
+                                      <p className="text-xs text-[#666666] truncate">{url.url}</p>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center gap-3 flex-shrink-0">
+                                    {url.lastCrawled && (
+                                      <span className="text-xs text-[#999]">Last: {formatTimeAgo(url.lastCrawled)}</span>
+                                    )}
+                                    <span className={`px-2 py-1 text-xs rounded font-medium ${
+                                      url.lastStatus === "success" ? "bg-green-100 text-green-600" :
+                                      url.lastStatus === "error" ? "bg-red-100 text-red-600" :
+                                      url.lastStatus === "pending" ? "bg-amber-100 text-amber-600" :
+                                      "bg-gray-100 text-gray-500"
+                                    }`}>
+                                      {url.lastStatus === "never" ? "Not crawled" : url.lastStatus}
+                                    </span>
+                                    <motion.a
+                                      whileHover={{ scale: 1.1 }}
+                                      href={url.fullUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="w-8 h-8 flex items-center justify-center text-[#1D4F91] hover:bg-blue-100 rounded-lg transition-colors"
+                                    >
+                                      <ExternalLink className="h-4 w-4" />
+                                    </motion.a>
+                                  </div>
+                                </motion.div>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+
+            {/* Add Custom URL */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-white rounded-xl border border-[#E7EBF0] p-4 shadow-sm"
+            >
+              <h4 className="text-sm font-medium text-[#000034] mb-3 flex items-center gap-2">
+                <PlusCircle className="h-4 w-4 text-[#1D4F91]" />
+                Add Custom URL
+              </h4>
+              <div className="flex flex-col lg:flex-row gap-3">
+                <div className="relative flex-1">
+                  <Link className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                  <input
+                    type="text"
+                    placeholder="https://www.cityofdoral.com/..."
+                    value={newCustomUrl}
+                    onChange={(e) => setNewCustomUrl(e.target.value)}
+                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+                  />
+                </div>
+                <select
+                  value={newCustomSection}
+                  onChange={(e) => setNewCustomSection(e.target.value)}
+                  className="h-10 px-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] focus:outline-none focus:border-[#000080] cursor-pointer"
+                >
+                  {["About", "Businesses", "Residents", "Government", "Services", "Other"].map(section => (
+                    <option key={section} value={section}>{section}</option>
+                  ))}
+                </select>
+                <motion.button
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleAddCustomUrl}
+                  disabled={!newCustomUrl.trim()}
+                  className="h-10 px-5 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2 disabled:opacity-50"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add URL
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );
+}
+
+// Helper functions
+function formatFileSize(bytes: number): string {
+  if (bytes === 0) return "0 B";
+  const k = 1024;
+  const sizes = ["B", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+}
+
+function formatTimeAgo(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffDays > 0) return `${diffDays}d ago`;
+  if (diffHours > 0) return `${diffHours}h ago`;
+  return "Just now";
 }
 
 function FaqForm({

@@ -1,11 +1,12 @@
-import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'fs';
 import { join, relative, dirname, basename } from 'path';
 import { load } from 'cheerio';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SCRAPED_DIR = join(__dirname, '..', 'Website Scrapped');
-const OUTPUT_FILE = join(__dirname, '..', 'public', 'knowledge-base.json');
+const OUTPUT_FILE_EN = join(__dirname, '..', 'public', 'knowledge-base.json');
+const OUTPUT_FILE_ES = join(__dirname, '..', 'public', 'knowledge-base-es.json');
 
 // Sections to include
 const MAIN_SECTIONS = [
@@ -21,27 +22,15 @@ const MAIN_SECTIONS = [
   'Events-directory'
 ];
 
-// Files to skip (Spanish, duplicates, utility pages)
-function shouldSkipFile(filePath) {
-  const name = basename(filePath);
-  const lowerName = name.toLowerCase();
-
-  // Skip Spanish versions
-  if (lowerName.includes('_spanish') || lowerName.includes('lang_update')) {
-    return true;
-  }
-
-  // Skip non-index files (usually duplicates or resources)
-  if (!lowerName.includes('index.html')) {
-    return true;
-  }
-
-  return false;
-}
-
-// Get all HTML files recursively
-function getHtmlFiles(dir, files = []) {
+// Get all directories containing index.html files
+function getDirectoriesWithHtml(dir, dirs = []) {
   const items = readdirSync(dir);
+
+  // Check if this directory has an index.html
+  const hasIndexHtml = items.some(item => item === 'index.html');
+  if (hasIndexHtml) {
+    dirs.push(dir);
+  }
 
   for (const item of items) {
     const fullPath = join(dir, item);
@@ -50,17 +39,63 @@ function getHtmlFiles(dir, files = []) {
     if (stat.isDirectory()) {
       // Skip non-content directories
       if (!item.startsWith('.') && !item.startsWith('files') && !item.includes('WebResource')) {
-        getHtmlFiles(fullPath, files);
+        getDirectoriesWithHtml(fullPath, dirs);
       }
-    } else if (item.endsWith('.html') && !shouldSkipFile(fullPath)) {
-      files.push(fullPath);
     }
   }
 
-  return files;
+  return dirs;
 }
 
-// Extract section from path
+// Detect if content is English based on title/content patterns
+function isEnglishContent($) {
+  const title = $('title').text().toLowerCase();
+  const bodyText = $('body').text().toLowerCase().substring(0, 2000);
+
+  // English patterns
+  const englishPatterns = [
+    'city of doral',
+    ' the ',
+    ' and ',
+    ' for ',
+    ' with ',
+    'residents',
+    'businesses',
+    'government',
+    'services'
+  ];
+
+  // Spanish patterns
+  const spanishPatterns = [
+    'ciudad de doral',
+    ' de ',
+    ' para ',
+    ' con ',
+    'residentes',
+    'negocios',
+    'gobierno',
+    'servicios'
+  ];
+
+  let englishScore = 0;
+  let spanishScore = 0;
+
+  // Check title first (more weight)
+  if (title.includes('city of doral')) englishScore += 5;
+  if (title.includes('ciudad de doral')) spanishScore += 5;
+
+  // Check body content
+  for (const pattern of englishPatterns) {
+    if (bodyText.includes(pattern)) englishScore++;
+  }
+  for (const pattern of spanishPatterns) {
+    if (bodyText.includes(pattern)) spanishScore++;
+  }
+
+  return englishScore > spanishScore;
+}
+
+// Get section from path
 function getSection(filePath) {
   const relPath = relative(SCRAPED_DIR, filePath);
   const parts = relPath.split('/');
@@ -95,6 +130,9 @@ function parseHtmlFile(filePath) {
   try {
     const html = readFileSync(filePath, 'utf-8');
     const $ = load(html);
+
+    // Detect language
+    const isEnglish = isEnglishContent($);
 
     // Remove script and style tags
     $('script, style, noscript, iframe').remove();
@@ -153,8 +191,11 @@ function parseHtmlFile(filePath) {
     // Generate summary (first 200 chars)
     const summary = content.substring(0, 200).trim() + (content.length > 200 ? '...' : '');
 
-    // Get relative URL
-    const url = '/' + relative(SCRAPED_DIR, filePath);
+    // Get clean URL for the live website (directory path, not file path)
+    const relPath = relative(SCRAPED_DIR, filePath);
+    const dirPath = dirname(relPath);
+    // Convert to clean URL path (e.g., "/About/Doral-Facts")
+    const url = dirPath === '.' ? '/' : '/' + dirPath;
 
     // Get section
     const section = getSection(filePath);
@@ -168,7 +209,8 @@ function parseHtmlFile(filePath) {
       section,
       url,
       content,
-      summary
+      summary,
+      isEnglish
     };
   } catch (error) {
     console.error(`Error parsing ${filePath}:`, error.message);
@@ -176,67 +218,128 @@ function parseHtmlFile(filePath) {
   }
 }
 
-// Main function
-async function main() {
-  console.log('Starting knowledge base generation...\n');
-  console.log(`Source: ${SCRAPED_DIR}`);
-  console.log(`Output: ${OUTPUT_FILE}\n`);
+// Find best version for each language in a directory
+function findLanguageVersions(dirPath) {
+  const items = readdirSync(dirPath);
+  const htmlFiles = items.filter(f => f.endsWith('.html'));
 
-  // Get all HTML files
-  console.log('Finding HTML files...');
-  const htmlFiles = getHtmlFiles(SCRAPED_DIR);
-  console.log(`Found ${htmlFiles.length} HTML files to process\n`);
-
-  // Parse each file
-  const pages = [];
-  const sectionCounts = {};
-  let processed = 0;
-  let skipped = 0;
+  let englishFile = null;
+  let spanishFile = null;
 
   for (const file of htmlFiles) {
-    const page = parseHtmlFile(file);
+    const filePath = join(dirPath, file);
+    const html = readFileSync(filePath, 'utf-8');
+    const $ = load(html);
+    const isEnglish = isEnglishContent($);
 
-    if (page) {
-      pages.push(page);
-      sectionCounts[page.section] = (sectionCounts[page.section] || 0) + 1;
-      processed++;
-    } else {
-      skipped++;
+    if (isEnglish && !englishFile) {
+      englishFile = filePath;
+    } else if (!isEnglish && !spanishFile) {
+      spanishFile = filePath;
     }
 
-    // Progress indicator
-    if ((processed + skipped) % 100 === 0) {
-      process.stdout.write(`\rProcessed: ${processed + skipped}/${htmlFiles.length}`);
+    // Found both, no need to continue
+    if (englishFile && spanishFile) break;
+  }
+
+  return { englishFile, spanishFile };
+}
+
+// Main function
+async function main() {
+  console.log('Starting knowledge base generation (English + Spanish)...\n');
+  console.log(`Source: ${SCRAPED_DIR}`);
+  console.log(`Output EN: ${OUTPUT_FILE_EN}`);
+  console.log(`Output ES: ${OUTPUT_FILE_ES}\n`);
+
+  // Get all directories with HTML files
+  console.log('Finding directories with HTML files...');
+  const directories = getDirectoriesWithHtml(SCRAPED_DIR);
+  console.log(`Found ${directories.length} directories to process\n`);
+
+  // Parse each directory for both languages
+  const pagesEN = [];
+  const pagesES = [];
+  const sectionCountsEN = {};
+  const sectionCountsES = {};
+  let processed = 0;
+
+  for (const dirPath of directories) {
+    const { englishFile, spanishFile } = findLanguageVersions(dirPath);
+
+    // Parse English version
+    if (englishFile) {
+      const page = parseHtmlFile(englishFile);
+      if (page) {
+        delete page.isEnglish; // Remove temp field
+        pagesEN.push(page);
+        sectionCountsEN[page.section] = (sectionCountsEN[page.section] || 0) + 1;
+      }
+    }
+
+    // Parse Spanish version
+    if (spanishFile) {
+      const page = parseHtmlFile(spanishFile);
+      if (page) {
+        delete page.isEnglish; // Remove temp field
+        pagesES.push(page);
+        sectionCountsES[page.section] = (sectionCountsES[page.section] || 0) + 1;
+      }
+    }
+
+    processed++;
+    if (processed % 50 === 0) {
+      process.stdout.write(`\rProcessed: ${processed}/${directories.length}`);
     }
   }
 
-  console.log(`\n\nParsed ${processed} pages, skipped ${skipped}\n`);
+  console.log(`\n\nParsed ${pagesEN.length} English pages, ${pagesES.length} Spanish pages\n`);
 
-  // Get unique sections
-  const sections = Object.keys(sectionCounts).sort();
-
-  console.log('Pages by section:');
-  for (const section of sections) {
-    console.log(`  ${section}: ${sectionCounts[section]}`);
+  // Build English knowledge base
+  const sectionsEN = Object.keys(sectionCountsEN).sort();
+  console.log('English pages by section:');
+  for (const section of sectionsEN) {
+    console.log(`  ${section}: ${sectionCountsEN[section]}`);
   }
 
-  // Build knowledge base object
-  const knowledgeBase = {
-    pages,
-    sections,
+  const knowledgeBaseEN = {
+    language: 'en',
+    pages: pagesEN,
+    sections: sectionsEN,
     stats: {
-      totalPages: pages.length,
-      bySection: sectionCounts
+      totalPages: pagesEN.length,
+      bySection: sectionCountsEN
     },
     generatedAt: new Date().toISOString()
   };
 
-  // Write output
-  writeFileSync(OUTPUT_FILE, JSON.stringify(knowledgeBase, null, 2));
+  writeFileSync(OUTPUT_FILE_EN, JSON.stringify(knowledgeBaseEN, null, 2));
+  const fileSizeEnKb = Math.round(statSync(OUTPUT_FILE_EN).size / 1024);
+  console.log(`\nEnglish knowledge base saved to: ${OUTPUT_FILE_EN}`);
+  console.log(`File size: ${fileSizeEnKb} KB`);
 
-  const fileSizeKb = Math.round(statSync(OUTPUT_FILE).size / 1024);
-  console.log(`\nKnowledge base saved to: ${OUTPUT_FILE}`);
-  console.log(`File size: ${fileSizeKb} KB`);
+  // Build Spanish knowledge base
+  const sectionsES = Object.keys(sectionCountsES).sort();
+  console.log('\nSpanish pages by section:');
+  for (const section of sectionsES) {
+    console.log(`  ${section}: ${sectionCountsES[section]}`);
+  }
+
+  const knowledgeBaseES = {
+    language: 'es',
+    pages: pagesES,
+    sections: sectionsES,
+    stats: {
+      totalPages: pagesES.length,
+      bySection: sectionCountsES
+    },
+    generatedAt: new Date().toISOString()
+  };
+
+  writeFileSync(OUTPUT_FILE_ES, JSON.stringify(knowledgeBaseES, null, 2));
+  const fileSizeEsKb = Math.round(statSync(OUTPUT_FILE_ES).size / 1024);
+  console.log(`\nSpanish knowledge base saved to: ${OUTPUT_FILE_ES}`);
+  console.log(`File size: ${fileSizeEsKb} KB`);
 }
 
 main().catch(console.error);

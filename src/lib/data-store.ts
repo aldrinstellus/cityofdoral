@@ -609,6 +609,76 @@ export async function saveAuditLogs(logs: AuditLog[]): Promise<void> {
   return writeJsonFile('audit-logs.json', logs);
 }
 
+// Uploaded Document Types
+export interface UploadedDocument {
+  id: string;
+  filename: string;
+  originalName: string;
+  type: 'pdf' | 'docx' | 'txt';
+  size: number;
+  chunks: number;
+  uploadedAt: string;
+}
+
+const DEFAULT_UPLOADED_DOCS: UploadedDocument[] = [];
+
+// Uploaded Document functions
+export async function getUploadedDocuments(): Promise<UploadedDocument[]> {
+  return readJsonFile('documents.json', DEFAULT_UPLOADED_DOCS);
+}
+
+export async function saveUploadedDocuments(docs: UploadedDocument[]): Promise<void> {
+  return writeJsonFile('documents.json', docs);
+}
+
+// Crawler URL Types
+export interface CrawlerURL {
+  id: string;
+  url: string;
+  fullUrl: string;
+  title: string;
+  section: string;
+  enabled: boolean;
+  isCustom: boolean;
+  lastCrawled: string | null;
+  lastStatus: 'success' | 'error' | 'pending' | 'never';
+}
+
+const DEFAULT_CRAWLER_URLS: CrawlerURL[] = [];
+
+// Crawler URL functions
+export async function getCrawlerUrls(lang: 'en' | 'es' = 'en'): Promise<CrawlerURL[]> {
+  const filename = lang === 'es' ? 'crawler-urls-es.json' : 'crawler-urls.json';
+  return readJsonFile(filename, DEFAULT_CRAWLER_URLS);
+}
+
+export async function saveCrawlerUrls(urls: CrawlerURL[], lang: 'en' | 'es' = 'en'): Promise<void> {
+  const filename = lang === 'es' ? 'crawler-urls-es.json' : 'crawler-urls.json';
+  return writeJsonFile(filename, urls);
+}
+
+// Knowledge Entry Types (Custom entries for Knowledge Base)
+export interface KnowledgeEntry {
+  id: string;
+  title: string;
+  content: string;
+  section: string;
+  url?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+const DEFAULT_KNOWLEDGE_ENTRIES: KnowledgeEntry[] = [];
+
+// Knowledge Entry functions
+export async function getKnowledgeEntries(): Promise<KnowledgeEntry[]> {
+  return readJsonFile('knowledge-entries.json', DEFAULT_KNOWLEDGE_ENTRIES);
+}
+
+export async function saveKnowledgeEntries(entries: KnowledgeEntry[]): Promise<void> {
+  return writeJsonFile('knowledge-entries.json', entries);
+}
+
 // Helper to add audit log
 export async function addAuditLog(
   user: string,
