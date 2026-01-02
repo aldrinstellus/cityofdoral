@@ -23,6 +23,22 @@ import {
   FileText,
   History,
   User,
+  Lock,
+  Users,
+  ShieldCheck,
+  Mail,
+  Phone,
+  Building2,
+  Globe,
+  Camera,
+  Eye,
+  EyeOff,
+  UserPlus,
+  MoreHorizontal,
+  Check,
+  X,
+  MessageSquare,
+  Smartphone,
 } from "lucide-react";
 
 interface ChatbotSettings {
@@ -77,6 +93,46 @@ interface SettingsHistoryLog {
   adminEmail: string;
 }
 
+// Main settings tabs
+type MainSettingsTab = 'profile' | 'team' | 'permissions' | 'integrations' | 'chatbot';
+
+// Demo team member data
+interface TeamMember {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'editor' | 'viewer';
+  status: 'active' | 'pending';
+  avatar?: string;
+  lastActive: string;
+}
+
+const initialTeamMembers: TeamMember[] = [
+  { id: '1', name: 'Maria Rodriguez', email: 'mrodriguez@cityofdoral.com', role: 'admin', status: 'active', lastActive: 'Just now' },
+  { id: '2', name: 'Carlos Martinez', email: 'cmartinez@cityofdoral.com', role: 'editor', status: 'active', lastActive: '2 hours ago' },
+  { id: '3', name: 'Ana Garcia', email: 'agarcia@cityofdoral.com', role: 'viewer', status: 'active', lastActive: 'Yesterday' },
+  { id: '4', name: 'Luis Hernandez', email: 'lhernandez@cityofdoral.com', role: 'editor', status: 'pending', lastActive: '-' },
+  { id: '5', name: 'Sofia Perez', email: 'sperez@cityofdoral.com', role: 'viewer', status: 'active', lastActive: '3 days ago' },
+];
+
+// Demo permissions matrix structure
+interface PermissionRow {
+  resource: string;
+  admin: string[];
+  editor: string[];
+  viewer: string[];
+}
+
+const initialPermissions: PermissionRow[] = [
+  { resource: 'Dashboard', admin: ['read', 'create', 'update', 'delete'], editor: ['read'], viewer: ['read'] },
+  { resource: 'Content', admin: ['read', 'create', 'update', 'delete'], editor: ['read', 'create', 'update'], viewer: ['read'] },
+  { resource: 'Conversations', admin: ['read', 'create', 'update', 'delete'], editor: ['read', 'update'], viewer: ['read'] },
+  { resource: 'Escalations', admin: ['read', 'create', 'update', 'delete'], editor: ['read', 'update'], viewer: ['read'] },
+  { resource: 'Analytics', admin: ['read', 'create', 'update', 'delete'], editor: ['read'], viewer: ['read'] },
+  { resource: 'Settings', admin: ['read', 'create', 'update', 'delete'], editor: ['read'], viewer: [] },
+  { resource: 'Audit Logs', admin: ['read', 'create', 'update', 'delete'], editor: ['read'], viewer: [] },
+];
+
 const defaultSettings: ChatbotSettings = {
   chatbotName: "Doral Assistant",
   welcomeMessage: "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
@@ -110,10 +166,38 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [activeMainTab, setActiveMainTab] = useState<MainSettingsTab>("chatbot");
   const [activeSection, setActiveSection] = useState<string>("general");
   const [historyLogs, setHistoryLogs] = useState<SettingsHistoryLog[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const { confirm, DialogComponent } = useConfirmDialog();
+
+  // Team management state
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(initialTeamMembers);
+  const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [actionMenuOpen, setActionMenuOpen] = useState<string | null>(null);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteRole, setInviteRole] = useState<'admin' | 'editor' | 'viewer'>('viewer');
+
+  // Permissions management state
+  const [permissions, setPermissions] = useState<PermissionRow[]>(initialPermissions);
+  const [showAddPermissionModal, setShowAddPermissionModal] = useState(false);
+  const [newPermissionName, setNewPermissionName] = useState('');
+  const [newPermissionAdmin, setNewPermissionAdmin] = useState<string[]>(['read', 'create', 'update', 'delete']);
+  const [newPermissionEditor, setNewPermissionEditor] = useState<string[]>(['read']);
+  const [newPermissionViewer, setNewPermissionViewer] = useState<string[]>(['read']);
+
+  // Main settings tabs configuration
+  const mainTabs = [
+    { id: 'profile' as MainSettingsTab, label: 'Profile', icon: User, gradient: 'from-blue-500' },
+    { id: 'team' as MainSettingsTab, label: 'Team', icon: Users, gradient: 'from-purple-500' },
+    { id: 'permissions' as MainSettingsTab, label: 'Permissions', icon: ShieldCheck, gradient: 'from-amber-500' },
+    { id: 'integrations' as MainSettingsTab, label: 'Integrations', icon: Link2, gradient: 'from-cyan-500' },
+    { id: 'chatbot' as MainSettingsTab, label: 'Chatbot', icon: Bot, gradient: 'from-indigo-500' },
+  ];
 
   // Fetch settings history
   const fetchHistory = useCallback(async () => {
@@ -315,6 +399,116 @@ export default function SettingsPage() {
     });
   };
 
+  // Team management functions
+  const handleInviteMember = () => {
+    if (!inviteEmail.trim()) {
+      toast.error("Please enter an email address");
+      return;
+    }
+    if (!inviteEmail.includes('@')) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    const newMember: TeamMember = {
+      id: Date.now().toString(),
+      name: inviteEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      email: inviteEmail,
+      role: inviteRole,
+      status: 'pending',
+      lastActive: '-',
+    };
+    setTeamMembers([...teamMembers, newMember]);
+    setShowInviteModal(false);
+    setInviteEmail('');
+    setInviteRole('viewer');
+    toast.success(`Invitation sent to ${inviteEmail}`);
+  };
+
+  const handleUpdateMemberRole = (memberId: string, newRole: 'admin' | 'editor' | 'viewer') => {
+    setTeamMembers(teamMembers.map(m =>
+      m.id === memberId ? { ...m, role: newRole } : m
+    ));
+    setShowEditModal(false);
+    setEditingMember(null);
+    toast.success("Role updated successfully");
+  };
+
+  const handleRemoveMember = (member: TeamMember) => {
+    confirm({
+      title: "Remove Team Member",
+      description: `Are you sure you want to remove ${member.name} from the team? This action cannot be undone.`,
+      confirmLabel: "Remove",
+      variant: "danger",
+      onConfirm: () => {
+        setTeamMembers(teamMembers.filter(m => m.id !== member.id));
+        toast.success(`${member.name} has been removed`);
+      },
+    });
+  };
+
+  // Permissions management functions
+  const togglePermission = (resourceIndex: number, role: 'admin' | 'editor' | 'viewer', action: string) => {
+    setPermissions(permissions.map((row, idx) => {
+      if (idx !== resourceIndex) return row;
+      const currentPerms = [...row[role]];
+      const actionIndex = currentPerms.indexOf(action);
+      if (actionIndex > -1) {
+        currentPerms.splice(actionIndex, 1);
+      } else {
+        currentPerms.push(action);
+      }
+      return { ...row, [role]: currentPerms };
+    }));
+    toast.success("Permission updated");
+  };
+
+  const handleAddPermission = () => {
+    if (!newPermissionName.trim()) {
+      toast.error("Please enter a resource name");
+      return;
+    }
+    if (permissions.some(p => p.resource.toLowerCase() === newPermissionName.trim().toLowerCase())) {
+      toast.error("A resource with this name already exists");
+      return;
+    }
+    const newPermission: PermissionRow = {
+      resource: newPermissionName.trim(),
+      admin: [...newPermissionAdmin],
+      editor: [...newPermissionEditor],
+      viewer: [...newPermissionViewer],
+    };
+    setPermissions([...permissions, newPermission]);
+    setShowAddPermissionModal(false);
+    setNewPermissionName('');
+    setNewPermissionAdmin(['read', 'create', 'update', 'delete']);
+    setNewPermissionEditor(['read']);
+    setNewPermissionViewer(['read']);
+    toast.success(`Permission "${newPermissionName.trim()}" created`);
+  };
+
+  const handleDeletePermission = (resource: string) => {
+    confirm({
+      title: "Delete Permission",
+      description: `Are you sure you want to delete the "${resource}" permission? This action cannot be undone.`,
+      confirmLabel: "Delete",
+      variant: "danger",
+      onConfirm: () => {
+        setPermissions(permissions.filter(p => p.resource !== resource));
+        toast.success(`Permission "${resource}" deleted`);
+      },
+    });
+  };
+
+  const toggleNewPermission = (role: 'admin' | 'editor' | 'viewer', action: string) => {
+    const setter = role === 'admin' ? setNewPermissionAdmin : role === 'editor' ? setNewPermissionEditor : setNewPermissionViewer;
+    const current = role === 'admin' ? newPermissionAdmin : role === 'editor' ? newPermissionEditor : newPermissionViewer;
+    if (current.includes(action)) {
+      setter(current.filter(a => a !== action));
+    } else {
+      setter([...current, action]);
+    }
+  };
+
   if (loading) {
     return (
       <div className="p-6 lg:p-8 max-w-[1600px] mx-auto flex items-center justify-center min-h-[60vh]">
@@ -326,13 +520,13 @@ export default function SettingsPage() {
     );
   }
 
-  const sections = [
+  // Chatbot sub-sections (integrations moved to top-level tab)
+  const chatbotSections = [
     { id: "general", label: "General", icon: Settings, gradient: "from-blue-500" },
     { id: "behavior", label: "Behavior", icon: Bot, gradient: "from-purple-500" },
     { id: "appearance", label: "Appearance", icon: Palette, gradient: "from-pink-500" },
     { id: "llm", label: "LLM Settings", icon: Database, gradient: "from-orange-500" },
     { id: "notifications", label: "Notifications", icon: Bell, gradient: "from-amber-500" },
-    { id: "integrations", label: "Integrations", icon: Link2, gradient: "from-cyan-500" },
     { id: "security", label: "Security", icon: Shield, gradient: "from-green-500" },
     { id: "history", label: "History", icon: History, gradient: "from-gray-500" },
   ];
@@ -360,7 +554,13 @@ export default function SettingsPage() {
               <Settings className="h-6 w-6 text-[#1D4F91]" />
             </motion.div>
           </div>
-          <p className="text-[#666666] mt-1 text-[15px]">Configure chatbot behavior and appearance</p>
+          <p className="text-[#666666] mt-1 text-[15px]">
+            {activeMainTab === 'profile' && 'Manage your account profile and security'}
+            {activeMainTab === 'team' && 'Manage team members and access'}
+            {activeMainTab === 'permissions' && 'Configure role-based permissions'}
+            {activeMainTab === 'integrations' && 'Configure external service connections'}
+            {activeMainTab === 'chatbot' && 'Configure chatbot behavior and appearance'}
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <motion.button
@@ -407,16 +607,924 @@ export default function SettingsPage() {
         </div>
       </motion.div>
 
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Section Navigation */}
-        <motion.nav
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 }}
-          className="lg:w-56 flex-shrink-0"
-        >
-          <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
-            {sections.map((section, idx) => {
+      {/* Main Settings Tabs */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="mb-6"
+      >
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {mainTabs.map((tab, idx) => {
+            const Icon = tab.icon;
+            const isActive = activeMainTab === tab.id;
+            return (
+              <motion.button
+                key={tab.id}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 + idx * 0.03 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setActiveMainTab(tab.id)}
+                className={`relative flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                  isActive
+                    ? "text-white"
+                    : "bg-white text-[#363535] hover:bg-gray-50 border border-[#E7EBF0] hover:border-[#000080]/30"
+                }`}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="activeMainTab"
+                    className="absolute inset-0 bg-gradient-to-r from-[#000080] to-[#1D4F91] rounded-xl shadow-lg shadow-[#000080]/25"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <div className={`relative z-10 ${isActive ? "" : `w-7 h-7 rounded-lg bg-gradient-to-br ${tab.gradient} to-transparent/50 flex items-center justify-center`}`}>
+                  <Icon className={`h-4 w-4 ${isActive ? "" : "text-white"}`} />
+                </div>
+                <span className="relative z-10">{tab.label}</span>
+              </motion.button>
+            );
+          })}
+        </div>
+      </motion.div>
+
+      {/* Tab Content */}
+      <AnimatePresence mode="wait">
+        {/* Profile Tab */}
+        {activeMainTab === 'profile' && (
+          <motion.div
+            key="profile-tab"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] p-6"
+          >
+            <h2 className="text-lg font-semibold text-[#000034] mb-6 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+                <User className="h-5 w-5 text-white" />
+              </div>
+              Profile Settings
+            </h2>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Avatar Section */}
+              <div className="flex flex-col items-center p-6 bg-gradient-to-br from-[#F5F9FD] to-blue-50/50 rounded-xl border border-[#E7EBF0]">
+                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#000080] to-[#1D4F91] flex items-center justify-center text-white text-3xl font-bold mb-4">
+                  MR
+                </div>
+                <h3 className="font-semibold text-[#000034]">Maria Rodriguez</h3>
+                <p className="text-sm text-[#666666]">Administrator</p>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="mt-4 px-4 py-2 bg-white border border-[#E7EBF0] rounded-lg text-sm font-medium text-[#363535] hover:border-[#000080]/30 transition-colors flex items-center gap-2"
+                >
+                  <Camera className="h-4 w-4" />
+                  Change Photo
+                </motion.button>
+              </div>
+
+              {/* Profile Form */}
+              <div className="lg:col-span-2 space-y-5">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className={labelClass}>First Name</label>
+                    <input type="text" defaultValue="Maria" className={inputClass} />
+                  </div>
+                  <div>
+                    <label className={labelClass}>Last Name</label>
+                    <input type="text" defaultValue="Rodriguez" className={inputClass} />
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelClass}>Email Address</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                    <input type="email" defaultValue="mrodriguez@cityofdoral.com" className={`${inputClass} pl-10`} />
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelClass}>Phone Number</label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                    <input type="tel" defaultValue="(305) 593-6725" className={`${inputClass} pl-10`} />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className={labelClass}>Department</label>
+                    <div className="relative">
+                      <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                      <select defaultValue="it" className={`${inputClass} pl-10 cursor-pointer`}>
+                        <option value="it">Information Technology</option>
+                        <option value="admin">Administration</option>
+                        <option value="comm">Communications</option>
+                        <option value="public-works">Public Works</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Timezone</label>
+                    <div className="relative">
+                      <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                      <select defaultValue="est" className={`${inputClass} pl-10 cursor-pointer`}>
+                        <option value="est">Eastern Time (ET)</option>
+                        <option value="cst">Central Time (CT)</option>
+                        <option value="mst">Mountain Time (MT)</option>
+                        <option value="pst">Pacific Time (PT)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelClass}>Preferred Language</label>
+                  <select defaultValue="en" className={`${inputClass} cursor-pointer`}>
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                  </select>
+                </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => toast.success("Profile updated successfully")}
+                  className="h-11 px-6 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2"
+                >
+                  <Save className="h-4 w-4" />
+                  Save Profile
+                </motion.button>
+              </div>
+            </div>
+
+            {/* Password & Security Section */}
+            <div className="mt-8 pt-8 border-t border-[#E7EBF0]">
+              <h2 className="text-lg font-semibold text-[#000034] mb-6 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-lg">
+                  <Lock className="h-5 w-5 text-white" />
+                </div>
+                Password & Security
+              </h2>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Password Change */}
+                <div className="space-y-4">
+                  <div>
+                    <label className={labelClass}>Current Password</label>
+                    <div className="relative">
+                      <input type={showPassword ? "text" : "password"} placeholder="Enter current password" className={`${inputClass} pr-10`} />
+                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] hover:text-[#666666]">
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>New Password</label>
+                    <div className="relative">
+                      <input type={showPassword ? "text" : "password"} placeholder="Enter new password" className={`${inputClass} pr-10`} />
+                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] hover:text-[#666666]">
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                    <div className="mt-2 flex gap-1">
+                      <div className="h-1 flex-1 bg-green-500 rounded" />
+                      <div className="h-1 flex-1 bg-green-500 rounded" />
+                      <div className="h-1 flex-1 bg-green-500 rounded" />
+                      <div className="h-1 flex-1 bg-gray-200 rounded" />
+                    </div>
+                    <p className="text-xs text-[#666666] mt-1">Password strength: Good</p>
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Confirm New Password</label>
+                    <input type={showPassword ? "text" : "password"} placeholder="Confirm new password" className={inputClass} />
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => toast.success("Password updated successfully")}
+                    className="h-11 px-6 bg-gradient-to-r from-green-600 to-green-700 text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-green-600/25 transition-all duration-300 flex items-center gap-2"
+                  >
+                    <Lock className="h-4 w-4" />
+                    Update Password
+                  </motion.button>
+                </div>
+
+                {/* Security Settings */}
+                <div className="space-y-4">
+                  <AnimatedToggleCard
+                    label="Two-Factor Authentication"
+                    description="Add an extra layer of security to your account"
+                    checked={true}
+                    onChange={() => toast.info("2FA settings would be configured here")}
+                  />
+
+                  <div>
+                    <label className={labelClass}>Session Timeout</label>
+                    <select defaultValue="30" className={`${inputClass} cursor-pointer`}>
+                      <option value="15">15 minutes</option>
+                      <option value="30">30 minutes</option>
+                      <option value="60">1 hour</option>
+                      <option value="120">2 hours</option>
+                    </select>
+                  </div>
+
+                  <div className="p-4 bg-gradient-to-br from-[#F5F9FD] to-blue-50/50 rounded-xl border border-[#E7EBF0]">
+                    <p className="text-sm text-[#666666]">
+                      <span className="font-medium text-[#000034]">Last password change:</span> December 15, 2025
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Team Tab */}
+        {activeMainTab === 'team' && (
+          <motion.div
+            key="team-tab"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="bg-gradient-to-br from-white via-white to-purple-50/30 rounded-xl border border-[#E7EBF0] shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] p-6"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-[#000034] flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg">
+                  <Users className="h-5 w-5 text-white" />
+                </div>
+                Team Members
+              </h2>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setShowInviteModal(true)}
+                className="h-10 px-4 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-xl hover:shadow-lg transition-all flex items-center gap-2"
+              >
+                <UserPlus className="h-4 w-4" />
+                Invite Member
+              </motion.button>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-[#E7EBF0]">
+                    <th className="text-left py-3 px-4 text-xs font-medium text-[#666666] uppercase tracking-wide">Member</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-[#666666] uppercase tracking-wide">Role</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-[#666666] uppercase tracking-wide">Status</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-[#666666] uppercase tracking-wide">Last Active</th>
+                    <th className="text-right py-3 px-4 text-xs font-medium text-[#666666] uppercase tracking-wide">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {teamMembers.map((member, idx) => (
+                    <motion.tr
+                      key={member.id}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                      className="border-b border-[#E7EBF0] hover:bg-gray-50 transition-colors"
+                    >
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#000080] to-[#1D4F91] flex items-center justify-center text-white text-sm font-medium">
+                            {member.name.split(' ').map(n => n[0]).join('')}
+                          </div>
+                          <div>
+                            <p className="font-medium text-[#000034]">{member.name}</p>
+                            <p className="text-sm text-[#666666]">{member.email}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          member.role === 'admin' ? 'bg-[#000080] text-white' :
+                          member.role === 'editor' ? 'bg-blue-100 text-blue-700' :
+                          'bg-gray-100 text-gray-700'
+                        }`}>
+                          {member.role.charAt(0).toUpperCase() + member.role.slice(1)}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          member.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                        }`}>
+                          {member.status.charAt(0).toUpperCase() + member.status.slice(1)}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4 text-sm text-[#666666]">{member.lastActive}</td>
+                      <td className="py-4 px-4 text-right relative">
+                        <button
+                          onClick={() => setActionMenuOpen(actionMenuOpen === member.id ? null : member.id)}
+                          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        >
+                          <MoreHorizontal className="h-4 w-4 text-[#666666]" />
+                        </button>
+                        {/* Action Dropdown Menu */}
+                        <AnimatePresence>
+                          {actionMenuOpen === member.id && (
+                            <motion.div
+                              initial={{ opacity: 0, scale: 0.95, y: -5 }}
+                              animate={{ opacity: 1, scale: 1, y: 0 }}
+                              exit={{ opacity: 0, scale: 0.95, y: -5 }}
+                              className="absolute right-4 top-12 w-40 bg-white rounded-xl shadow-lg border border-[#E7EBF0] py-1 z-10"
+                            >
+                              <button
+                                onClick={() => {
+                                  setEditingMember(member);
+                                  setShowEditModal(true);
+                                  setActionMenuOpen(null);
+                                }}
+                                className="w-full px-4 py-2 text-left text-sm text-[#363535] hover:bg-gray-50 flex items-center gap-2"
+                              >
+                                <User className="h-4 w-4" />
+                                Edit Role
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setActionMenuOpen(null);
+                                  handleRemoveMember(member);
+                                }}
+                                className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                              >
+                                <X className="h-4 w-4" />
+                                Remove
+                              </button>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Empty State */}
+            {teamMembers.length === 0 && (
+              <div className="text-center py-12">
+                <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                <p className="text-[#666666]">No team members yet</p>
+                <p className="text-sm text-gray-400">Click "Invite Member" to add someone</p>
+              </div>
+            )}
+
+            {/* Invite Modal */}
+            {showInviteModal && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowInviteModal(false)}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl"
+                >
+                  <h3 className="text-lg font-semibold text-[#000034] mb-4">Invite Team Member</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className={labelClass}>Email Address</label>
+                      <input
+                        type="email"
+                        value={inviteEmail}
+                        onChange={(e) => setInviteEmail(e.target.value)}
+                        placeholder="colleague@cityofdoral.com"
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Role</label>
+                      <select
+                        value={inviteRole}
+                        onChange={(e) => setInviteRole(e.target.value as 'admin' | 'editor' | 'viewer')}
+                        className={`${inputClass} cursor-pointer`}
+                      >
+                        <option value="viewer">Viewer</option>
+                        <option value="editor">Editor</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="flex justify-end gap-3 mt-6">
+                    <button onClick={() => { setShowInviteModal(false); setInviteEmail(''); setInviteRole('viewer'); }} className="px-4 py-2 text-sm font-medium text-[#666666] hover:bg-gray-100 rounded-lg transition-colors">
+                      Cancel
+                    </button>
+                    <button onClick={handleInviteMember} className="px-4 py-2 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg">
+                      Send Invite
+                    </button>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+
+            {/* Edit Role Modal */}
+            {showEditModal && editingMember && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => { setShowEditModal(false); setEditingMember(null); }}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl"
+                >
+                  <h3 className="text-lg font-semibold text-[#000034] mb-4">Edit Role</h3>
+                  <div className="flex items-center gap-3 mb-4 p-3 bg-gray-50 rounded-lg">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#000080] to-[#1D4F91] flex items-center justify-center text-white text-sm font-medium">
+                      {editingMember.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                    <div>
+                      <p className="font-medium text-[#000034]">{editingMember.name}</p>
+                      <p className="text-sm text-[#666666]">{editingMember.email}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Select New Role</label>
+                    <div className="space-y-2">
+                      {(['admin', 'editor', 'viewer'] as const).map((role) => (
+                        <button
+                          key={role}
+                          onClick={() => handleUpdateMemberRole(editingMember.id, role)}
+                          className={`w-full p-3 rounded-lg text-left border transition-all ${
+                            editingMember.role === role
+                              ? 'border-[#000080] bg-blue-50'
+                              : 'border-[#E7EBF0] hover:border-[#000080]/30'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="font-medium text-[#000034]">{role.charAt(0).toUpperCase() + role.slice(1)}</p>
+                              <p className="text-xs text-[#666666]">
+                                {role === 'admin' && 'Full access to all features'}
+                                {role === 'editor' && 'Can manage content and conversations'}
+                                {role === 'viewer' && 'Read-only access'}
+                              </p>
+                            </div>
+                            {editingMember.role === role && <Check className="h-5 w-5 text-[#000080]" />}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex justify-end mt-6">
+                    <button onClick={() => { setShowEditModal(false); setEditingMember(null); }} className="px-4 py-2 text-sm font-medium text-[#666666] hover:bg-gray-100 rounded-lg transition-colors">
+                      Close
+                    </button>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* Permissions Tab */}
+        {activeMainTab === 'permissions' && (
+          <motion.div
+            key="permissions-tab"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="bg-gradient-to-br from-white via-white to-amber-50/30 rounded-xl border border-[#E7EBF0] shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] p-6"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-[#000034] flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg">
+                  <ShieldCheck className="h-5 w-5 text-white" />
+                </div>
+                Role Permissions
+              </h2>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setShowAddPermissionModal(true)}
+                className="h-10 px-4 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-xl hover:shadow-lg transition-all flex items-center gap-2"
+              >
+                <ShieldCheck className="h-4 w-4" />
+                Add Permission
+              </motion.button>
+            </div>
+
+            {/* Role Cards - Dynamic counts from team members */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              {[
+                { role: 'admin' as const, label: 'Admin', desc: 'Full access to all features', color: 'from-[#000080] to-[#1D4F91]' },
+                { role: 'editor' as const, label: 'Editor', desc: 'Can manage content and conversations', color: 'from-blue-500 to-blue-600' },
+                { role: 'viewer' as const, label: 'Viewer', desc: 'Read-only access', color: 'from-gray-400 to-gray-500' },
+              ].map((item, idx) => {
+                const count = teamMembers.filter(m => m.role === item.role).length;
+                return (
+                  <motion.div
+                    key={item.role}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="p-4 bg-white rounded-xl border border-[#E7EBF0] hover:shadow-md transition-shadow"
+                  >
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-3`}>
+                      <ShieldCheck className="h-5 w-5 text-white" />
+                    </div>
+                    <h3 className="font-semibold text-[#000034]">{item.label}</h3>
+                    <p className="text-sm text-[#666666] mt-1">{item.desc}</p>
+                    <p className="text-xs text-[#999] mt-2">{count} member{count !== 1 ? 's' : ''}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Info Banner */}
+            <div className="p-4 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl border border-amber-100 mb-6">
+              <div className="flex items-center gap-2 text-amber-700">
+                <Shield className="h-4 w-4" />
+                <span className="text-sm font-medium">Click on any permission to toggle it (Demo Mode)</span>
+              </div>
+            </div>
+
+            {/* Permissions Matrix - Interactive */}
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-[#E7EBF0]">
+                    <th className="text-left py-3 px-4 text-xs font-medium text-[#666666] uppercase tracking-wide">Resource</th>
+                    <th className="text-center py-3 px-4 text-xs font-medium text-[#666666] uppercase tracking-wide">
+                      <span className="inline-flex items-center gap-1">
+                        <span className="w-2 h-2 rounded-full bg-[#000080]"></span>
+                        Admin
+                      </span>
+                    </th>
+                    <th className="text-center py-3 px-4 text-xs font-medium text-[#666666] uppercase tracking-wide">
+                      <span className="inline-flex items-center gap-1">
+                        <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                        Editor
+                      </span>
+                    </th>
+                    <th className="text-center py-3 px-4 text-xs font-medium text-[#666666] uppercase tracking-wide">
+                      <span className="inline-flex items-center gap-1">
+                        <span className="w-2 h-2 rounded-full bg-gray-400"></span>
+                        Viewer
+                      </span>
+                    </th>
+                    <th className="text-right py-3 px-4 text-xs font-medium text-[#666666] uppercase tracking-wide">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {permissions.map((row, idx) => (
+                    <motion.tr
+                      key={row.resource}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: idx * 0.03 }}
+                      className="border-b border-[#E7EBF0] hover:bg-gray-50"
+                    >
+                      <td className="py-3 px-4 font-medium text-[#000034]">{row.resource}</td>
+                      <td className="py-3 px-4 text-center">
+                        <div className="flex justify-center gap-1">
+                          {['read', 'create', 'update', 'delete'].map(action => (
+                            <button
+                              key={action}
+                              onClick={() => togglePermission(idx, 'admin', action)}
+                              title={`${action.charAt(0).toUpperCase() + action.slice(1)} - Click to toggle`}
+                              className={`w-6 h-6 rounded flex items-center justify-center text-xs transition-all hover:scale-110 cursor-pointer ${
+                                row.admin.includes(action) ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                              }`}
+                            >
+                              {row.admin.includes(action) ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                            </button>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <div className="flex justify-center gap-1">
+                          {['read', 'create', 'update', 'delete'].map(action => (
+                            <button
+                              key={action}
+                              onClick={() => togglePermission(idx, 'editor', action)}
+                              title={`${action.charAt(0).toUpperCase() + action.slice(1)} - Click to toggle`}
+                              className={`w-6 h-6 rounded flex items-center justify-center text-xs transition-all hover:scale-110 cursor-pointer ${
+                                row.editor.includes(action) ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                              }`}
+                            >
+                              {row.editor.includes(action) ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                            </button>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <div className="flex justify-center gap-1">
+                          {['read', 'create', 'update', 'delete'].map(action => (
+                            <button
+                              key={action}
+                              onClick={() => togglePermission(idx, 'viewer', action)}
+                              title={`${action.charAt(0).toUpperCase() + action.slice(1)} - Click to toggle`}
+                              className={`w-6 h-6 rounded flex items-center justify-center text-xs transition-all hover:scale-110 cursor-pointer ${
+                                row.viewer.includes(action) ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                              }`}
+                            >
+                              {row.viewer.includes(action) ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                            </button>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <button
+                          onClick={() => handleDeletePermission(row.resource)}
+                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Delete permission"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="flex items-center justify-between mt-4">
+              <p className="text-xs text-[#999]">Legend: R=Read, C=Create, U=Update, D=Delete</p>
+              <button
+                onClick={() => {
+                  setPermissions(initialPermissions);
+                  toast.success("Permissions reset to defaults");
+                }}
+                className="text-xs text-[#000080] hover:underline"
+              >
+                Reset to defaults
+              </button>
+            </div>
+
+            {/* Add Permission Modal */}
+            {showAddPermissionModal && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowAddPermissionModal(false)}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-white rounded-xl p-6 w-full max-w-lg shadow-2xl"
+                >
+                  <h3 className="text-lg font-semibold text-[#000034] mb-4 flex items-center gap-2">
+                    <ShieldCheck className="h-5 w-5 text-amber-500" />
+                    Add New Permission
+                  </h3>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className={labelClass}>Resource Name</label>
+                      <input
+                        type="text"
+                        value={newPermissionName}
+                        onChange={(e) => setNewPermissionName(e.target.value)}
+                        placeholder="e.g., Reports, Notifications, Billing"
+                        className={inputClass}
+                      />
+                    </div>
+
+                    <div className="p-4 bg-gray-50 rounded-xl space-y-4">
+                      <p className="text-xs font-medium text-[#666666] uppercase tracking-wide">Set Permissions by Role</p>
+
+                      {/* Admin Permissions */}
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="w-2 h-2 rounded-full bg-[#000080]"></span>
+                          <span className="text-sm font-medium text-[#000034]">Admin</span>
+                        </div>
+                        <div className="flex gap-2">
+                          {['read', 'create', 'update', 'delete'].map(action => (
+                            <button
+                              key={action}
+                              onClick={() => toggleNewPermission('admin', action)}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                newPermissionAdmin.includes(action)
+                                  ? 'bg-green-100 text-green-700 border border-green-200'
+                                  : 'bg-gray-100 text-gray-500 border border-gray-200'
+                              }`}
+                            >
+                              {action.charAt(0).toUpperCase() + action.slice(1)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Editor Permissions */}
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                          <span className="text-sm font-medium text-[#000034]">Editor</span>
+                        </div>
+                        <div className="flex gap-2">
+                          {['read', 'create', 'update', 'delete'].map(action => (
+                            <button
+                              key={action}
+                              onClick={() => toggleNewPermission('editor', action)}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                newPermissionEditor.includes(action)
+                                  ? 'bg-green-100 text-green-700 border border-green-200'
+                                  : 'bg-gray-100 text-gray-500 border border-gray-200'
+                              }`}
+                            >
+                              {action.charAt(0).toUpperCase() + action.slice(1)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Viewer Permissions */}
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="w-2 h-2 rounded-full bg-gray-400"></span>
+                          <span className="text-sm font-medium text-[#000034]">Viewer</span>
+                        </div>
+                        <div className="flex gap-2">
+                          {['read', 'create', 'update', 'delete'].map(action => (
+                            <button
+                              key={action}
+                              onClick={() => toggleNewPermission('viewer', action)}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                newPermissionViewer.includes(action)
+                                  ? 'bg-green-100 text-green-700 border border-green-200'
+                                  : 'bg-gray-100 text-gray-500 border border-gray-200'
+                              }`}
+                            >
+                              {action.charAt(0).toUpperCase() + action.slice(1)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-3 mt-6">
+                    <button
+                      onClick={() => {
+                        setShowAddPermissionModal(false);
+                        setNewPermissionName('');
+                        setNewPermissionAdmin(['read', 'create', 'update', 'delete']);
+                        setNewPermissionEditor(['read']);
+                        setNewPermissionViewer(['read']);
+                      }}
+                      className="px-4 py-2 text-sm font-medium text-[#666666] hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleAddPermission}
+                      className="px-4 py-2 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg"
+                    >
+                      Add Permission
+                    </button>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* Integrations Tab */}
+        {activeMainTab === 'integrations' && (
+          <motion.div
+            key="integrations-tab"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-6"
+          >
+            <div className="bg-gradient-to-br from-white via-white to-cyan-50/30 rounded-xl border border-[#E7EBF0] shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] p-6">
+              <h2 className="text-lg font-semibold text-[#000034] mb-6 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center shadow-lg">
+                  <Link2 className="h-5 w-5 text-white" />
+                </div>
+                External Integrations
+              </h2>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* CRM Integration */}
+                <div className="p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+                  <div className="flex items-center gap-2 text-[#1D4F91] mb-4">
+                    <Database className="h-5 w-5" />
+                    <span className="font-semibold">CRM Integration (ITN 3.1.2)</span>
+                  </div>
+                  <AnimatedToggleCard
+                    label="Enable CRM Sync"
+                    description="Sync escalated conversations to your CRM"
+                    checked={settings.crmEnabled}
+                    onChange={(checked) => setSettings({ ...settings, crmEnabled: checked })}
+                  />
+                  {settings.crmEnabled && (
+                    <div className="mt-4">
+                      <label className={labelClass}>CRM Provider</label>
+                      <select
+                        value={settings.crmProvider}
+                        onChange={(e) => setSettings({ ...settings, crmProvider: e.target.value as "salesforce" | "dynamics" | "none" })}
+                        className={`${inputClass} cursor-pointer`}
+                      >
+                        <option value="none">Select Provider...</option>
+                        <option value="salesforce">Salesforce</option>
+                        <option value="dynamics">Microsoft Dynamics 365</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+
+                {/* SharePoint Integration */}
+                <div className="p-5 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
+                  <div className="flex items-center gap-2 text-[#006A52] mb-4">
+                    <FileText className="h-5 w-5" />
+                    <span className="font-semibold">SharePoint Integration (ITN 3.2.5)</span>
+                  </div>
+                  <AnimatedToggleCard
+                    label="Enable SharePoint Sync"
+                    description="Parse documents from SharePoint for knowledge base"
+                    checked={settings.sharePointEnabled}
+                    onChange={(checked) => setSettings({ ...settings, sharePointEnabled: checked })}
+                  />
+                </div>
+
+                {/* IVR Integration */}
+                <div className="p-5 bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl border border-purple-100">
+                  <div className="flex items-center gap-2 text-purple-700 mb-4">
+                    <Phone className="h-5 w-5" />
+                    <span className="font-semibold">IVR Integration</span>
+                  </div>
+                  <AnimatedToggleCard
+                    label="Enable IVR System"
+                    description="Connect chatbot to phone system via Twilio"
+                    checked={false}
+                    onChange={() => toast.info("IVR settings would be configured here")}
+                  />
+                </div>
+
+                {/* SMS Integration */}
+                <div className="p-5 bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl border border-orange-100">
+                  <div className="flex items-center gap-2 text-orange-700 mb-4">
+                    <MessageSquare className="h-5 w-5" />
+                    <span className="font-semibold">SMS Integration</span>
+                  </div>
+                  <AnimatedToggleCard
+                    label="Enable SMS Support"
+                    description="Allow users to interact via text messages"
+                    checked={false}
+                    onChange={() => toast.info("SMS settings would be configured here")}
+                  />
+                </div>
+
+                {/* Social Media */}
+                <div className="p-5 bg-gradient-to-br from-pink-50 to-rose-50 rounded-xl border border-pink-100 lg:col-span-2">
+                  <div className="flex items-center gap-2 text-pink-700 mb-4">
+                    <Smartphone className="h-5 w-5" />
+                    <span className="font-semibold">Social Media Integrations</span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <AnimatedToggleCard
+                      label="Facebook Messenger"
+                      description="Connect to Facebook Page"
+                      checked={false}
+                      onChange={() => toast.info("Facebook settings would be configured here")}
+                    />
+                    <AnimatedToggleCard
+                      label="WhatsApp Business"
+                      description="Connect WhatsApp API"
+                      checked={false}
+                      onChange={() => toast.info("WhatsApp settings would be configured here")}
+                    />
+                    <AnimatedToggleCard
+                      label="Instagram DM"
+                      description="Connect Instagram account"
+                      checked={false}
+                      onChange={() => toast.info("Instagram settings would be configured here")}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Chatbot Tab - Original Settings Content */}
+        {activeMainTab === 'chatbot' && (
+          <motion.div
+            key="chatbot-tab"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex flex-col lg:flex-row gap-6">
+              {/* Section Navigation */}
+              <motion.nav
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
+                className="lg:w-56 flex-shrink-0"
+              >
+                <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+                  {chatbotSections.map((section, idx) => {
               const Icon = section.icon;
               const isActive = activeSection === section.id;
               return (
@@ -843,195 +1951,6 @@ export default function SettingsPage() {
               </motion.div>
             )}
 
-            {/* Integrations Settings (CRM & SharePoint) */}
-            {activeSection === "integrations" && (
-              <motion.div
-                key="integrations"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="bg-gradient-to-br from-white via-white to-cyan-50/30 rounded-xl border border-[#E7EBF0] shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] p-6"
-              >
-                <h2 className="text-lg font-semibold text-[#000034] mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center shadow-lg">
-                    <Link2 className="h-5 w-5 text-white" />
-                  </div>
-                  Integrations (Optional)
-                </h2>
-
-                <div className="space-y-6">
-                  {/* CRM Integration */}
-                  <div className="p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
-                    <div className="flex items-center gap-2 text-[#1D4F91] mb-4">
-                      <Database className="h-5 w-5" />
-                      <span className="font-semibold">CRM Integration (ITN 3.1.2)</span>
-                    </div>
-
-                    <AnimatedToggleCard
-                      label="Enable CRM Sync"
-                      description="Sync escalated conversations to your CRM"
-                      checked={settings.crmEnabled}
-                      onChange={(checked) => setSettings({ ...settings, crmEnabled: checked })}
-                    />
-
-                    <AnimatePresence>
-                      {settings.crmEnabled && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="mt-4 space-y-4 overflow-hidden"
-                        >
-                          <div>
-                            <label className={labelClass}>CRM Provider</label>
-                            <select
-                              value={settings.crmProvider}
-                              onChange={(e) =>
-                                setSettings({
-                                  ...settings,
-                                  crmProvider: e.target.value as "salesforce" | "dynamics" | "none",
-                                })
-                              }
-                              className={`${inputClass} cursor-pointer`}
-                            >
-                              <option value="none">Select Provider...</option>
-                              <option value="salesforce">Salesforce</option>
-                              <option value="dynamics">Microsoft Dynamics 365</option>
-                            </select>
-                          </div>
-
-                          {settings.crmProvider === "salesforce" && (
-                            <motion.div
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              className="p-4 bg-white rounded-lg border border-[#E7EBF0]"
-                            >
-                              <h4 className="font-medium text-sm text-[#000034] mb-2">Salesforce Configuration</h4>
-                              <p className="text-xs text-[#666666] mb-3">
-                                Configure credentials in environment variables:
-                              </p>
-                              <ul className="text-xs text-[#999] space-y-1 font-mono">
-                                <li>SALESFORCE_INSTANCE_URL</li>
-                                <li>SALESFORCE_CLIENT_ID</li>
-                                <li>SALESFORCE_CLIENT_SECRET</li>
-                                <li>SALESFORCE_USERNAME</li>
-                                <li>SALESFORCE_PASSWORD</li>
-                                <li>SALESFORCE_SECURITY_TOKEN</li>
-                              </ul>
-                            </motion.div>
-                          )}
-
-                          {settings.crmProvider === "dynamics" && (
-                            <motion.div
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              className="p-4 bg-white rounded-lg border border-[#E7EBF0]"
-                            >
-                              <h4 className="font-medium text-sm text-[#000034] mb-2">Dynamics 365 Configuration</h4>
-                              <p className="text-xs text-[#666666] mb-3">
-                                Configure credentials in environment variables:
-                              </p>
-                              <ul className="text-xs text-[#999] space-y-1 font-mono">
-                                <li>DYNAMICS_ORGANIZATION_URL</li>
-                                <li>DYNAMICS_CLIENT_ID</li>
-                                <li>DYNAMICS_CLIENT_SECRET</li>
-                                <li>DYNAMICS_TENANT_ID</li>
-                              </ul>
-                            </motion.div>
-                          )}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* SharePoint Integration */}
-                  <div className="p-5 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
-                    <div className="flex items-center gap-2 text-[#006A52] mb-4">
-                      <FileText className="h-5 w-5" />
-                      <span className="font-semibold">SharePoint Integration (ITN 3.2.5)</span>
-                    </div>
-
-                    <AnimatedToggleCard
-                      label="Enable SharePoint Sync"
-                      description="Parse documents from SharePoint for knowledge base"
-                      checked={settings.sharePointEnabled}
-                      onChange={(checked) => setSettings({ ...settings, sharePointEnabled: checked })}
-                    />
-
-                    <AnimatePresence>
-                      {settings.sharePointEnabled && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="mt-4 space-y-4 overflow-hidden"
-                        >
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="p-4 bg-white rounded-lg border border-[#E7EBF0]"
-                          >
-                            <h4 className="font-medium text-sm text-[#000034] mb-2">SharePoint Configuration</h4>
-                            <p className="text-xs text-[#666666] mb-3">
-                              Configure Microsoft Graph credentials in environment variables:
-                            </p>
-                            <ul className="text-xs text-[#999] space-y-1 font-mono">
-                              <li>SHAREPOINT_TENANT_ID</li>
-                              <li>SHAREPOINT_CLIENT_ID</li>
-                              <li>SHAREPOINT_CLIENT_SECRET</li>
-                              <li>SHAREPOINT_SITE_URL</li>
-                              <li>SHAREPOINT_SITE_NAME</li>
-                              <li>SHAREPOINT_LIBRARY_NAME</li>
-                            </ul>
-                          </motion.div>
-
-                          <div className="p-4 bg-white rounded-lg border border-[#E7EBF0]">
-                            <h4 className="font-medium text-sm text-[#000034] mb-2">Supported File Types</h4>
-                            <div className="flex flex-wrap gap-2">
-                              {["PDF", "DOCX", "DOC", "XLSX", "XLS", "PPTX", "TXT", "HTML"].map((type) => (
-                                <span
-                                  key={type}
-                                  className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded"
-                                >
-                                  {type}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* API Endpoints */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                    className="p-5 bg-gradient-to-br from-[#F5F9FD] to-blue-50/50 rounded-xl border border-[#E7EBF0]"
-                  >
-                    <h3 className="font-medium text-[#000034] mb-3 flex items-center gap-2">
-                      <Key className="h-4 w-4 text-[#1D4F91]" />
-                      Integration API Endpoints
-                    </h3>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center gap-2 font-mono text-xs">
-                        <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded">GET/POST</span>
-                        <span className="text-[#666666]">/api/crm</span>
-                      </div>
-                      <div className="flex items-center gap-2 font-mono text-xs">
-                        <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded">GET/POST</span>
-                        <span className="text-[#666666]">/api/sharepoint</span>
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            )}
-
             {/* Security Settings */}
             {activeSection === "security" && (
               <motion.div
@@ -1201,6 +2120,9 @@ export default function SettingsPage() {
           </AnimatePresence>
         </div>
       </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
