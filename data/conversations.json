@@ -10005,7 +10005,65 @@
       "feedbackGiven": false,
       "userAgent": "node",
       "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767311358700_emxcnnnjw",
+      "sessionId": "sess_1767252383147_ohzceebhk",
+      "startTime": "2026-01-01T23:49:18.700Z",
+      "endTime": "2026-01-01T23:49:18.700Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-01T23:49:18.700Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-01T23:49:18.700Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The Doral City Hall is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number is (305) 593-6725.",
+          "timestamp": "2026-01-01T23:49:18.700Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767311358768_aewjb33a4",
+      "sessionId": "sess_1767252383147_ohzceebhk",
+      "startTime": "2026-01-01T23:49:12.504Z",
+      "endTime": "2026-01-01T23:49:18.703Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-01T23:49:12.504Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-01T23:49:17.122Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The Doral City Hall is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number is (305) 593-6725.",
+          "timestamp": "2026-01-01T23:49:18.703Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
     }
   ],
-  "lastUpdated": "2026-01-01T22:12:40.887Z"
+  "lastUpdated": "2026-01-01T23:49:18.773Z"
 }

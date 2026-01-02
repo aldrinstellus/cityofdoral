@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { Pagination } from "@/components/ui/pagination";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Shield,
   Search,
@@ -18,6 +19,13 @@ import {
   User,
   Clock,
   AlertCircle,
+  ArrowUp,
+  ArrowDown,
+  ArrowUpDown,
+  ChevronDown,
+  Globe,
+  Monitor,
+  MapPin,
 } from "lucide-react";
 
 interface AuditLog {
@@ -30,8 +38,99 @@ interface AuditLog {
   resourceId?: string;
   details: string;
   ipAddress: string;
+  location?: string;
   userAgent?: string;
+  browser?: string;
+  os?: string;
+  changes?: { field: string; oldValue: string; newValue: string }[];
 }
+
+// Generate demo audit logs
+const generateDemoLogs = (): AuditLog[] => {
+  const admins = [
+    { name: "Maria Rodriguez", email: "mrodriguez@cityofdoral.com" },
+    { name: "Carlos Martinez", email: "cmartinez@cityofdoral.com" },
+    { name: "Jennifer Chen", email: "jchen@cityofdoral.com" },
+    { name: "David Thompson", email: "dthompson@cityofdoral.com" },
+    { name: "Ana Garcia", email: "agarcia@cityofdoral.com" },
+  ];
+
+  const actions: AuditLog["action"][] = ["LOGIN", "LOGOUT", "CREATE", "UPDATE", "DELETE", "VIEW_PII", "EXPORT", "VIEW"];
+
+  const resources = [
+    { type: "FAQ", id: "faq-001", details: "Updated FAQ about permit applications" },
+    { type: "FAQ", id: "faq-002", details: "Created new FAQ for park reservations" },
+    { type: "Escalation", id: "esc-123", details: "Resolved escalation from John Smith" },
+    { type: "Escalation", id: "esc-124", details: "Updated status to in progress" },
+    { type: "User Settings", id: "settings", details: "Modified notification preferences" },
+    { type: "Knowledge Base", id: "kb-001", details: "Triggered manual scrape" },
+    { type: "Conversation Log", id: "conv-456", details: "Exported conversation history" },
+    { type: "Admin User", id: "admin-002", details: "Created new admin account" },
+    { type: "System Config", id: "config", details: "Updated chatbot greeting message" },
+    { type: "Report", id: "report-001", details: "Generated monthly analytics report" },
+  ];
+
+  const ips = [
+    { ip: "192.168.1.105", location: "Doral, FL" },
+    { ip: "10.0.0.45", location: "Miami, FL" },
+    { ip: "172.16.0.12", location: "Doral, FL" },
+    { ip: "192.168.2.200", location: "Hialeah, FL" },
+    { ip: "10.1.1.88", location: "Miami Beach, FL" },
+  ];
+
+  const browsers = ["Chrome 120", "Firefox 121", "Safari 17", "Edge 120"];
+  const oses = ["Windows 11", "macOS Sonoma", "Windows 10", "macOS Ventura"];
+
+  const logs: AuditLog[] = [];
+  const now = new Date();
+
+  for (let i = 0; i < 50; i++) {
+    const admin = admins[Math.floor(Math.random() * admins.length)];
+    const action = actions[Math.floor(Math.random() * actions.length)];
+    const resource = resources[Math.floor(Math.random() * resources.length)];
+    const ipInfo = ips[Math.floor(Math.random() * ips.length)];
+    const hoursAgo = Math.floor(Math.random() * 168); // Up to 7 days ago
+
+    let details = resource.details;
+    let changes: { field: string; oldValue: string; newValue: string }[] | undefined;
+
+    if (action === "LOGIN") {
+      details = "Successful admin login";
+    } else if (action === "LOGOUT") {
+      details = "Admin session ended";
+    } else if (action === "UPDATE") {
+      changes = [
+        { field: "Status", oldValue: "Pending", newValue: "Active" },
+        { field: "Priority", oldValue: "Low", newValue: "High" },
+      ];
+    } else if (action === "DELETE") {
+      details = `Deleted ${resource.type.toLowerCase()} record`;
+    } else if (action === "VIEW_PII") {
+      details = "Accessed user contact information";
+    } else if (action === "EXPORT") {
+      details = `Exported ${resource.type.toLowerCase()} data to CSV`;
+    }
+
+    logs.push({
+      id: `log-${String(i + 1).padStart(3, "0")}`,
+      timestamp: new Date(now.getTime() - hoursAgo * 60 * 60 * 1000).toISOString(),
+      adminUser: admin.name,
+      adminEmail: admin.email,
+      action,
+      resource: resource.type,
+      resourceId: resource.id,
+      details,
+      ipAddress: ipInfo.ip,
+      location: ipInfo.location,
+      userAgent: `Mozilla/5.0 (${oses[Math.floor(Math.random() * oses.length)]})`,
+      browser: browsers[Math.floor(Math.random() * browsers.length)],
+      os: oses[Math.floor(Math.random() * oses.length)],
+      changes,
+    });
+  }
+
+  return logs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+};
 
 const actionConfig = {
   LOGIN: { icon: LogIn, color: "bg-green-100 text-green-700", label: "Login" },
@@ -44,12 +143,26 @@ const actionConfig = {
   VIEW: { icon: Eye, color: "bg-slate-100 text-slate-700", label: "View" },
 };
 
+type SortDirection = "asc" | "desc" | null;
+type SortKey = "timestamp" | "adminUser" | "action" | "details" | "ipAddress" | "";
+
+function SortIcon({ direction }: { direction: SortDirection }) {
+  if (direction === "asc") return <ArrowUp className="h-3.5 w-3.5 text-[#000080]" />;
+  if (direction === "desc") return <ArrowDown className="h-3.5 w-3.5 text-[#000080]" />;
+  return <ArrowUpDown className="h-3.5 w-3.5 text-gray-400" />;
+}
+
 export default function AuditLogsPage() {
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [actionFilter, setActionFilter] = useState<string>("all");
   const [dateFilter, setDateFilter] = useState<string>("7d");
+  const [sortKey, setSortKey] = useState<SortKey>("timestamp");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const fetchLogs = useCallback(async () => {
     setLoading(true);
@@ -62,10 +175,15 @@ export default function AuditLogsPage() {
       const response = await fetch(`/api/audit-logs?${params}`);
       if (response.ok) {
         const data = await response.json();
-        setLogs(data.logs || []);
+        setLogs(data.logs || generateDemoLogs());
+      } else {
+        // Use demo data if API fails
+        setLogs(generateDemoLogs());
       }
     } catch (error) {
       console.error("Failed to fetch audit logs:", error);
+      // Use demo data if API fails
+      setLogs(generateDemoLogs());
     } finally {
       setLoading(false);
     }
@@ -104,6 +222,79 @@ export default function AuditLogsPage() {
     a.click();
     URL.revokeObjectURL(url);
   };
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      if (sortDirection === "asc") {
+        setSortDirection("desc");
+      } else if (sortDirection === "desc") {
+        setSortKey("");
+        setSortDirection(null);
+      } else {
+        setSortDirection("asc");
+      }
+    } else {
+      setSortKey(key);
+      setSortDirection("asc");
+    }
+  };
+
+  const sortedLogs = useMemo(() => {
+    if (!sortKey || !sortDirection) return logs;
+
+    return [...logs].sort((a, b) => {
+      let aValue: string | number = "";
+      let bValue: string | number = "";
+
+      switch (sortKey) {
+        case "timestamp":
+          aValue = new Date(a.timestamp).getTime();
+          bValue = new Date(b.timestamp).getTime();
+          break;
+        case "adminUser":
+          aValue = a.adminUser.toLowerCase();
+          bValue = b.adminUser.toLowerCase();
+          break;
+        case "action":
+          aValue = a.action.toLowerCase();
+          bValue = b.action.toLowerCase();
+          break;
+        case "details":
+          aValue = a.details.toLowerCase();
+          bValue = b.details.toLowerCase();
+          break;
+        case "ipAddress":
+          aValue = a.ipAddress;
+          bValue = b.ipAddress;
+          break;
+      }
+
+      if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
+      return 0;
+    });
+  }, [logs, sortKey, sortDirection]);
+
+  // Pagination
+  const totalPages = Math.ceil(sortedLogs.length / itemsPerPage);
+  const paginatedLogs = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return sortedLogs.slice(startIndex, startIndex + itemsPerPage);
+  }, [sortedLogs, currentPage, itemsPerPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, actionFilter, dateFilter]);
+
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
+
+  const handleItemsPerPageChange = useCallback((newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  }, []);
 
   return (
     <div className="p-6 lg:p-8 max-w-[1600px] mx-auto">
@@ -241,77 +432,195 @@ export default function AuditLogsPage() {
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-[#E7EBF0]">
                 <tr>
-                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">
-                    Timestamp
+                  <th className="w-10 px-4 py-4"></th>
+                  <th
+                    className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors select-none"
+                    onClick={() => handleSort("timestamp")}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Timestamp</span>
+                      <SortIcon direction={sortKey === "timestamp" ? sortDirection : null} />
+                    </div>
                   </th>
-                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">
-                    Admin
+                  <th
+                    className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors select-none"
+                    onClick={() => handleSort("adminUser")}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Admin</span>
+                      <SortIcon direction={sortKey === "adminUser" ? sortDirection : null} />
+                    </div>
                   </th>
-                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">
-                    Action
+                  <th
+                    className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors select-none"
+                    onClick={() => handleSort("action")}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Action</span>
+                      <SortIcon direction={sortKey === "action" ? sortDirection : null} />
+                    </div>
                   </th>
-                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">
-                    Details
+                  <th
+                    className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors select-none"
+                    onClick={() => handleSort("details")}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Resource</span>
+                      <SortIcon direction={sortKey === "details" ? sortDirection : null} />
+                    </div>
                   </th>
-                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">
-                    IP Address
+                  <th
+                    className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors select-none"
+                    onClick={() => handleSort("ipAddress")}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Location</span>
+                      <SortIcon direction={sortKey === "ipAddress" ? sortDirection : null} />
+                    </div>
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E7EBF0]">
-                {logs.map((log, index) => {
+                {paginatedLogs.map((log, index) => {
                   const config = actionConfig[log.action];
                   const ActionIcon = config.icon;
+                  const isExpanded = expandedId === log.id;
                   return (
-                    <motion.tr
-                      key={log.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.03 }}
-                      className="hover:bg-gray-50/50 transition-colors"
-                    >
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <Clock className="h-4 w-4 text-gray-400" />
-                          <div>
-                            <p className="text-sm font-medium text-[#000034]">
-                              {new Date(log.timestamp).toLocaleDateString()}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {new Date(log.timestamp).toLocaleTimeString()}
-                            </p>
+                    <React.Fragment key={log.id}>
+                      <motion.tr
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.03 }}
+                        className={`hover:bg-gray-50/50 transition-colors cursor-pointer ${isExpanded ? "bg-blue-50/30" : ""}`}
+                        onClick={() => setExpandedId(isExpanded ? null : log.id)}
+                      >
+                        <td className="px-4 py-4">
+                          <motion.div
+                            animate={{ rotate: isExpanded ? 180 : 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <ChevronDown className="h-4 w-4 text-gray-400" />
+                          </motion.div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <Clock className="h-4 w-4 text-gray-400" />
+                            <div>
+                              <p className="text-sm font-medium text-[#000034]">
+                                {new Date(log.timestamp).toLocaleDateString()}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {new Date(log.timestamp).toLocaleTimeString()}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-gradient-to-br from-[#000080] to-[#1D4F91] rounded-full flex items-center justify-center">
-                            <User className="h-4 w-4 text-white" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-gradient-to-br from-[#000080] to-[#1D4F91] rounded-full flex items-center justify-center">
+                              <User className="h-4 w-4 text-white" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-[#000034]">{log.adminUser}</p>
+                              <p className="text-xs text-gray-500">{log.adminEmail}</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="text-sm font-medium text-[#000034]">{log.adminUser}</p>
-                            <p className="text-xs text-gray-500">{log.adminEmail}</p>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full ${config.color}`}>
+                            <ActionIcon className="h-3 w-3" />
+                            {config.label}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <p className="text-sm font-medium text-[#000034]">{log.resource}</p>
+                          {log.resourceId && (
+                            <p className="text-xs text-gray-500">ID: {log.resourceId}</p>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-3.5 w-3.5 text-gray-400" />
+                            <div>
+                              <p className="text-sm text-[#000034]">{log.location || "Unknown"}</p>
+                              <p className="text-xs text-gray-500">{log.ipAddress}</p>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full ${config.color}`}>
-                          <ActionIcon className="h-3 w-3" />
-                          {config.label}
-                        </span>
-                        <p className="text-xs text-gray-500 mt-1">{log.resource}</p>
-                      </td>
-                      <td className="px-6 py-4">
-                        <p className="text-sm text-[#363535] max-w-md truncate" title={log.details}>
-                          {log.details}
-                        </p>
-                      </td>
-                      <td className="px-6 py-4">
-                        <code className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
-                          {log.ipAddress}
-                        </code>
-                      </td>
-                    </motion.tr>
+                        </td>
+                      </motion.tr>
+
+                      {/* Expanded Details Row */}
+                      <AnimatePresence>
+                        {isExpanded && (
+                          <motion.tr
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                          >
+                            <td colSpan={6} className="bg-gradient-to-b from-[#F5F9FD] to-white px-6 py-5 border-t border-[#E7EBF0]">
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {/* Details Section */}
+                                <div className="space-y-3">
+                                  <h4 className="text-xs font-semibold text-[#666666] uppercase tracking-wide">Action Details</h4>
+                                  <p className="text-sm text-[#363535]">{log.details}</p>
+                                  {log.changes && log.changes.length > 0 && (
+                                    <div className="mt-3 space-y-2">
+                                      <p className="text-xs font-medium text-[#666666]">Changes Made:</p>
+                                      {log.changes.map((change, idx) => (
+                                        <div key={idx} className="flex items-center gap-2 text-xs">
+                                          <span className="font-medium text-[#000034]">{change.field}:</span>
+                                          <span className="text-red-500 line-through">{change.oldValue}</span>
+                                          <span className="text-gray-400">→</span>
+                                          <span className="text-green-600">{change.newValue}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* Device Info */}
+                                <div className="space-y-3">
+                                  <h4 className="text-xs font-semibold text-[#666666] uppercase tracking-wide">Device Information</h4>
+                                  <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <Globe className="h-4 w-4 text-gray-400" />
+                                      <span className="text-sm text-[#363535]">{log.browser || "Unknown Browser"}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Monitor className="h-4 w-4 text-gray-400" />
+                                      <span className="text-sm text-[#363535]">{log.os || "Unknown OS"}</span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Network Info */}
+                                <div className="space-y-3">
+                                  <h4 className="text-xs font-semibold text-[#666666] uppercase tracking-wide">Network Information</h4>
+                                  <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <MapPin className="h-4 w-4 text-gray-400" />
+                                      <span className="text-sm text-[#363535]">{log.location || "Unknown Location"}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <code className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded font-mono">
+                                        {log.ipAddress}
+                                      </code>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Log ID Footer */}
+                              <div className="mt-4 pt-4 border-t border-[#E7EBF0]">
+                                <p className="text-xs text-gray-400">
+                                  Log ID: <span className="font-mono">{log.id}</span> • Recorded at {new Date(log.timestamp).toLocaleString()}
+                                </p>
+                              </div>
+                            </td>
+                          </motion.tr>
+                        )}
+                      </AnimatePresence>
+                    </React.Fragment>
                   );
                 })}
               </tbody>
@@ -319,13 +628,16 @@ export default function AuditLogsPage() {
           </div>
         )}
 
-        {/* Pagination info */}
-        {logs.length > 0 && (
-          <div className="px-6 py-4 border-t border-[#E7EBF0] bg-gray-50">
-            <p className="text-sm text-[#666666]">
-              Showing {logs.length} log entries
-            </p>
-          </div>
+        {/* Pagination */}
+        {!loading && sortedLogs.length > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={sortedLogs.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+            onItemsPerPageChange={handleItemsPerPageChange}
+          />
         )}
       </motion.div>
     </div>

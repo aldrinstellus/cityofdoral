@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { Pagination } from "@/components/ui/pagination";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -30,6 +31,8 @@ import {
   Loader2,
   Filter,
   ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
   Star,
   AlertCircle,
 } from "lucide-react";
@@ -55,6 +58,15 @@ const priorityColors = {
   medium: "bg-blue-100 text-blue-600",
   high: "bg-red-100 text-red-600",
 };
+
+type SortDirection = "asc" | "desc" | null;
+type FaqSortKey = "question" | "category" | "priority" | "language" | "isActive" | "";
+
+function SortIcon({ direction }: { direction: SortDirection }) {
+  if (direction === "asc") return <ArrowUp className="h-3.5 w-3.5 text-white" />;
+  if (direction === "desc") return <ArrowDown className="h-3.5 w-3.5 text-white" />;
+  return <ArrowUpDown className="h-3.5 w-3.5 text-white/60" />;
+}
 
 // Highlight matching text component
 function HighlightText({ text, highlight }: { text: string; highlight: string }) {
@@ -162,7 +174,10 @@ export default function ContentManagement() {
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<"all" | "active" | "inactive">("all");
   const [filterPriority, setFilterPriority] = useState<string>("all");
-  const [sortBy, setSortBy] = useState<"question" | "category" | "priority">("question");
+  const [sortKey, setSortKey] = useState<FaqSortKey>("question");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const { confirm, DialogComponent } = useConfirmDialog();
 
@@ -240,8 +255,8 @@ export default function ContentManagement() {
     );
   });
 
-  const filteredFaqs = faqs
-    .filter((faq) => {
+  const filteredFaqsBase = useMemo(() => {
+    return faqs.filter((faq) => {
       if (filterCategory !== "all" && faq.category !== filterCategory) return false;
       if (filterStatus === "active" && !faq.isActive) return false;
       if (filterStatus === "inactive" && faq.isActive) return false;
@@ -249,15 +264,74 @@ export default function ContentManagement() {
       if (!searchTerm) return true;
       const search = searchTerm.toLowerCase();
       return faq.question.toLowerCase().includes(search) || faq.answer.toLowerCase().includes(search);
-    })
-    .sort((a, b) => {
-      if (sortBy === "priority") {
-        const priorityOrder = { high: 0, medium: 1, low: 2 };
-        return priorityOrder[a.priority] - priorityOrder[b.priority];
-      }
-      if (sortBy === "category") return a.category.localeCompare(b.category);
-      return a.question.localeCompare(b.question);
     });
+  }, [faqs, filterCategory, filterStatus, filterPriority, searchTerm]);
+
+  const handleFaqSort = (key: FaqSortKey) => {
+    if (sortKey === key) {
+      if (sortDirection === "asc") {
+        setSortDirection("desc");
+      } else if (sortDirection === "desc") {
+        setSortKey("");
+        setSortDirection(null);
+      } else {
+        setSortDirection("asc");
+      }
+    } else {
+      setSortKey(key);
+      setSortDirection("asc");
+    }
+  };
+
+  const filteredFaqs = useMemo(() => {
+    if (!sortKey || !sortDirection) return filteredFaqsBase;
+
+    return [...filteredFaqsBase].sort((a, b) => {
+      let comparison = 0;
+
+      switch (sortKey) {
+        case "question":
+          comparison = a.question.localeCompare(b.question);
+          break;
+        case "category":
+          comparison = a.category.localeCompare(b.category);
+          break;
+        case "priority":
+          const priorityOrder = { high: 0, medium: 1, low: 2 };
+          comparison = priorityOrder[a.priority] - priorityOrder[b.priority];
+          break;
+        case "language":
+          comparison = a.language.localeCompare(b.language);
+          break;
+        case "isActive":
+          comparison = (a.isActive === b.isActive) ? 0 : a.isActive ? -1 : 1;
+          break;
+      }
+
+      return sortDirection === "desc" ? -comparison : comparison;
+    });
+  }, [filteredFaqsBase, sortKey, sortDirection]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredFaqs.length / itemsPerPage);
+  const paginatedFaqs = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredFaqs.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredFaqs, currentPage, itemsPerPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterCategory, filterStatus, filterPriority]);
+
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
+
+  const handleItemsPerPageChange = useCallback((newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  }, []);
 
   // FAQ stats
   const stats = {
@@ -858,18 +932,6 @@ export default function ContentManagement() {
                     <option value="medium">Medium</option>
                     <option value="low">Low</option>
                   </select>
-                  <div className="flex items-center gap-2">
-                    <ArrowUpDown className="h-4 w-4 text-[#666]" />
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as "question" | "category" | "priority")}
-                      className="h-10 px-3 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] focus:outline-none focus:border-[#000080] cursor-pointer"
-                    >
-                      <option value="question">Sort by Question</option>
-                      <option value="category">Sort by Category</option>
-                      <option value="priority">Sort by Priority</option>
-                    </select>
-                  </div>
                   <motion.button
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
@@ -1015,11 +1077,51 @@ export default function ContentManagement() {
                             className="w-4 h-4 rounded border-white/30 text-white focus:ring-white/20 cursor-pointer"
                           />
                         </th>
-                        <th className="px-6 py-4 font-medium">Question</th>
-                        <th className="px-6 py-4 font-medium w-36">Category</th>
-                        <th className="px-6 py-4 font-medium w-24">Priority</th>
-                        <th className="px-6 py-4 font-medium w-24">Language</th>
-                        <th className="px-6 py-4 font-medium w-20">Status</th>
+                        <th
+                          className="px-6 py-4 font-medium cursor-pointer hover:bg-white/10 transition-colors select-none"
+                          onClick={() => handleFaqSort("question")}
+                        >
+                          <div className="flex items-center gap-1.5">
+                            <span>Question</span>
+                            <SortIcon direction={sortKey === "question" ? sortDirection : null} />
+                          </div>
+                        </th>
+                        <th
+                          className="px-6 py-4 font-medium w-36 cursor-pointer hover:bg-white/10 transition-colors select-none"
+                          onClick={() => handleFaqSort("category")}
+                        >
+                          <div className="flex items-center gap-1.5">
+                            <span>Category</span>
+                            <SortIcon direction={sortKey === "category" ? sortDirection : null} />
+                          </div>
+                        </th>
+                        <th
+                          className="px-6 py-4 font-medium w-24 cursor-pointer hover:bg-white/10 transition-colors select-none"
+                          onClick={() => handleFaqSort("priority")}
+                        >
+                          <div className="flex items-center gap-1.5">
+                            <span>Priority</span>
+                            <SortIcon direction={sortKey === "priority" ? sortDirection : null} />
+                          </div>
+                        </th>
+                        <th
+                          className="px-6 py-4 font-medium w-24 cursor-pointer hover:bg-white/10 transition-colors select-none"
+                          onClick={() => handleFaqSort("language")}
+                        >
+                          <div className="flex items-center gap-1.5">
+                            <span>Language</span>
+                            <SortIcon direction={sortKey === "language" ? sortDirection : null} />
+                          </div>
+                        </th>
+                        <th
+                          className="px-6 py-4 font-medium w-20 cursor-pointer hover:bg-white/10 transition-colors select-none"
+                          onClick={() => handleFaqSort("isActive")}
+                        >
+                          <div className="flex items-center gap-1.5">
+                            <span>Status</span>
+                            <SortIcon direction={sortKey === "isActive" ? sortDirection : null} />
+                          </div>
+                        </th>
                         <th className="px-6 py-4 font-medium w-28">Actions</th>
                       </tr>
                     </thead>
@@ -1036,7 +1138,7 @@ export default function ContentManagement() {
                           </td>
                         </tr>
                       ) : (
-                        filteredFaqs.map((faq, idx) => (
+                        paginatedFaqs.map((faq, idx) => (
                           <motion.tr
                             key={faq.id}
                             initial={{ opacity: 0, x: -20 }}
@@ -1119,10 +1221,16 @@ export default function ContentManagement() {
                       )}
                     </tbody>
                   </table>
+                  {/* Pagination */}
                   {filteredFaqs.length > 0 && (
-                    <div className="px-6 py-3 bg-[#F5F9FD] border-t border-[#E7EBF0] text-sm text-[#666666]">
-                      Showing {filteredFaqs.length} of {faqs.length} FAQs
-                    </div>
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      totalItems={filteredFaqs.length}
+                      itemsPerPage={itemsPerPage}
+                      onPageChange={handlePageChange}
+                      onItemsPerPageChange={handleItemsPerPageChange}
+                    />
                   )}
                 </>
               )}

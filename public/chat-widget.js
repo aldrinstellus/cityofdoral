@@ -192,21 +192,31 @@
     }
   };
 
-  // Quick Actions
+  // Quick Actions - 10 common topics from knowledge base
   const QUICK_ACTIONS = {
     en: [
-      { id: 'report', label: 'Report Issue', icon: '📋', query: 'How do I report an issue to the city?' },
-      { id: 'service', label: 'Find Service', icon: '🔍', query: 'What city services are available?' },
-      { id: 'directions', label: 'Get Directions', icon: '📍', query: 'Where is City Hall located?' },
-      { id: 'contact', label: 'Contact Dept', icon: '📞', query: 'How do I contact a city department?' },
-      { id: 'hours', label: 'Check Hours', icon: '🕐', query: 'What are the city office hours?' }
+      { id: 'permits', label: 'Building Permits', icon: '🏗️', query: 'How do I apply for a building permit?' },
+      { id: 'utilities', label: 'Pay Utilities', icon: '💧', query: 'How do I pay my water bill?' },
+      { id: 'hours', label: 'City Hall Hours', icon: '🕐', query: 'What are the City Hall hours?' },
+      { id: 'parks', label: 'Parks & Rec', icon: '🌳', query: 'What parks and recreation programs are available?' },
+      { id: 'report', label: 'Report Issue', icon: '📋', query: 'How do I report a pothole or issue?' },
+      { id: 'police', label: 'Police Services', icon: '🚔', query: 'How do I contact Doral Police?' },
+      { id: 'business', label: 'Business License', icon: '🏢', query: 'How do I get a business license?' },
+      { id: 'events', label: 'City Events', icon: '📅', query: 'What events are coming up in Doral?' },
+      { id: 'jobs', label: 'Job Openings', icon: '💼', query: 'What job opportunities are available with the city?' },
+      { id: 'code', label: 'Code Compliance', icon: '📜', query: 'How do I report a code violation?' }
     ],
     es: [
-      { id: 'report', label: 'Reportar', icon: '📋', query: '¿Cómo reporto un problema a la ciudad?' },
-      { id: 'service', label: 'Buscar Servicio', icon: '🔍', query: '¿Qué servicios ofrece la ciudad?' },
-      { id: 'directions', label: 'Direcciones', icon: '📍', query: '¿Dónde está el Ayuntamiento?' },
-      { id: 'contact', label: 'Contactar', icon: '📞', query: '¿Cómo contacto un departamento?' },
-      { id: 'hours', label: 'Horarios', icon: '🕐', query: '¿Cuál es el horario de oficinas?' }
+      { id: 'permits', label: 'Permisos', icon: '🏗️', query: '¿Cómo solicito un permiso de construcción?' },
+      { id: 'utilities', label: 'Pagar Servicios', icon: '💧', query: '¿Cómo pago mi factura de agua?' },
+      { id: 'hours', label: 'Horario', icon: '🕐', query: '¿Cuál es el horario del Ayuntamiento?' },
+      { id: 'parks', label: 'Parques', icon: '🌳', query: '¿Qué programas de parques y recreación hay?' },
+      { id: 'report', label: 'Reportar', icon: '📋', query: '¿Cómo reporto un bache o problema?' },
+      { id: 'police', label: 'Policía', icon: '🚔', query: '¿Cómo contacto a la Policía de Doral?' },
+      { id: 'business', label: 'Licencia Comercial', icon: '🏢', query: '¿Cómo obtengo una licencia comercial?' },
+      { id: 'events', label: 'Eventos', icon: '📅', query: '¿Qué eventos hay próximamente en Doral?' },
+      { id: 'jobs', label: 'Empleos', icon: '💼', query: '¿Qué oportunidades de trabajo hay en la ciudad?' },
+      { id: 'code', label: 'Códigos', icon: '📜', query: '¿Cómo reporto una violación de código?' }
     ]
   };
 
@@ -246,8 +256,14 @@
       default: [
         'What are the city hall hours?',
         'How do I apply for a building permit?',
+        'How do I pay my water bill?',
         'What events are coming up?',
-        'Where are the parks located?'
+        'Where are the parks located?',
+        'How do I report a pothole?',
+        'How do I get a business license?',
+        'What job openings are available?',
+        'How do I contact Doral Police?',
+        'How do I register for youth sports?'
       ]
     },
     es: {
@@ -284,8 +300,14 @@
       default: [
         '¿Cuál es el horario del ayuntamiento?',
         '¿Cómo solicito un permiso de construcción?',
+        '¿Cómo pago mi factura de agua?',
         '¿Qué eventos hay próximamente?',
-        '¿Dónde están los parques?'
+        '¿Dónde están los parques?',
+        '¿Cómo reporto un bache?',
+        '¿Cómo obtengo una licencia comercial?',
+        '¿Qué empleos hay disponibles?',
+        '¿Cómo contacto a la Policía de Doral?',
+        '¿Cómo registro a mi hijo para deportes?'
       ]
     }
   };
@@ -315,9 +337,7 @@
     isLoading: false,
     sessionId: null,
     conversationId: null,
-    lastActivity: null,
-    actionsOpen: false,
-    suggestionsVisible: true
+    lastActivity: null
   };
 
   // DOM Elements
@@ -386,10 +406,8 @@
       localStorage.removeItem(CONFIG.storageKey);
       state.messages = [];
       state.conversationId = generateId('conv');
-      state.suggestionsVisible = true;
       elements.messages.innerHTML = '';
       addWelcomeMessage();
-      elements.suggestions.classList.remove('doral-hidden');
       updateSuggestionsForPage();
     } catch (e) {
       console.warn('Failed to clear conversation:', e);
@@ -494,11 +512,6 @@
     // Render existing messages or add welcome
     if (state.messages.length > 0) {
       renderAllMessages();
-      // Hide suggestions if there are user messages
-      if (state.messages.some(m => m.role === 'user')) {
-        state.suggestionsVisible = false;
-        elements.suggestions.classList.add('doral-hidden');
-      }
     } else {
       addWelcomeMessage();
     }
@@ -545,7 +558,6 @@
     elements.input = panel.querySelector('.doral-chat-input');
     elements.sendBtn = panel.querySelector('.doral-chat-send-btn');
     elements.disclaimer = panel.querySelector('.doral-chat-disclaimer');
-    elements.actionsToggle = panel.querySelector('.doral-chat-actions-toggle');
   }
 
   function createPanelHTML() {
@@ -590,9 +602,6 @@
       </div>
       <div class="doral-chat-input-area">
         <div class="doral-chat-input-row">
-          <button type="button" class="doral-chat-actions-toggle" aria-label="${labels.quickActions}" aria-expanded="false" title="${labels.quickActions}">
-            ${ICONS.menu}
-          </button>
           <form class="doral-chat-input-form">
             <input type="text" class="doral-chat-input" placeholder="${labels.placeholder}" aria-label="${labels.placeholder}">
             <button type="submit" class="doral-chat-send-btn" aria-label="${labels.send}" disabled>
@@ -619,9 +628,6 @@
 
     // Close button in header
     elements.closeBtn.addEventListener('click', toggleChat);
-
-    // Actions toggle
-    elements.actionsToggle.addEventListener('click', toggleQuickActions);
 
     // Input handling
     elements.input.addEventListener('input', function() {
@@ -653,6 +659,57 @@
         sendMessage();
       }
     });
+
+    // Horizontal mouse wheel scrolling for quick actions
+    elements.quickActionsList.addEventListener('wheel', function(e) {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        this.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+
+    // Horizontal mouse wheel scrolling for suggestions
+    elements.suggestionsList.addEventListener('wheel', function(e) {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        this.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+
+    // Drag to scroll for quick actions and suggestions
+    function enableDragScroll(element) {
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+
+      element.addEventListener('mousedown', function(e) {
+        isDown = true;
+        element.classList.add('doral-dragging');
+        startX = e.pageX - element.offsetLeft;
+        scrollLeft = element.scrollLeft;
+      });
+
+      element.addEventListener('mouseleave', function() {
+        isDown = false;
+        element.classList.remove('doral-dragging');
+      });
+
+      element.addEventListener('mouseup', function() {
+        isDown = false;
+        element.classList.remove('doral-dragging');
+      });
+
+      element.addEventListener('mousemove', function(e) {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - element.offsetLeft;
+        const walk = (x - startX) * 1.5; // Scroll speed multiplier
+        element.scrollLeft = scrollLeft - walk;
+      });
+    }
+
+    enableDragScroll(elements.quickActionsList);
+    enableDragScroll(elements.suggestionsList);
 
     // Keyboard navigation
     document.addEventListener('keydown', function(e) {
@@ -712,20 +769,6 @@
     saveConversation();
   }
 
-  function toggleQuickActions() {
-    state.actionsOpen = !state.actionsOpen;
-    elements.quickActions.classList.toggle('doral-expanded', state.actionsOpen);
-    elements.actionsToggle.classList.toggle('doral-expanded', state.actionsOpen);
-    elements.actionsToggle.setAttribute('aria-expanded', state.actionsOpen.toString());
-  }
-
-  function hideSuggestions() {
-    if (state.suggestionsVisible) {
-      state.suggestionsVisible = false;
-      elements.suggestions.classList.add('doral-hidden');
-    }
-  }
-
   function updateLabels() {
     const labels = LABELS[state.language];
     const actions = QUICK_ACTIONS[state.language];
@@ -750,10 +793,6 @@
     // Update suggestions
     elements.suggestionsLabel.textContent = labels.suggested;
     updateSuggestionsForPage();
-
-    // Update actions toggle
-    elements.actionsToggle.setAttribute('aria-label', labels.quickActions);
-    elements.actionsToggle.setAttribute('title', labels.quickActions);
   }
 
   function addWelcomeMessage() {
@@ -794,11 +833,6 @@
     // Save to localStorage
     if (save) {
       saveConversation();
-    }
-
-    // Hide suggestions after first user message
-    if (role === 'user' && state.messages.filter(m => m.role === 'user').length === 1) {
-      hideSuggestions();
     }
   }
 

@@ -632,19 +632,12 @@
   padding-left: 4px;
 }
 
-/* ==================== QUICK ACTIONS - COLLAPSIBLE ==================== */
+/* ==================== QUICK ACTIONS - PERSISTENT ==================== */
 .doral-chat-quick-actions {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.25s ease, padding 0.25s ease;
   background: var(--doral-bg-primary);
   border-top: 1px solid var(--doral-border-light);
-  padding: 0 14px;
-}
-
-.doral-chat-quick-actions.doral-expanded {
-  max-height: 60px;
   padding: 10px 14px;
+  overflow: hidden;
 }
 
 .doral-chat-quick-actions-label {
@@ -653,14 +646,24 @@
 
 .doral-chat-quick-actions-list {
   display: flex;
+  flex-wrap: nowrap;
   gap: 6px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px;
+  cursor: grab;
 }
 
 .doral-chat-quick-actions-list::-webkit-scrollbar {
   display: none;
+}
+
+.doral-chat-quick-actions-list.doral-dragging {
+  cursor: grabbing;
+  user-select: none;
 }
 
 .doral-chat-quick-action-btn {
@@ -695,22 +698,13 @@
   line-height: 1;
 }
 
-/* ==================== SUGGESTIONS - FLOATING ==================== */
+/* ==================== SUGGESTIONS - PERSISTENT ==================== */
 .doral-chat-suggestions {
   padding: 8px 14px;
-  background: linear-gradient(to bottom, transparent, var(--doral-bg-primary));
-  border-top: none;
+  background: var(--doral-bg-primary);
+  border-top: 1px solid var(--doral-border-light);
   flex-shrink: 0;
-  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
-  max-height: 44px;
   overflow: hidden;
-}
-
-.doral-chat-suggestions.doral-hidden {
-  max-height: 0;
-  padding: 0 14px;
-  opacity: 0;
-  pointer-events: none;
 }
 
 .doral-chat-suggestions-label {
@@ -719,14 +713,24 @@
 
 .doral-chat-suggestions-list {
   display: flex;
+  flex-wrap: nowrap;
   gap: 6px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px;
+  cursor: grab;
 }
 
 .doral-chat-suggestions-list::-webkit-scrollbar {
   display: none;
+}
+
+.doral-chat-suggestions-list.doral-dragging {
+  cursor: grabbing;
+  user-select: none;
 }
 
 .doral-chat-suggestion-btn {
@@ -766,48 +770,12 @@
   align-items: center;
 }
 
-/* Quick Actions Toggle Button - Inline with input */
-.doral-chat-actions-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: var(--doral-bg-secondary);
-  border: 1px solid var(--doral-border);
-  color: var(--doral-text-muted);
-  border-radius: var(--doral-radius-lg);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  flex-shrink: 0;
-}
-
-.doral-chat-actions-toggle:hover {
-  border-color: var(--doral-primary);
-  color: var(--doral-primary);
-  background: var(--doral-hover);
-}
-
-.doral-chat-actions-toggle.doral-expanded {
-  border-color: var(--doral-primary);
-  color: var(--doral-text-on-dark);
-  background: var(--doral-primary);
-}
-
-.doral-chat-actions-toggle svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-}
-
-.doral-chat-actions-toggle span {
-  display: none; /* Hide text label, icon only */
-}
-
 .doral-chat-input-form {
   display: flex;
   gap: 8px;
   align-items: center;
+  flex: 1;
+  width: 100%;
 }
 
 .doral-chat-input {
@@ -984,7 +952,6 @@
 .doral-chat-send-btn:focus-visible,
 .doral-chat-source-link:focus-visible,
 .doral-chat-escalation-btn:focus-visible,
-.doral-chat-actions-toggle:focus-visible,
 .doral-chat-input:focus-visible {
   outline: 2px solid var(--doral-focus);
   outline-offset: 2px;

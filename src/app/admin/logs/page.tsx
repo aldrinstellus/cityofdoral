@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { Pagination } from "@/components/ui/pagination";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageSquare,
@@ -10,21 +11,23 @@ import {
   User,
   Bot,
   ThumbsUp,
-  ThumbsDown,
   AlertTriangle,
   Globe,
-  Clock,
   Download,
   RefreshCw,
   TrendingUp,
   TrendingDown,
   Minus,
   Sparkles,
+  ArrowUp,
+  ArrowDown,
+  ArrowUpDown,
 } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
+  timestamp?: string;
 }
 
 interface Conversation {
@@ -34,9 +37,9 @@ interface Conversation {
   language: string;
   sentiment: string;
   escalated: boolean;
-  feedback?: "positive" | "negative";
-  timestamp: string;
-  duration?: number;
+  feedbackGiven?: boolean;
+  startTime: string;
+  endTime?: string;
 }
 
 // Animated counter component
@@ -64,6 +67,9 @@ function AnimatedCounter({ value, duration = 1 }: { value: number; duration?: nu
   return <span>{displayValue}</span>;
 }
 
+type SortDirection = "asc" | "desc" | null;
+type SortKey = "sessionId" | "language" | "sentiment" | "feedbackGiven" | "startTime" | "messages" | "";
+
 export default function ConversationLogs() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,6 +78,28 @@ export default function ConversationLogs() {
   const [filterLanguage, setFilterLanguage] = useState<string>("all");
   const [filterSentiment, setFilterSentiment] = useState<string>("all");
   const [showFilters, setShowFilters] = useState(false);
+  const [sortKey, setSortKey] = useState<SortKey>("startTime");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      if (sortDirection === "asc") setSortDirection("desc");
+      else if (sortDirection === "desc") { setSortKey(""); setSortDirection(null); }
+      else setSortDirection("asc");
+    } else {
+      setSortKey(key);
+      setSortDirection("asc");
+    }
+  };
+
+  const SortIcon = ({ columnKey }: { columnKey: SortKey }) => {
+    if (sortKey !== columnKey) return <ArrowUpDown className="h-3.5 w-3.5 text-gray-400" />;
+    if (sortDirection === "asc") return <ArrowUp className="h-3.5 w-3.5 text-[#000080]" />;
+    if (sortDirection === "desc") return <ArrowDown className="h-3.5 w-3.5 text-[#000080]" />;
+    return <ArrowUpDown className="h-3.5 w-3.5 text-gray-400" />;
+  };
 
   useEffect(() => {
     const fetchConversations = async () => {
@@ -83,50 +111,8 @@ export default function ConversationLogs() {
         }
       } catch (error) {
         console.error("Failed to fetch:", error);
-        // Demo data
-        setConversations([
-          {
-            id: "1",
-            sessionId: "sess-abc123",
-            messages: [
-              { role: "user", content: "What are the park hours?" },
-              { role: "assistant", content: "Most City of Doral parks are open from sunrise to sunset, 7 days a week." },
-            ],
-            language: "en",
-            sentiment: "neutral",
-            escalated: false,
-            feedback: "positive",
-            timestamp: new Date(Date.now() - 3600000).toISOString(),
-            duration: 45,
-          },
-          {
-            id: "2",
-            sessionId: "sess-def456",
-            messages: [
-              { role: "user", content: "¿Cómo solicito un permiso de construcción?" },
-              { role: "assistant", content: "Puede solicitar un permiso de construcción en línea a través del portal e-Permitting de la Ciudad." },
-            ],
-            language: "es",
-            sentiment: "positive",
-            escalated: false,
-            timestamp: new Date(Date.now() - 7200000).toISOString(),
-            duration: 120,
-          },
-          {
-            id: "3",
-            sessionId: "sess-ghi789",
-            messages: [
-              { role: "user", content: "This is ridiculous! I've been waiting for weeks!" },
-              { role: "assistant", content: "I understand your frustration. Let me connect you with a representative who can help." },
-            ],
-            language: "en",
-            sentiment: "negative",
-            escalated: true,
-            feedback: "negative",
-            timestamp: new Date(Date.now() - 86400000).toISOString(),
-            duration: 180,
-          },
-        ]);
+        // Demo data only used if API fails
+        setConversations([]);
       } finally {
         setLoading(false);
       }
@@ -145,6 +131,71 @@ export default function ConversationLogs() {
     return true;
   });
 
+  const sortedConversations = useMemo(() => {
+    if (!sortKey || !sortDirection) return filteredConversations;
+
+    return [...filteredConversations].sort((a, b) => {
+      let aVal: string | number | boolean;
+      let bVal: string | number | boolean;
+
+      switch (sortKey) {
+        case "sessionId":
+          aVal = a.sessionId;
+          bVal = b.sessionId;
+          break;
+        case "language":
+          aVal = a.language;
+          bVal = b.language;
+          break;
+        case "sentiment":
+          aVal = a.sentiment;
+          bVal = b.sentiment;
+          break;
+        case "feedbackGiven":
+          aVal = a.feedbackGiven ? 1 : 0;
+          bVal = b.feedbackGiven ? 1 : 0;
+          break;
+        case "startTime":
+          aVal = new Date(a.startTime).getTime();
+          bVal = new Date(b.startTime).getTime();
+          break;
+        case "messages":
+          aVal = a.messages.length;
+          bVal = b.messages.length;
+          break;
+        default:
+          return 0;
+      }
+
+      if (aVal < bVal) return sortDirection === "asc" ? -1 : 1;
+      if (aVal > bVal) return sortDirection === "asc" ? 1 : -1;
+      return 0;
+    });
+  }, [filteredConversations, sortKey, sortDirection]);
+
+  // Pagination
+  const totalPages = Math.ceil(sortedConversations.length / itemsPerPage);
+  const paginatedConversations = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return sortedConversations.slice(startIndex, startIndex + itemsPerPage);
+  }, [sortedConversations, currentPage, itemsPerPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterLanguage, filterSentiment]);
+
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+    setExpandedId(null);
+  }, []);
+
+  const handleItemsPerPageChange = useCallback((newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+    setExpandedId(null);
+  }, []);
+
   const handleExportJSON = () => {
     const dataStr = JSON.stringify(filteredConversations, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
@@ -158,7 +209,7 @@ export default function ConversationLogs() {
 
   const handleExportCSV = () => {
     // CSV headers
-    const headers = ["ID", "Session ID", "Language", "Sentiment", "Escalated", "Feedback", "Timestamp", "Duration (s)", "Message Count", "First User Message"];
+    const headers = ["ID", "Session ID", "Language", "Sentiment", "Escalated", "Feedback Given", "Start Time", "End Time", "Message Count", "First User Message"];
 
     // Map conversations to CSV rows
     const rows = filteredConversations.map((conv) => [
@@ -167,9 +218,9 @@ export default function ConversationLogs() {
       conv.language,
       conv.sentiment,
       conv.escalated ? "Yes" : "No",
-      conv.feedback || "N/A",
-      new Date(conv.timestamp).toLocaleString(),
-      conv.duration || "N/A",
+      conv.feedbackGiven ? "Yes" : "No",
+      new Date(conv.startTime).toLocaleString(),
+      conv.endTime ? new Date(conv.endTime).toLocaleString() : "N/A",
       conv.messages.length,
       // Get first user message, escape quotes
       conv.messages.find((m) => m.role === "user")?.content.replace(/"/g, '""').slice(0, 200) || "",
@@ -216,8 +267,22 @@ export default function ConversationLogs() {
     }
   };
 
-  const formatDuration = (seconds?: number) => {
-    if (!seconds) return "—";
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return { date: "—", time: "—" };
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return { date: "—", time: "—" };
+    return {
+      date: date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      time: date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }),
+    };
+  };
+
+  const calculateDuration = (startTime: string, endTime?: string) => {
+    if (!startTime || !endTime) return "—";
+    const start = new Date(startTime).getTime();
+    const end = new Date(endTime).getTime();
+    if (isNaN(start) || isNaN(end)) return "—";
+    const seconds = Math.floor((end - start) / 1000);
     if (seconds < 60) return `${seconds}s`;
     return `${Math.floor(seconds / 60)}m ${seconds % 60}s`;
   };
@@ -274,28 +339,30 @@ export default function ConversationLogs() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
-          { label: "Total Shown", value: stats.total, color: "from-[#000080]", icon: MessageSquare },
-          { label: "English", value: stats.english, color: "from-[#1D4F91]", icon: Globe },
-          { label: "Spanish", value: stats.spanish, color: "from-[#006A52]", icon: Globe },
-          { label: "Escalated", value: stats.escalated, color: "from-amber-500", icon: AlertTriangle },
+          { label: "Total Shown", value: stats.total, color: "from-blue-500 to-blue-600", icon: MessageSquare },
+          { label: "English", value: stats.english, color: "from-indigo-500 to-indigo-600", icon: Globe },
+          { label: "Spanish", value: stats.spanish, color: "from-emerald-500 to-emerald-600", icon: Globe },
+          { label: "Escalated", value: stats.escalated, color: "from-amber-500 to-amber-600", icon: AlertTriangle },
         ].map((stat, idx) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] p-5 shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,128,0.15)] transition-all duration-300"
+            whileHover={{ y: -2 }}
+            className="bg-white rounded-xl border border-[#E7EBF0] p-4 shadow-sm"
           >
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-xs text-[#666666] font-medium uppercase tracking-wide">{stat.label}</p>
-              <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${stat.color} to-transparent/50 flex items-center justify-center`}>
-                <stat.icon className="h-4 w-4 text-white" />
+            <div className="flex items-center gap-3">
+              <div className={`p-2 rounded-lg bg-gradient-to-br ${stat.color} shadow-lg`}>
+                <stat.icon className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-[#000034]">
+                  <AnimatedCounter value={stat.value} />
+                </p>
+                <p className="text-xs text-[#666666]">{stat.label}</p>
               </div>
             </div>
-            <p className="text-3xl font-bold text-[#000034]">
-              <AnimatedCounter value={stat.value} />
-            </p>
           </motion.div>
         ))}
       </div>
@@ -305,7 +372,7 @@ export default function ConversationLogs() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] p-5 mb-6"
+        className="bg-white rounded-xl border border-[#E7EBF0] p-4 mb-6 shadow-sm"
       >
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
@@ -385,7 +452,7 @@ export default function ConversationLogs() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] overflow-hidden"
+        className="bg-white rounded-xl border border-[#E7EBF0] shadow-sm overflow-hidden"
       >
         {loading ? (
           <div className="p-12 text-center">
@@ -414,28 +481,74 @@ export default function ConversationLogs() {
         ) : (
           <table className="w-full">
             <thead>
-              <tr className="bg-gradient-to-r from-[#1D4F91] to-[#000080] text-white text-left text-sm">
-                <th className="px-6 py-4 font-medium w-8"></th>
-                <th className="px-6 py-4 font-medium">Session</th>
-                <th className="px-6 py-4 font-medium w-24">Language</th>
-                <th className="px-6 py-4 font-medium w-28">Sentiment</th>
-                <th className="px-6 py-4 font-medium w-24">Feedback</th>
-                <th className="px-6 py-4 font-medium w-24">Duration</th>
-                <th className="px-6 py-4 font-medium w-40">Date</th>
+              <tr className="bg-gray-50 border-b border-[#E7EBF0]">
+                <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 w-8"></th>
+                <th
+                  className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                  onClick={() => handleSort("sessionId")}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Session</span>
+                    <SortIcon columnKey="sessionId" />
+                  </div>
+                </th>
+                <th
+                  className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 w-24 cursor-pointer hover:bg-gray-100 transition-colors"
+                  onClick={() => handleSort("language")}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Language</span>
+                    <SortIcon columnKey="language" />
+                  </div>
+                </th>
+                <th
+                  className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 w-28 cursor-pointer hover:bg-gray-100 transition-colors"
+                  onClick={() => handleSort("sentiment")}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Sentiment</span>
+                    <SortIcon columnKey="sentiment" />
+                  </div>
+                </th>
+                <th
+                  className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 w-24 cursor-pointer hover:bg-gray-100 transition-colors"
+                  onClick={() => handleSort("feedbackGiven")}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Feedback</span>
+                    <SortIcon columnKey="feedbackGiven" />
+                  </div>
+                </th>
+                <th
+                  className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 w-24 cursor-pointer hover:bg-gray-100 transition-colors"
+                  onClick={() => handleSort("messages")}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Duration</span>
+                    <SortIcon columnKey="messages" />
+                  </div>
+                </th>
+                <th
+                  className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 w-40 cursor-pointer hover:bg-gray-100 transition-colors"
+                  onClick={() => handleSort("startTime")}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Date</span>
+                    <SortIcon columnKey="startTime" />
+                  </div>
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E7EBF0]">
-              {filteredConversations.map((conv, idx) => {
+              {paginatedConversations.map((conv, idx) => {
                 const sentimentStyles = getSentimentStyles(conv.sentiment);
                 const SentimentIcon = sentimentStyles.icon;
                 return (
-                  <motion.tbody
-                    key={conv.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                  >
-                    <tr
+                  <React.Fragment key={conv.id}>
+                    <motion.tr
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.05 }}
                       className={`cursor-pointer transition-all duration-200 ${
                         idx % 2 === 0 ? "bg-white" : "bg-[#F5F9FD]/50"
                       } hover:bg-blue-50/50`}
@@ -479,34 +592,33 @@ export default function ConversationLogs() {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        {conv.feedback === "positive" && (
-                          <motion.div
-                            whileHover={{ scale: 1.2 }}
-                            className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-50"
-                          >
-                            <ThumbsUp className="h-4 w-4 text-green-500" />
-                          </motion.div>
+                        {conv.feedbackGiven ? (
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full border bg-green-50 text-green-700 border-green-200">
+                            <ThumbsUp className="h-3 w-3" />
+                            Received
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full border bg-gray-50 text-gray-500 border-gray-200">
+                            No Rating
+                          </span>
                         )}
-                        {conv.feedback === "negative" && (
-                          <motion.div
-                            whileHover={{ scale: 1.2 }}
-                            className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50"
-                          >
-                            <ThumbsDown className="h-4 w-4 text-red-500" />
-                          </motion.div>
-                        )}
-                        {!conv.feedback && <span className="text-[#999]">—</span>}
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex items-center gap-1.5 text-sm text-[#666666]">
-                          <Clock className="h-3.5 w-3.5" />
-                          {formatDuration(conv.duration)}
-                        </div>
+                        <p className="text-sm font-medium text-[#000034]">{calculateDuration(conv.startTime, conv.endTime)}</p>
+                        <p className="text-xs text-gray-400">{conv.messages.length} messages</p>
                       </td>
-                      <td className="px-6 py-4 text-sm text-[#666666]">
-                        {new Date(conv.timestamp).toLocaleString()}
+                      <td className="px-6 py-4">
+                        {(() => {
+                          const formatted = formatDate(conv.startTime);
+                          return (
+                            <>
+                              <p className="text-sm text-[#666666]">{formatted.date}</p>
+                              <p className="text-xs text-gray-400">{formatted.time}</p>
+                            </>
+                          );
+                        })()}
                       </td>
-                    </tr>
+                    </motion.tr>
 
                     <AnimatePresence>
                       {expandedId === conv.id && (
@@ -555,11 +667,23 @@ export default function ConversationLogs() {
                         </motion.tr>
                       )}
                     </AnimatePresence>
-                  </motion.tbody>
+                  </React.Fragment>
                 );
               })}
             </tbody>
           </table>
+        )}
+
+        {/* Pagination */}
+        {!loading && sortedConversations.length > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={sortedConversations.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+            onItemsPerPageChange={handleItemsPerPageChange}
+          />
         )}
       </motion.div>
     </div>

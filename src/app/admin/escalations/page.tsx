@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { Pagination } from "@/components/ui/pagination";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -18,6 +19,9 @@ import {
   MoreHorizontal,
   ArrowUpRight,
   Trash2,
+  ArrowUp,
+  ArrowDown,
+  ArrowUpDown,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -80,6 +84,9 @@ function HighlightText({ text, highlight }: { text: string; highlight: string })
   );
 }
 
+type SortDirection = "asc" | "desc" | null;
+type SortKey = "userName" | "contactMethod" | "reason" | "requestedAt" | "status" | "";
+
 export default function EscalationsPage() {
   const [escalations, setEscalations] = useState<Escalation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -88,6 +95,87 @@ export default function EscalationsPage() {
   const [selectedEscalation, setSelectedEscalation] = useState<Escalation | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const { confirm, DialogComponent } = useConfirmDialog();
+  const [sortKey, setSortKey] = useState<SortKey>("requestedAt");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      if (sortDirection === "asc") setSortDirection("desc");
+      else if (sortDirection === "desc") { setSortKey(""); setSortDirection(null); }
+      else setSortDirection("asc");
+    } else {
+      setSortKey(key);
+      setSortDirection("asc");
+    }
+  };
+
+  const SortIcon = ({ columnKey }: { columnKey: SortKey }) => {
+    if (sortKey !== columnKey) return <ArrowUpDown className="h-3.5 w-3.5 text-gray-400" />;
+    if (sortDirection === "asc") return <ArrowUp className="h-3.5 w-3.5 text-[#000080]" />;
+    if (sortDirection === "desc") return <ArrowDown className="h-3.5 w-3.5 text-[#000080]" />;
+    return <ArrowUpDown className="h-3.5 w-3.5 text-gray-400" />;
+  };
+
+  const sortedEscalations = useMemo(() => {
+    if (!sortKey || !sortDirection) return escalations;
+
+    return [...escalations].sort((a, b) => {
+      let aVal: string | number;
+      let bVal: string | number;
+
+      switch (sortKey) {
+        case "userName":
+          aVal = a.userName.toLowerCase();
+          bVal = b.userName.toLowerCase();
+          break;
+        case "contactMethod":
+          aVal = a.contactMethod;
+          bVal = b.contactMethod;
+          break;
+        case "reason":
+          aVal = a.reason.toLowerCase();
+          bVal = b.reason.toLowerCase();
+          break;
+        case "requestedAt":
+          aVal = new Date(a.requestedAt).getTime();
+          bVal = new Date(b.requestedAt).getTime();
+          break;
+        case "status":
+          aVal = a.status;
+          bVal = b.status;
+          break;
+        default:
+          return 0;
+      }
+
+      if (aVal < bVal) return sortDirection === "asc" ? -1 : 1;
+      if (aVal > bVal) return sortDirection === "asc" ? 1 : -1;
+      return 0;
+    });
+  }, [escalations, sortKey, sortDirection]);
+
+  // Pagination
+  const totalPages = Math.ceil(sortedEscalations.length / itemsPerPage);
+  const paginatedEscalations = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return sortedEscalations.slice(startIndex, startIndex + itemsPerPage);
+  }, [sortedEscalations, currentPage, itemsPerPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, statusFilter]);
+
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
+
+  const handleItemsPerPageChange = useCallback((newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  }, []);
 
   const fetchEscalations = useCallback(async () => {
     setLoading(true);
@@ -342,20 +430,50 @@ export default function EscalationsPage() {
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-[#E7EBF0]">
                 <tr>
-                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">
-                    User
+                  <th
+                    className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                    onClick={() => handleSort("userName")}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>User</span>
+                      <SortIcon columnKey="userName" />
+                    </div>
                   </th>
-                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">
-                    Contact
+                  <th
+                    className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                    onClick={() => handleSort("contactMethod")}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Contact</span>
+                      <SortIcon columnKey="contactMethod" />
+                    </div>
                   </th>
-                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">
-                    Reason
+                  <th
+                    className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                    onClick={() => handleSort("reason")}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Reason</span>
+                      <SortIcon columnKey="reason" />
+                    </div>
                   </th>
-                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">
-                    Requested
+                  <th
+                    className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                    onClick={() => handleSort("requestedAt")}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Requested</span>
+                      <SortIcon columnKey="requestedAt" />
+                    </div>
                   </th>
-                  <th className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">
-                    Status
+                  <th
+                    className="text-left text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                    onClick={() => handleSort("status")}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>Status</span>
+                      <SortIcon columnKey="status" />
+                    </div>
                   </th>
                   <th className="text-right text-xs font-semibold text-[#666666] uppercase tracking-wider px-6 py-4">
                     Actions
@@ -363,7 +481,7 @@ export default function EscalationsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E7EBF0]">
-                {escalations.map((escalation, index) => {
+                {paginatedEscalations.map((escalation, index) => {
                   const status = statusConfig[escalation.status];
                   const StatusIcon = status.icon;
                   return (
@@ -449,6 +567,18 @@ export default function EscalationsPage() {
               </tbody>
             </table>
           </div>
+        )}
+
+        {/* Pagination */}
+        {!loading && sortedEscalations.length > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={sortedEscalations.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+            onItemsPerPageChange={handleItemsPerPageChange}
+          />
         )}
       </motion.div>
 
