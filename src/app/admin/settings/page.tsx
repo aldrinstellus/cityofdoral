@@ -192,11 +192,11 @@ export default function SettingsPage() {
 
   // Main settings tabs configuration
   const mainTabs = [
-    { id: 'profile' as MainSettingsTab, label: 'Profile', icon: User, gradient: 'from-blue-500' },
-    { id: 'team' as MainSettingsTab, label: 'Team', icon: Users, gradient: 'from-purple-500' },
-    { id: 'permissions' as MainSettingsTab, label: 'Permissions', icon: ShieldCheck, gradient: 'from-amber-500' },
-    { id: 'integrations' as MainSettingsTab, label: 'Integrations', icon: Link2, gradient: 'from-cyan-500' },
-    { id: 'chatbot' as MainSettingsTab, label: 'Chatbot', icon: Bot, gradient: 'from-indigo-500' },
+    { id: 'profile' as MainSettingsTab, label: 'Profile', icon: User },
+    { id: 'team' as MainSettingsTab, label: 'Team', icon: Users },
+    { id: 'permissions' as MainSettingsTab, label: 'Permissions', icon: ShieldCheck },
+    { id: 'integrations' as MainSettingsTab, label: 'Integrations', icon: Link2 },
+    { id: 'chatbot' as MainSettingsTab, label: 'Chatbot', icon: Bot },
   ];
 
   // Fetch settings history
@@ -614,7 +614,7 @@ export default function SettingsPage() {
         transition={{ delay: 0.1 }}
         className="mb-6"
       >
-        <div className="flex gap-2 overflow-x-auto pb-1">
+        <div className="flex flex-wrap gap-2">
           {mainTabs.map((tab, idx) => {
             const Icon = tab.icon;
             const isActive = activeMainTab === tab.id;
@@ -627,23 +627,23 @@ export default function SettingsPage() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveMainTab(tab.id)}
-                className={`relative flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                className={`relative h-10 px-5 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                   isActive
-                    ? "text-white shadow-md shadow-[#000080]/20"
-                    : "bg-white text-[#363535] hover:bg-gray-50 border border-[#E7EBF0] hover:border-[#000080]/30"
+                    ? "text-white"
+                    : "bg-white text-[#363535] hover:bg-gray-50 border border-[#E7EBF0]"
                 }`}
               >
                 {isActive && (
                   <motion.div
                     layoutId="activeMainTab"
-                    className="absolute inset-0 bg-gradient-to-r from-[#000080] to-[#1D4F91] rounded-xl"
+                    className="absolute inset-0 bg-gradient-to-r from-[#000080] to-[#1D4F91] rounded-xl shadow-lg shadow-[#000080]/25"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
-                <div className={`relative z-10 ${isActive ? "" : `w-7 h-7 rounded-lg bg-gradient-to-br ${tab.gradient} to-transparent/50 flex items-center justify-center`}`}>
-                  <Icon className={`h-4 w-4 ${isActive ? "" : "text-white"}`} />
-                </div>
-                <span className="relative z-10">{tab.label}</span>
+                <span className="relative z-10 flex items-center gap-2">
+                  <Icon className="h-3.5 w-3.5" />
+                  {tab.label}
+                </span>
               </motion.button>
             );
           })}
