@@ -21,21 +21,23 @@ import {
   ChevronRight,
   Home,
   BarChart3,
+  Languages,
 } from "lucide-react";
+import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 
 const navItems = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/admin/content", label: "Content", icon: FileText },
-  { href: "/admin/logs", label: "Conversations", icon: MessageSquare },
-  { href: "/admin/escalations", label: "Escalations", icon: AlertTriangle, badge: true },
-  { href: "/admin/announcements", label: "Announcements", icon: Bell },
-  { href: "/admin/audit-logs", label: "Audit Logs", icon: Shield },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/admin", labelKey: "nav.dashboard", icon: LayoutDashboard, exact: true },
+  { href: "/admin/analytics", labelKey: "nav.analytics", icon: BarChart3 },
+  { href: "/admin/content", labelKey: "nav.content", icon: FileText },
+  { href: "/admin/logs", labelKey: "nav.conversations", icon: MessageSquare },
+  { href: "/admin/escalations", labelKey: "nav.escalations", icon: AlertTriangle, badge: true },
+  { href: "/admin/announcements", labelKey: "nav.announcements", icon: Bell },
+  { href: "/admin/audit-logs", labelKey: "nav.auditLogs", icon: Shield },
+  { href: "/admin/settings", labelKey: "nav.settings", icon: Settings },
 ];
 
 // Breadcrumb configuration
-const breadcrumbLabels: Record<string, string> = {
+const breadcrumbLabelsEn: Record<string, string> = {
   admin: "Dashboard",
   analytics: "Analytics",
   content: "Content Management",
@@ -46,14 +48,71 @@ const breadcrumbLabels: Record<string, string> = {
   settings: "Settings",
 };
 
-export default function AdminLayoutClient({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const breadcrumbLabelsEs: Record<string, string> = {
+  admin: "Panel",
+  analytics: "Analíticas",
+  content: "Gestión de Contenido",
+  logs: "Conversaciones",
+  escalations: "Escalaciones",
+  announcements: "Anuncios",
+  "audit-logs": "Registros",
+  settings: "Configuración",
+};
+
+// Language Toggle Component
+function LanguageToggle({ collapsed }: { collapsed: boolean }) {
+  const { language, setLanguage } = useLanguage();
+
+  return (
+    <div className={`px-3 py-2 ${collapsed ? "flex justify-center" : ""}`}>
+      <div
+        className={`
+          relative flex items-center rounded-xl bg-white/5 p-1
+          ${collapsed ? "flex-col gap-1" : "gap-1"}
+        `}
+      >
+        {!collapsed && (
+          <Languages className="h-4 w-4 text-white/50 mx-2" />
+        )}
+        <button
+          onClick={() => setLanguage("en")}
+          className={`
+            relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
+            ${language === "en"
+              ? "bg-white text-[#000080] shadow-sm"
+              : "text-white/60 hover:text-white hover:bg-white/10"
+            }
+          `}
+          title="English"
+        >
+          EN
+        </button>
+        <button
+          onClick={() => setLanguage("es")}
+          className={`
+            relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
+            ${language === "es"
+              ? "bg-white text-[#000080] shadow-sm"
+              : "text-white/60 hover:text-white hover:bg-white/10"
+            }
+          `}
+          title="Español"
+        >
+          ES
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Main Layout Content (uses language context)
+function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { language, t } = useLanguage();
+
+  const breadcrumbLabels = language === "es" ? breadcrumbLabelsEs : breadcrumbLabelsEn;
 
   const isActive = (item: typeof navItems[0]) => {
     if (item.exact) return pathname === item.href;
@@ -186,12 +245,13 @@ export default function AdminLayoutClient({
         <nav className="relative p-3 space-y-1">
           {!sidebarCollapsed && (
             <p className="px-3 py-2 text-[10px] font-semibold text-blue-300/70 uppercase tracking-wider">
-              Main Menu
+              {t("nav.mainMenu")}
             </p>
           )}
           {navItems.map((item, index) => {
             const active = isActive(item);
             const Icon = item.icon;
+            const label = t(item.labelKey);
             return (
               <motion.div
                 key={item.href}
@@ -210,7 +270,7 @@ export default function AdminLayoutClient({
                       : "text-white/70 hover:bg-white/10 hover:text-white"
                     }
                   `}
-                  title={sidebarCollapsed ? item.label : undefined}
+                  title={sidebarCollapsed ? label : undefined}
                 >
                   {/* Active indicator glow */}
                   {active && (
@@ -230,10 +290,10 @@ export default function AdminLayoutClient({
                     <Icon className={`h-5 w-5 flex-shrink-0 ${active ? "text-[#000080]" : ""}`} />
                   </motion.div>
                   {!sidebarCollapsed && (
-                    <span className="text-sm">{item.label}</span>
+                    <span className="text-sm">{label}</span>
                   )}
                   {/* Notification badges */}
-                  {item.label === "Escalations" && !sidebarCollapsed && (
+                  {item.labelKey === "nav.escalations" && !sidebarCollapsed && (
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
@@ -242,7 +302,7 @@ export default function AdminLayoutClient({
                       3
                     </motion.span>
                   )}
-                  {item.label === "Announcements" && !sidebarCollapsed && (
+                  {item.labelKey === "nav.announcements" && !sidebarCollapsed && (
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
@@ -266,7 +326,7 @@ export default function AdminLayoutClient({
                 flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition-all cursor-pointer
                 ${sidebarCollapsed ? "justify-center px-2" : ""}
               `}
-              title={sidebarCollapsed ? "Admin User" : undefined}
+              title={sidebarCollapsed ? t("user.adminUser") : undefined}
             >
               <div className="relative flex-shrink-0">
                 <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-semibold text-sm shadow-lg">
@@ -280,12 +340,15 @@ export default function AdminLayoutClient({
                   animate={{ opacity: 1, x: 0 }}
                   className="flex-1 min-w-0"
                 >
-                  <p className="text-sm font-medium text-white truncate">Admin User</p>
-                  <p className="text-[10px] text-blue-300 truncate">System Administrator</p>
+                  <p className="text-sm font-medium text-white truncate">{t("user.adminUser")}</p>
+                  <p className="text-[10px] text-blue-300 truncate">{t("user.systemAdmin")}</p>
                 </motion.div>
               )}
             </div>
           </div>
+
+          {/* Language Toggle */}
+          <LanguageToggle collapsed={sidebarCollapsed} />
 
           {/* Back to Website */}
           <div className={`px-3 pb-3 ${sidebarCollapsed ? "flex justify-center" : ""}`}>
@@ -297,10 +360,10 @@ export default function AdminLayoutClient({
                 flex items-center gap-3 px-3 py-2 rounded-xl text-white/50 hover:bg-white/10 hover:text-white transition-all text-sm
                 ${sidebarCollapsed ? "justify-center px-2" : ""}
               `}
-              title={sidebarCollapsed ? "Back to Website" : undefined}
+              title={sidebarCollapsed ? t("nav.backToWebsite") : undefined}
             >
               <Globe className="h-4 w-4 flex-shrink-0" />
-              {!sidebarCollapsed && <span>Back to Website</span>}
+              {!sidebarCollapsed && <span>{t("nav.backToWebsite")}</span>}
             </a>
           </div>
         </div>
@@ -403,5 +466,18 @@ export default function AdminLayoutClient({
         closeButton
       />
     </div>
+  );
+}
+
+// Main export with LanguageProvider wrapper
+export default function AdminLayoutClient({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <LanguageProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </LanguageProvider>
   );
 }

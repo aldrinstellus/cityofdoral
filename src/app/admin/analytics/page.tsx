@@ -159,20 +159,59 @@ export default function AnalyticsPage() {
     escalated: d.escalated,
   })) || [];
 
-  // Hourly activity data
-  const hourlyData = [
-    { hour: "12am", conversations: 2 },
-    { hour: "2am", conversations: 1 },
-    { hour: "4am", conversations: 1 },
-    { hour: "6am", conversations: 5 },
-    { hour: "8am", conversations: 18 },
-    { hour: "10am", conversations: 32 },
-    { hour: "12pm", conversations: 28 },
-    { hour: "2pm", conversations: 35 },
-    { hour: "4pm", conversations: 25 },
-    { hour: "6pm", conversations: 15 },
-    { hour: "8pm", conversations: 8 },
-    { hour: "10pm", conversations: 4 },
+  // Peak Hours Heatmap data (7 days x 24 hours)
+  const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const hoursOfDay = Array.from({ length: 24 }, (_, i) => i);
+
+  const generateHeatmapData = () => {
+    const data: Array<{ day: string; hour: number; value: number }> = [];
+    weekDays.forEach(day => {
+      hoursOfDay.forEach(hour => {
+        // Generate realistic patterns: busy during work hours, less on weekends
+        let baseValue = 0;
+        const isWeekend = day === "Sat" || day === "Sun";
+        if (hour >= 8 && hour <= 18) {
+          baseValue = isWeekend ? 15 : 35;
+        } else if (hour >= 6 && hour <= 20) {
+          baseValue = isWeekend ? 8 : 20;
+        } else {
+          baseValue = 3;
+        }
+        // Add some variance
+        const variance = Math.floor(Math.random() * 10) - 5;
+        data.push({ day, hour, value: Math.max(0, baseValue + variance) });
+      });
+    });
+    return data;
+  };
+  const heatmapData = generateHeatmapData();
+
+  const getHeatmapColor = (value: number) => {
+    if (value >= 35) return "#000080"; // Navy - very busy
+    if (value >= 25) return "#1D4F91"; // Medium-dark blue
+    if (value >= 15) return "#4B7BB5"; // Medium blue
+    if (value >= 8) return "#8BAAD9";  // Light blue
+    if (value >= 3) return "#C5D5EC";  // Very light blue
+    return "#F0F4F8"; // Almost white
+  };
+
+  // Channel Performance data
+  const channelPerformanceData = [
+    { channel: "Web", satisfaction: 94, conversations: 245, resolution: 185 },
+    { channel: "IVR", satisfaction: 87, conversations: 189, resolution: 220 },
+    { channel: "SMS", satisfaction: 91, conversations: 134, resolution: 165 },
+    { channel: "Facebook", satisfaction: 89, conversations: 78, resolution: 145 },
+    { channel: "Instagram", satisfaction: 92, conversations: 45, resolution: 130 },
+    { channel: "WhatsApp", satisfaction: 96, conversations: 156, resolution: 155 },
+  ];
+
+  // Resolution Time Distribution data
+  const resolutionTimeData = [
+    { range: "<1 min", count: 125, percentage: 28, color: "#22c55e" },
+    { range: "1-3 min", count: 187, percentage: 42, color: "#4ade80" },
+    { range: "3-5 min", count: 78, percentage: 17, color: "#fbbf24" },
+    { range: "5-10 min", count: 42, percentage: 9, color: "#f59e0b" },
+    { range: "10+ min", count: 18, percentage: 4, color: "#ef4444" },
   ];
 
   // Top categories data
@@ -250,6 +289,34 @@ export default function AnalyticsPage() {
           >
             <RefreshCw className={`h-4 w-4 text-[#666666] ${loading ? "animate-spin" : ""}`} />
           </motion.button>
+
+          {/* Export Dropdown */}
+          <div className="relative group">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="h-10 px-4 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg flex items-center gap-2 shadow-lg shadow-[#000080]/20"
+            >
+              <Download className="h-4 w-4" />
+              Export
+            </motion.button>
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl border border-[#E7EBF0] shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+              <button
+                onClick={handleExportJSON}
+                className="w-full px-4 py-3 text-left text-sm text-[#363535] hover:bg-[#F5F9FD] flex items-center gap-2 rounded-t-xl"
+              >
+                <FileText className="h-4 w-4 text-[#000080]" />
+                Export JSON
+              </button>
+              <button
+                onClick={handleExportCSV}
+                className="w-full px-4 py-3 text-left text-sm text-[#363535] hover:bg-[#F5F9FD] flex items-center gap-2 rounded-b-xl border-t border-[#E7EBF0]"
+              >
+                <Download className="h-4 w-4 text-[#000080]" />
+                Export CSV
+              </button>
+            </div>
+          </div>
         </div>
       </motion.div>
 
@@ -364,28 +431,60 @@ export default function AnalyticsPage() {
               </div>
             </motion.div>
 
-            {/* Hourly Activity */}
+            {/* Peak Hours Heatmap */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
               className="bg-white rounded-xl border border-[#E7EBF0] p-6 shadow-sm"
             >
-              <div className="flex items-center gap-2 mb-4">
-                <div className="p-2 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg">
-                  <Clock className="h-4 w-4 text-white" />
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg">
+                    <Clock className="h-4 w-4 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-[#000034]">Peak Hours</h3>
                 </div>
-                <h3 className="text-lg font-semibold text-[#000034]">Hourly Activity</h3>
+                <div className="flex items-center gap-2 text-xs text-[#666]">
+                  <span>Low</span>
+                  <div className="flex gap-0.5">
+                    {["#F0F4F8", "#C5D5EC", "#8BAAD9", "#4B7BB5", "#1D4F91", "#000080"].map((color, i) => (
+                      <div key={i} className="w-4 h-3 rounded-sm" style={{ backgroundColor: color }} />
+                    ))}
+                  </div>
+                  <span>High</span>
+                </div>
               </div>
-              <div className="h-[280px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={hourlyData}>
-                    <XAxis dataKey="hour" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#666" }} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#666" }} />
-                    <Tooltip contentStyle={{ backgroundColor: "white", border: "none", borderRadius: "8px", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }} />
-                    <Bar dataKey="conversations" fill="#f59e0b" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+              <div className="overflow-x-auto">
+                <div className="min-w-[600px]">
+                  {/* Hour labels */}
+                  <div className="flex items-center mb-1 pl-12">
+                    {[0, 3, 6, 9, 12, 15, 18, 21].map(h => (
+                      <div key={h} className="flex-1 text-[10px] text-[#666] text-center">
+                        {h === 0 ? "12am" : h === 12 ? "12pm" : h > 12 ? `${h-12}pm` : `${h}am`}
+                      </div>
+                    ))}
+                  </div>
+                  {/* Heatmap grid */}
+                  {weekDays.map(day => (
+                    <div key={day} className="flex items-center mb-1">
+                      <div className="w-12 text-xs text-[#666] font-medium">{day}</div>
+                      <div className="flex-1 flex gap-0.5">
+                        {hoursOfDay.map(hour => {
+                          const cell = heatmapData.find(d => d.day === day && d.hour === hour);
+                          return (
+                            <div
+                              key={hour}
+                              className="flex-1 h-6 rounded-sm cursor-pointer hover:ring-2 hover:ring-[#000080] hover:ring-offset-1 transition-all"
+                              style={{ backgroundColor: getHeatmapColor(cell?.value || 0) }}
+                              title={`${day} ${hour}:00 - ${cell?.value || 0} conversations`}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </motion.div>
 
@@ -478,6 +577,87 @@ export default function AnalyticsPage() {
             </motion.div>
           </div>
 
+          {/* Channel Performance & Resolution Time Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Channel Performance Comparison */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55 }}
+              className="bg-white rounded-xl border border-[#E7EBF0] p-6 shadow-sm"
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg">
+                  <BarChart3 className="h-4 w-4 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold text-[#000034]">Channel Performance</h3>
+              </div>
+              <div className="h-[280px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={channelPerformanceData}>
+                    <XAxis dataKey="channel" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#666" }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#666" }} />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "white", border: "none", borderRadius: "8px", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}
+                      formatter={(value, name) => [
+                        name === "satisfaction" ? `${value}%` : value,
+                        name === "satisfaction" ? "Satisfaction" : name === "resolution" ? "Avg Resolution (s)" : "Conversations"
+                      ]}
+                    />
+                    <Legend wrapperStyle={{ fontSize: "11px" }} />
+                    <Bar dataKey="conversations" name="Conversations" fill="#000080" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="satisfaction" name="Satisfaction %" fill="#22c55e" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </motion.div>
+
+            {/* Resolution Time Distribution */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="bg-white rounded-xl border border-[#E7EBF0] p-6 shadow-sm"
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-2 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-lg">
+                  <Clock className="h-4 w-4 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold text-[#000034]">Resolution Time Distribution</h3>
+              </div>
+              <div className="space-y-3">
+                {resolutionTimeData.map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-3">
+                    <div className="w-16 text-xs text-[#666] font-medium">{item.range}</div>
+                    <div className="flex-1 h-8 bg-[#F5F9FD] rounded-lg overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${item.percentage}%` }}
+                        transition={{ delay: 0.6 + idx * 0.1, duration: 0.5 }}
+                        className="h-full rounded-lg"
+                        style={{ backgroundColor: item.color }}
+                      />
+                    </div>
+                    <div className="w-20 text-right">
+                      <span className="text-sm font-semibold text-[#000034]">{item.count}</span>
+                      <span className="text-xs text-[#666] ml-1">({item.percentage}%)</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 pt-4 border-t border-[#E7EBF0] flex items-center justify-between text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-[#22c55e]" />
+                  <span className="text-[#666]">Fast (&lt;3 min): 70%</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-[#ef4444]" />
+                  <span className="text-[#666]">Slow (&gt;10 min): 4%</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
           {/* Top Questions */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -508,52 +688,6 @@ export default function AnalyticsPage() {
                   </div>
                 </div>
               ))}
-            </div>
-          </motion.div>
-
-          {/* Export Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="bg-gradient-to-r from-[#000080] to-[#1D4F91] rounded-xl p-6 shadow-xl"
-          >
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div className="text-white">
-                <div className="flex items-center gap-2 mb-1">
-                  <Download className="h-5 w-5" />
-                  <h3 className="text-lg font-semibold">Export for Power BI</h3>
-                </div>
-                <p className="text-blue-200 text-sm">
-                  Download analytics data for import into Microsoft Power BI dashboards.
-                </p>
-              </div>
-              <div className="flex gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleExportJSON}
-                  className="h-10 px-5 bg-white text-[#000080] text-sm font-medium rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-2"
-                >
-                  <FileText className="h-4 w-4" />
-                  Export JSON
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleExportCSV}
-                  className="h-10 px-5 bg-white/10 text-white text-sm font-medium rounded-lg hover:bg-white/20 transition-colors flex items-center gap-2 border border-white/20"
-                >
-                  <Download className="h-4 w-4" />
-                  Export CSV
-                </motion.button>
-              </div>
-            </div>
-            <div className="mt-4 pt-4 border-t border-white/10">
-              <p className="text-xs text-blue-200 flex items-center gap-1">
-                <Calendar className="h-3 w-3" />
-                Report generated: {new Date(analytics.metadata.reportGeneratedAt).toLocaleString()}
-              </p>
             </div>
           </motion.div>
         </>
