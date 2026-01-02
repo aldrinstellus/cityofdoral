@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +10,7 @@ import {
   FileText,
   MessageSquare,
   Bell,
+  BellRing,
   Settings,
   Menu,
   X,
@@ -21,7 +22,6 @@ import {
   ChevronRight,
   Home,
   BarChart3,
-  Languages,
 } from "lucide-react";
 import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 
@@ -31,6 +31,7 @@ const navItems = [
   { href: "/admin/content", labelKey: "nav.content", icon: FileText },
   { href: "/admin/logs", labelKey: "nav.conversations", icon: MessageSquare },
   { href: "/admin/escalations", labelKey: "nav.escalations", icon: AlertTriangle, badge: true },
+  { href: "/admin/notifications", labelKey: "nav.notifications", icon: BellRing, notificationBadge: true },
   { href: "/admin/announcements", labelKey: "nav.announcements", icon: Bell },
   { href: "/admin/audit-logs", labelKey: "nav.auditLogs", icon: Shield },
   { href: "/admin/settings", labelKey: "nav.settings", icon: Settings },
@@ -43,6 +44,7 @@ const breadcrumbLabelsEn: Record<string, string> = {
   content: "Content Management",
   logs: "Conversations",
   escalations: "Escalations",
+  notifications: "Notifications",
   announcements: "Announcements",
   "audit-logs": "Audit Logs",
   settings: "Settings",
@@ -54,65 +56,45 @@ const breadcrumbLabelsEs: Record<string, string> = {
   content: "Gestión de Contenido",
   logs: "Conversaciones",
   escalations: "Escalaciones",
+  notifications: "Notificaciones",
   announcements: "Anuncios",
   "audit-logs": "Registros",
   settings: "Configuración",
 };
-
-// Language Toggle Component
-function LanguageToggle({ collapsed }: { collapsed: boolean }) {
-  const { language, setLanguage } = useLanguage();
-
-  return (
-    <div className={`px-3 py-2 ${collapsed ? "flex justify-center" : ""}`}>
-      <div
-        className={`
-          relative flex items-center rounded-xl bg-white/5 p-1
-          ${collapsed ? "flex-col gap-1" : "gap-1"}
-        `}
-      >
-        {!collapsed && (
-          <Languages className="h-4 w-4 text-white/50 mx-2" />
-        )}
-        <button
-          onClick={() => setLanguage("en")}
-          className={`
-            relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
-            ${language === "en"
-              ? "bg-white text-[#000080] shadow-sm"
-              : "text-white/60 hover:text-white hover:bg-white/10"
-            }
-          `}
-          title="English"
-        >
-          EN
-        </button>
-        <button
-          onClick={() => setLanguage("es")}
-          className={`
-            relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
-            ${language === "es"
-              ? "bg-white text-[#000080] shadow-sm"
-              : "text-white/60 hover:text-white hover:bg-white/10"
-            }
-          `}
-          title="Español"
-        >
-          ES
-        </button>
-      </div>
-    </div>
-  );
-}
 
 // Main Layout Content (uses language context)
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
   const { language, t } = useLanguage();
 
   const breadcrumbLabels = language === "es" ? breadcrumbLabelsEs : breadcrumbLabelsEn;
+
+  // Fetch unread notifications count
+  const fetchNotificationsCount = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/notifications?unreadOnly=true");
+      if (res.ok) {
+        const data = await res.json();
+        setUnreadNotifications(data.total || 0);
+      }
+    } catch (error) {
+      console.error("Failed to fetch notifications count:", error);
+    }
+  }, []);
+
+  // Poll for notifications every 30 seconds
+  useEffect(() => {
+    // Initial fetch with slight delay to avoid hydration issues
+    const timeoutId = setTimeout(fetchNotificationsCount, 100);
+    const interval = setInterval(fetchNotificationsCount, 30000);
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(interval);
+    };
+  }, [fetchNotificationsCount]);
 
   const isActive = (item: typeof navItems[0]) => {
     if (item.exact) return pathname === item.href;
@@ -302,6 +284,24 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                       3
                     </motion.span>
                   )}
+                  {item.labelKey === "nav.notifications" && unreadNotifications > 0 && !sidebarCollapsed && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="ml-auto px-2 py-0.5 text-[10px] font-bold bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full shadow-lg"
+                    >
+                      {unreadNotifications}
+                    </motion.span>
+                  )}
+                  {item.labelKey === "nav.notifications" && unreadNotifications > 0 && sidebarCollapsed && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-1 -right-1 w-4 h-4 text-[8px] font-bold bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full flex items-center justify-center shadow-lg"
+                    >
+                      {unreadNotifications > 9 ? "9+" : unreadNotifications}
+                    </motion.span>
+                  )}
                   {item.labelKey === "nav.announcements" && !sidebarCollapsed && (
                     <motion.span
                       initial={{ scale: 0 }}
@@ -346,9 +346,6 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
               )}
             </div>
           </div>
-
-          {/* Language Toggle */}
-          <LanguageToggle collapsed={sidebarCollapsed} />
 
           {/* Back to Website */}
           <div className={`px-3 pb-3 ${sidebarCollapsed ? "flex justify-center" : ""}`}>

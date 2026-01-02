@@ -1,5 +1,33 @@
 [
   {
+    "id": "log-1767343799466",
+    "timestamp": "2026-01-02T08:49:59.466Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-15",
+    "details": {
+      "title": "Power Outage Restoration Update - NW 112th Area",
+      "changes": {
+        "isActive": true
+      }
+    }
+  },
+  {
+    "id": "log-1767343797817",
+    "timestamp": "2026-01-02T08:49:57.817Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-15",
+    "details": {
+      "title": "Power Outage Restoration Update - NW 112th Area",
+      "changes": {
+        "isActive": false
+      }
+    }
+  },
+  {
     "id": "log-1767343536971",
     "timestamp": "2026-01-02T08:45:36.971Z",
     "user": "Admin",

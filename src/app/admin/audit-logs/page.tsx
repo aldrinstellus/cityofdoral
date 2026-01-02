@@ -17,7 +17,6 @@ import {
   Eye,
   FileDown,
   User,
-  Clock,
   AlertCircle,
   ArrowUp,
   ArrowDown,
@@ -503,16 +502,13 @@ export default function AuditLogsPage() {
                           </motion.div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                            <Clock className="h-4 w-4 text-gray-400" />
-                            <div>
-                              <p className="text-sm font-medium text-[#000034]">
-                                {new Date(log.timestamp).toLocaleDateString()}
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                {new Date(log.timestamp).toLocaleTimeString()}
-                              </p>
-                            </div>
+                          <div>
+                            <p className="text-sm font-medium text-[#000034]">
+                              {new Date(log.timestamp).toLocaleDateString()}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {new Date(log.timestamp).toLocaleTimeString()}
+                            </p>
                           </div>
                         </td>
                         <td className="px-6 py-4">
@@ -602,9 +598,9 @@ export default function AuditLogsPage() {
                                       <span className="text-sm text-[#363535]">{log.location || "Unknown Location"}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                      <code className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded font-mono">
-                                        {log.ipAddress}
-                                      </code>
+                                      <span className="text-sm text-[#363535]">
+                                        IP: {log.ipAddress}
+                                      </span>
                                     </div>
                                   </div>
                                 </div>
@@ -613,7 +609,7 @@ export default function AuditLogsPage() {
                               {/* Log ID Footer */}
                               <div className="mt-4 pt-4 border-t border-[#E7EBF0]">
                                 <p className="text-xs text-gray-400">
-                                  Log ID: <span className="font-mono">{log.id}</span> • Recorded at {new Date(log.timestamp).toLocaleString()}
+                                  Log ID: {log.id} • Recorded at {new Date(log.timestamp).toLocaleString()}
                                 </p>
                               </div>
                             </td>

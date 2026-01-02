@@ -679,6 +679,77 @@ export async function saveKnowledgeEntries(entries: KnowledgeEntry[]): Promise<v
   return writeJsonFile('knowledge-entries.json', entries);
 }
 
+// Notification Types
+export interface Notification {
+  id: string;
+  type: 'system' | 'activity' | 'reminder';
+  category: string;
+  title: string;
+  message: string;
+  severity: 'info' | 'warning' | 'error' | 'success';
+  isRead: boolean;
+  createdAt: string;
+  link?: string;
+  metadata?: Record<string, unknown>;
+}
+
+const DEFAULT_NOTIFICATIONS: Notification[] = [];
+
+// Notification functions
+export async function getNotifications(): Promise<Notification[]> {
+  return readJsonFile('notifications.json', DEFAULT_NOTIFICATIONS);
+}
+
+export async function saveNotifications(notifications: Notification[]): Promise<void> {
+  return writeJsonFile('notifications.json', notifications);
+}
+
+export async function createNotification(
+  notification: Omit<Notification, 'id' | 'createdAt' | 'isRead'>
+): Promise<Notification> {
+  const notifications = await getNotifications();
+  const newNotification: Notification = {
+    ...notification,
+    id: `notif-${Date.now()}`,
+    isRead: false,
+    createdAt: new Date().toISOString(),
+  };
+  notifications.unshift(newNotification);
+  await saveNotifications(notifications);
+  return newNotification;
+}
+
+export async function markNotificationRead(id: string): Promise<Notification | null> {
+  const notifications = await getNotifications();
+  const index = notifications.findIndex(n => n.id === id);
+  if (index === -1) return null;
+  notifications[index].isRead = true;
+  await saveNotifications(notifications);
+  return notifications[index];
+}
+
+export async function markAllNotificationsRead(): Promise<number> {
+  const notifications = await getNotifications();
+  let count = 0;
+  notifications.forEach(n => {
+    if (!n.isRead) {
+      n.isRead = true;
+      count++;
+    }
+  });
+  await saveNotifications(notifications);
+  return count;
+}
+
+export async function deleteNotification(id: string): Promise<boolean> {
+  const notifications = await getNotifications();
+  const index = notifications.findIndex(n => n.id === id);
+  if (index === -1) return false;
+  notifications.splice(index, 1);
+  await saveNotifications(notifications);
+  return true;
+}
+
 // Helper to add audit log
 export async function addAuditLog(
   user: string,
