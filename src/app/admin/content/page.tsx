@@ -547,21 +547,6 @@ export default function ContentManagement() {
           </div>
           <p className="text-[#666666] mt-1 text-[15px]">Manage knowledge base and custom FAQs</p>
         </div>
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 }}
-          className="relative w-full lg:w-80"
-        >
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
-          <input
-            type="text"
-            placeholder="Search content..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full h-11 pl-10 pr-4 bg-white border border-[#E7EBF0] rounded-xl text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200"
-          />
-        </motion.div>
       </motion.div>
 
       {/* Tab Navigation - Enhanced */}
@@ -617,232 +602,280 @@ export default function ContentManagement() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)] overflow-hidden"
           >
-            <div className="px-6 py-4 border-b border-[#E7EBF0] flex items-center justify-between bg-gradient-to-r from-white to-blue-50/50">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#000080] to-[#1D4F91] flex items-center justify-center shadow-lg">
-                  <Layers className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-[#000034]">Scraped Knowledge Base</h3>
-                  <p className="text-sm text-[#666666] mt-0.5">
-                    {knowledgeItems.length} pages indexed from City websites
+            {/* Stats Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              {[
+                { label: "Total Pages", value: knowledgeItems.length, color: "from-blue-500 to-blue-600" },
+                { label: "Sections", value: Object.keys(groupedKnowledge).length, color: "from-purple-500 to-violet-600" },
+                { label: "Last Scraped", value: autoScrapeSettings.lastRun ? "3 days ago" : "Never", isText: true, color: "from-amber-500 to-orange-500" },
+                { label: "Auto-Scrape", value: autoScrapeSettings.enabled ? "Active" : "Off", isText: true, color: autoScrapeSettings.enabled ? "from-green-500 to-emerald-600" : "from-gray-400 to-gray-500" },
+              ].map((stat, idx) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="bg-white rounded-xl border border-[#E7EBF0] p-4 shadow-sm"
+                >
+                  <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center mb-3`}>
+                    <Database className="h-5 w-5 text-white" />
+                  </div>
+                  <p className="text-2xl font-bold text-[#000034]">
+                    {stat.isText ? stat.value : <AnimatedCounter value={stat.value as number} />}
                   </p>
+                  <p className="text-sm text-[#666666]">{stat.label}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Search and Actions Bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-xl border border-[#E7EBF0] p-4 mb-6 shadow-sm"
+            >
+              <div className="flex flex-col lg:flex-row gap-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                  <input
+                    type="text"
+                    placeholder="Search pages..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+                  />
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setShowAutoScrapeSettings(!showAutoScrapeSettings)}
+                    className={`h-10 px-4 border rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                      autoScrapeSettings.enabled
+                        ? "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                        : "bg-white border-[#E7EBF0] text-[#363535] hover:bg-gray-50"
+                    }`}
+                  >
+                    <Zap className="h-4 w-4" />
+                    Auto-Scrape {autoScrapeSettings.enabled ? "On" : "Off"}
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleRefreshKnowledge}
+                    disabled={loading}
+                    className="h-10 px-5 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2 disabled:opacity-50"
+                  >
+                    <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+                    Scrape Now
+                  </motion.button>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setShowAutoScrapeSettings(!showAutoScrapeSettings)}
-                  className={`h-10 px-4 border rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 shadow-sm ${
-                    autoScrapeSettings.enabled
-                      ? "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
-                      : "bg-white border-[#E7EBF0] text-[#363535] hover:bg-gray-50"
-                  }`}
-                >
-                  <Zap className="h-4 w-4" />
-                  Auto-Scrape {autoScrapeSettings.enabled ? "On" : "Off"}
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleRefreshKnowledge}
-                  disabled={loading}
-                  className="h-10 px-5 bg-white border border-[#E7EBF0] rounded-lg text-sm font-medium text-[#363535] hover:bg-gray-50 hover:border-[#000080]/30 transition-all duration-200 flex items-center gap-2 disabled:opacity-50 shadow-sm"
-                >
-                  <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-                  Scrape Now
-                </motion.button>
-              </div>
-            </div>
+            </motion.div>
 
             {/* Auto-Scrape Settings Panel */}
             <AnimatePresence>
               {showAutoScrapeSettings && (
                 <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="border-b border-[#E7EBF0] overflow-hidden"
+                  initial={{ opacity: 0, y: -20, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: "auto" }}
+                  exit={{ opacity: 0, y: -20, height: 0 }}
+                  className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] shadow-lg p-6 mb-6 overflow-hidden"
                 >
-                  <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        <Settings className="h-5 w-5 text-[#000080]" />
-                        <h4 className="font-semibold text-[#000034]">Auto-Scrape Settings</h4>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-semibold text-[#000034] flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#000080] to-[#1D4F91] flex items-center justify-center">
+                        <Settings className="h-4 w-4 text-white" />
                       </div>
+                      Auto-Scrape Settings
+                    </h3>
+                    <button
+                      onClick={() => setShowAutoScrapeSettings(false)}
+                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      <X className="h-4 w-4 text-[#666666]" />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-[#363535] mb-2">Status</label>
                       <button
-                        onClick={() => setShowAutoScrapeSettings(false)}
-                        className="p-1 hover:bg-white/50 rounded-lg transition-colors"
+                        onClick={() => setAutoScrapeSettings({
+                          ...autoScrapeSettings,
+                          enabled: !autoScrapeSettings.enabled
+                        })}
+                        className={`w-full h-11 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${
+                          autoScrapeSettings.enabled
+                            ? "bg-green-500 text-white hover:bg-green-600"
+                            : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                        }`}
                       >
-                        <X className="h-4 w-4 text-[#666666]" />
+                        {autoScrapeSettings.enabled ? (
+                          <>
+                            <Check className="h-4 w-4" /> Enabled
+                          </>
+                        ) : (
+                          <>Disabled</>
+                        )}
                       </button>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div>
-                        <label className="block text-xs font-medium text-[#666666] mb-1.5">Status</label>
-                        <button
-                          onClick={() => setAutoScrapeSettings({
-                            ...autoScrapeSettings,
-                            enabled: !autoScrapeSettings.enabled
-                          })}
-                          className={`w-full h-10 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${
-                            autoScrapeSettings.enabled
-                              ? "bg-green-500 text-white hover:bg-green-600"
-                              : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                          }`}
-                        >
-                          {autoScrapeSettings.enabled ? (
-                            <>
-                              <Check className="h-4 w-4" /> Enabled
-                            </>
-                          ) : (
-                            <>Disabled</>
-                          )}
-                        </button>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-[#666666] mb-1.5">Frequency</label>
-                        <select
-                          value={autoScrapeSettings.frequency}
-                          onChange={(e) => setAutoScrapeSettings({
-                            ...autoScrapeSettings,
-                            frequency: e.target.value as "daily" | "weekly" | "monthly"
-                          })}
-                          className="w-full h-10 px-3 border border-[#E7EBF0] rounded-lg text-sm bg-white focus:outline-none focus:border-[#000080] cursor-pointer"
-                        >
-                          <option value="daily">Daily</option>
-                          <option value="weekly">Weekly</option>
-                          <option value="monthly">Monthly</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-[#666666] mb-1.5">Last Run</label>
-                        <div className="h-10 px-3 bg-white border border-[#E7EBF0] rounded-lg flex items-center text-sm text-[#363535]">
-                          <Clock className="h-4 w-4 text-[#666666] mr-2" />
-                          {autoScrapeSettings.lastRun
-                            ? new Date(autoScrapeSettings.lastRun).toLocaleDateString()
-                            : "Never"}
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-[#666666] mb-1.5">Next Run</label>
-                        <div className="h-10 px-3 bg-white border border-[#E7EBF0] rounded-lg flex items-center text-sm text-[#363535]">
-                          <Calendar className="h-4 w-4 text-[#666666] mr-2" />
-                          {autoScrapeSettings.enabled && autoScrapeSettings.nextRun
-                            ? new Date(autoScrapeSettings.nextRun).toLocaleDateString()
-                            : "—"}
-                        </div>
+                    <div>
+                      <label className="block text-sm font-medium text-[#363535] mb-2">Frequency</label>
+                      <select
+                        value={autoScrapeSettings.frequency}
+                        onChange={(e) => setAutoScrapeSettings({
+                          ...autoScrapeSettings,
+                          frequency: e.target.value as "daily" | "weekly" | "monthly"
+                        })}
+                        className="w-full h-11 px-4 border border-[#E7EBF0] rounded-lg text-sm bg-white focus:outline-none focus:border-[#000080] cursor-pointer"
+                      >
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-[#363535] mb-2">Last Run</label>
+                      <div className="h-11 px-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg flex items-center text-sm text-[#363535]">
+                        <Clock className="h-4 w-4 text-[#666666] mr-2" />
+                        {autoScrapeSettings.lastRun
+                          ? new Date(autoScrapeSettings.lastRun).toLocaleDateString()
+                          : "Never"}
                       </div>
                     </div>
-                    <p className="text-xs text-[#666666] mt-3">
-                      Auto-scrape automatically refreshes the knowledge base from cityofdoral.com on the selected schedule.
-                    </p>
+                    <div>
+                      <label className="block text-sm font-medium text-[#363535] mb-2">Next Run</label>
+                      <div className="h-11 px-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg flex items-center text-sm text-[#363535]">
+                        <Calendar className="h-4 w-4 text-[#666666] mr-2" />
+                        {autoScrapeSettings.enabled && autoScrapeSettings.nextRun
+                          ? new Date(autoScrapeSettings.nextRun).toLocaleDateString()
+                          : "—"}
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {loading ? (
-              <div className="p-12 text-center">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                >
-                  <RefreshCw className="h-8 w-8 text-[#000080] mx-auto mb-3" />
-                </motion.div>
-                <p className="text-[#666666] text-sm">Loading knowledge base...</p>
-              </div>
-            ) : (
-              <div className="divide-y divide-[#E7EBF0]">
-                {filteredSections.map(([section, items], sectionIdx) => (
+            {/* Knowledge Base Table */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white rounded-xl border border-[#E7EBF0] shadow-sm overflow-hidden"
+            >
+              {loading ? (
+                <div className="p-12 text-center">
                   <motion.div
-                    key={section}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: sectionIdx * 0.05 }}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                   >
-                    <motion.button
-                      whileHover={{ backgroundColor: "rgba(0, 0, 128, 0.03)" }}
-                      onClick={() => setExpandedSection(expandedSection === section ? null : section)}
-                      className="w-full px-6 py-4 flex items-center justify-between transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        <motion.div
-                          animate={{ rotate: expandedSection === section ? 90 : 0 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <ChevronRight className="h-4 w-4 text-[#666666]" />
-                        </motion.div>
-                        <span className="font-medium text-[#000034]">{section}</span>
-                        <span className="px-2.5 py-1 bg-gradient-to-r from-[#F3F4F6] to-[#E7EBF0] text-[#666666] text-xs rounded-full font-medium">
-                          {items.length} pages
-                        </span>
-                      </div>
-                    </motion.button>
-
-                    <AnimatePresence>
-                      {expandedSection === section && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="bg-gradient-to-b from-[#F5F9FD] to-white border-t border-[#E7EBF0] overflow-hidden"
-                        >
-                          <table className="w-full">
-                            <thead>
-                              <tr className="bg-gradient-to-r from-[#1D4F91] to-[#000080] text-white text-left text-sm">
-                                <th className="px-6 py-3 font-medium">Page Title</th>
-                                <th className="px-6 py-3 font-medium">URL</th>
-                                <th className="px-6 py-3 font-medium w-20">Action</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-[#E7EBF0]">
-                              {items.slice(0, 10).map((item, idx) => (
-                                <motion.tr
-                                  key={idx}
-                                  initial={{ opacity: 0, x: -20 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: idx * 0.03 }}
-                                  className={`${idx % 2 === 0 ? "bg-white" : "bg-[#F5F9FD]/50"} hover:bg-blue-50/50 transition-colors`}
-                                >
-                                  <td className="px-6 py-3 text-sm text-[#363535] font-medium">
-                                    {item.title}
-                                  </td>
-                                  <td className="px-6 py-3 text-sm text-[#666666] truncate max-w-[300px]">
-                                    {item.url}
-                                  </td>
-                                  <td className="px-6 py-3">
-                                    <motion.a
-                                      whileHover={{ scale: 1.1 }}
-                                      whileTap={{ scale: 0.9 }}
-                                      href={`https://www.cityofdoral.com${item.url}`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="inline-flex items-center justify-center w-8 h-8 text-[#1D4F91] hover:bg-blue-100 rounded-lg transition-colors"
-                                    >
-                                      <ExternalLink className="h-4 w-4" />
-                                    </motion.a>
-                                  </td>
-                                </motion.tr>
-                              ))}
-                            </tbody>
-                          </table>
-                          {items.length > 10 && (
-                            <p className="text-center py-3 text-sm text-[#666666] bg-white border-t border-[#E7EBF0]">
-                              + {items.length - 10} more pages
-                            </p>
-                          )}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    <RefreshCw className="h-8 w-8 text-[#000080] mx-auto mb-3" />
                   </motion.div>
-                ))}
-              </div>
-            )}
+                  <p className="text-[#666666] text-sm">Loading knowledge base...</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-[#E7EBF0]">
+                  {filteredSections.length === 0 ? (
+                    <div className="px-6 py-12 text-center">
+                      <Database className="h-12 w-12 mx-auto mb-3 text-[#E7EBF0]" />
+                      <p className="text-[#666666] text-sm">
+                        {searchTerm ? "No pages match your search" : "No pages in knowledge base"}
+                      </p>
+                    </div>
+                  ) : (
+                    filteredSections.map(([section, items], sectionIdx) => (
+                      <motion.div
+                        key={section}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: sectionIdx * 0.05 }}
+                      >
+                        <motion.button
+                          whileHover={{ backgroundColor: "rgba(0, 0, 128, 0.03)" }}
+                          onClick={() => setExpandedSection(expandedSection === section ? null : section)}
+                          className="w-full px-6 py-4 flex items-center justify-between transition-colors"
+                        >
+                          <div className="flex items-center gap-3">
+                            <motion.div
+                              animate={{ rotate: expandedSection === section ? 90 : 0 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <ChevronRight className="h-4 w-4 text-[#666666]" />
+                            </motion.div>
+                            <span className="font-medium text-[#000034]">
+                              <HighlightText text={section} highlight={searchTerm} />
+                            </span>
+                            <span className="px-2.5 py-1 bg-gradient-to-r from-[#F3F4F6] to-[#E7EBF0] text-[#666666] text-xs rounded-full font-medium">
+                              {items.length} pages
+                            </span>
+                          </div>
+                        </motion.button>
+
+                        <AnimatePresence>
+                          {expandedSection === section && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="bg-gradient-to-b from-[#F5F9FD] to-white border-t border-[#E7EBF0] overflow-hidden"
+                            >
+                              <table className="w-full">
+                                <thead>
+                                  <tr className="bg-gradient-to-r from-[#1D4F91] to-[#000080] text-white text-left text-sm">
+                                    <th className="px-6 py-3 font-medium">Page Title</th>
+                                    <th className="px-6 py-3 font-medium">URL</th>
+                                    <th className="px-6 py-3 font-medium w-20">Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody className="divide-y divide-[#E7EBF0]">
+                                  {items.slice(0, 10).map((item, idx) => (
+                                    <motion.tr
+                                      key={idx}
+                                      initial={{ opacity: 0, x: -20 }}
+                                      animate={{ opacity: 1, x: 0 }}
+                                      transition={{ delay: idx * 0.03 }}
+                                      className={`${idx % 2 === 0 ? "bg-white" : "bg-[#F5F9FD]/50"} hover:bg-blue-50/50 transition-colors`}
+                                    >
+                                      <td className="px-6 py-3 text-sm text-[#363535] font-medium">
+                                        <HighlightText text={item.title} highlight={searchTerm} />
+                                      </td>
+                                      <td className="px-6 py-3 text-sm text-[#666666] truncate max-w-[300px]">
+                                        {item.url}
+                                      </td>
+                                      <td className="px-6 py-3">
+                                        <motion.a
+                                          whileHover={{ scale: 1.1 }}
+                                          whileTap={{ scale: 0.9 }}
+                                          href={`https://www.cityofdoral.com${item.url}`}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="inline-flex items-center justify-center w-8 h-8 text-[#1D4F91] hover:bg-blue-100 rounded-lg transition-colors"
+                                        >
+                                          <ExternalLink className="h-4 w-4" />
+                                        </motion.a>
+                                      </td>
+                                    </motion.tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                              {items.length > 10 && (
+                                <p className="text-center py-3 text-sm text-[#666666] bg-white border-t border-[#E7EBF0]">
+                                  + {items.length - 10} more pages
+                                </p>
+                              )}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    ))
+                  )}
+                </div>
+              )}
+            </motion.div>
           </motion.div>
         )}
 
