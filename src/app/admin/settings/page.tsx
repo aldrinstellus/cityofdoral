@@ -614,7 +614,7 @@ export default function SettingsPage() {
         transition={{ delay: 0.1 }}
         className="mb-6"
       >
-        <div className="flex gap-2 overflow-x-auto pb-2">
+        <div className="flex gap-2 overflow-x-auto pb-1">
           {mainTabs.map((tab, idx) => {
             const Icon = tab.icon;
             const isActive = activeMainTab === tab.id;
@@ -629,14 +629,14 @@ export default function SettingsPage() {
                 onClick={() => setActiveMainTab(tab.id)}
                 className={`relative flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                   isActive
-                    ? "text-white"
+                    ? "text-white shadow-md shadow-[#000080]/20"
                     : "bg-white text-[#363535] hover:bg-gray-50 border border-[#E7EBF0] hover:border-[#000080]/30"
                 }`}
               >
                 {isActive && (
                   <motion.div
                     layoutId="activeMainTab"
-                    className="absolute inset-0 bg-gradient-to-r from-[#000080] to-[#1D4F91] rounded-xl shadow-lg shadow-[#000080]/25"
+                    className="absolute inset-0 bg-gradient-to-r from-[#000080] to-[#1D4F91] rounded-xl"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}

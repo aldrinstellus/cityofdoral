@@ -1,5 +1,33 @@
 [
   {
+    "id": "log-1767325899908",
+    "timestamp": "2026-01-02T03:51:39.908Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-2",
+    "details": {
+      "title": "Water Main Maintenance Notice",
+      "changes": {
+        "isActive": true
+      }
+    }
+  },
+  {
+    "id": "log-1767325898535",
+    "timestamp": "2026-01-02T03:51:38.535Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-2",
+    "details": {
+      "title": "Water Main Maintenance Notice",
+      "changes": {
+        "isActive": false
+      }
+    }
+  },
+  {
     "id": "log-1767309857542",
     "timestamp": "2026-01-01T23:24:17.542Z",
     "user": "Admin",

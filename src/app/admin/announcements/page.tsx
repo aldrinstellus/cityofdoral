@@ -24,6 +24,15 @@ import {
   Loader2,
   CheckSquare,
   Square,
+  Search,
+  Filter,
+  SortAsc,
+  SortDesc,
+  Users,
+  Building2,
+  Globe,
+  ChevronDown,
+  RotateCcw,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -118,6 +127,11 @@ export default function Announcements() {
   const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [filterActive, setFilterActive] = useState<"all" | "active" | "inactive">("all");
+  const [filterType, setFilterType] = useState<"all" | "info" | "warning" | "alert" | "success">("all");
+  const [filterAudience, setFilterAudience] = useState<"all" | "residents" | "businesses">("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "priority" | "views">("newest");
+  const [showFilters, setShowFilters] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -339,14 +353,65 @@ export default function Announcements() {
     }
   };
 
-  const filteredAnnouncements = announcements.filter((a) => {
-    if (filterActive === "active") return a.isActive;
-    if (filterActive === "inactive") return !a.isActive;
-    return true;
-  });
+  const filteredAnnouncements = useMemo(() => {
+    let filtered = announcements.filter((a) => {
+      // Status filter
+      if (filterActive === "active" && !a.isActive) return false;
+      if (filterActive === "inactive" && a.isActive) return false;
+
+      // Type filter
+      if (filterType !== "all" && a.type !== filterType) return false;
+
+      // Audience filter - map API types to UI types
+      if (filterAudience !== "all") {
+        // The API uses 'residents' and 'businesses', but we need to handle 'all' target audience
+        const audienceMatches = filterAudience === "residents"
+          ? true  // residents can see all announcements
+          : filterAudience === "businesses";
+        if (!audienceMatches) return false;
+      }
+
+      // Search filter
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        const matchesTitle = a.title.toLowerCase().includes(query);
+        const matchesMessage = a.message.toLowerCase().includes(query);
+        if (!matchesTitle && !matchesMessage) return false;
+      }
+
+      return true;
+    });
+
+    // Sorting
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "newest":
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        case "oldest":
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        case "priority":
+          const priorityOrder = { high: 0, medium: 1, low: 2 };
+          return priorityOrder[a.priority] - priorityOrder[b.priority];
+        case "views":
+          return 0; // Views not tracked in current model, but ready for future
+        default:
+          return 0;
+      }
+    });
+
+    return filtered;
+  }, [announcements, filterActive, filterType, filterAudience, searchQuery, sortBy]);
 
   const activeCount = announcements.filter((a) => a.isActive).length;
   const highPriorityCount = announcements.filter((a) => a.priority === "high" && a.isActive).length;
+  const hasActiveFilters = filterType !== "all" || filterAudience !== "all" || searchQuery.trim() !== "";
+
+  const resetFilters = () => {
+    setFilterType("all");
+    setFilterAudience("all");
+    setSearchQuery("");
+    setSortBy("newest");
+  };
 
   return (
     <div className="p-6 lg:p-8 max-w-[1600px] mx-auto">
@@ -411,35 +476,207 @@ export default function Announcements() {
         ))}
       </div>
 
-      {/* Filter Tabs */}
+      {/* Search and Filter Bar */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="flex gap-2 mb-6"
+        className="space-y-4 mb-6"
       >
-        {(["all", "active", "inactive"] as const).map((filter) => (
-          <motion.button
-            key={filter}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setFilterActive(filter)}
-            className={`relative h-11 px-6 rounded-xl text-sm font-medium transition-all duration-200 capitalize ${
-              filterActive === filter
-                ? "text-white"
-                : "bg-white text-[#363535] hover:bg-gray-50 border border-[#E7EBF0]"
-            }`}
-          >
-            {filterActive === filter && (
-              <motion.div
-                layoutId="activeFilterBg"
-                className="absolute inset-0 bg-gradient-to-r from-[#000080] to-[#1D4F91] rounded-xl shadow-lg shadow-[#000080]/25"
-                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-              />
+        {/* Search Bar */}
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+            <input
+              type="text"
+              placeholder="Search announcements by title or content..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full h-11 pl-11 pr-4 bg-white border border-[#E7EBF0] rounded-xl text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] hover:text-[#666] transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
             )}
-            <span className="relative z-10">{filter}</span>
-          </motion.button>
-        ))}
+          </div>
+
+          {/* Filter Toggle & Sort */}
+          <div className="flex items-center gap-2">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setShowFilters(!showFilters)}
+              className={`h-11 px-4 rounded-xl text-sm font-medium flex items-center gap-2 transition-all ${
+                showFilters || hasActiveFilters
+                  ? "bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white shadow-lg shadow-[#000080]/25"
+                  : "bg-white border border-[#E7EBF0] text-[#363535] hover:bg-gray-50"
+              }`}
+            >
+              <Filter className="h-4 w-4" />
+              Filters
+              {hasActiveFilters && (
+                <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-xs">
+                  {(filterType !== "all" ? 1 : 0) + (filterAudience !== "all" ? 1 : 0)}
+                </span>
+              )}
+            </motion.button>
+
+            <div className="relative">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                className="h-11 pl-4 pr-10 bg-white border border-[#E7EBF0] rounded-xl text-sm text-[#363535] appearance-none cursor-pointer focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="priority">Priority</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999] pointer-events-none" />
+            </div>
+          </div>
+        </div>
+
+        {/* Filter Panel */}
+        <AnimatePresence>
+          {showFilters && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] p-4 shadow-sm">
+                <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                  {/* Type Filter */}
+                  <div className="flex-1">
+                    <label className="block text-xs font-medium text-[#666666] mb-2 uppercase tracking-wide">
+                      Type
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        { value: "all", label: "All Types", icon: null },
+                        { value: "info", label: "Info", icon: Info },
+                        { value: "warning", label: "Warning", icon: AlertTriangle },
+                        { value: "alert", label: "Alert", icon: Megaphone },
+                        { value: "success", label: "Success", icon: CheckCircle2 },
+                      ].map((type) => (
+                        <button
+                          key={type.value}
+                          onClick={() => setFilterType(type.value as typeof filterType)}
+                          className={`h-9 px-3 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-all ${
+                            filterType === type.value
+                              ? "bg-[#000080] text-white shadow-sm"
+                              : "bg-gray-50 text-[#666666] hover:bg-gray-100"
+                          }`}
+                        >
+                          {type.icon && <type.icon className="h-3.5 w-3.5" />}
+                          {type.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Audience Filter */}
+                  <div className="flex-1">
+                    <label className="block text-xs font-medium text-[#666666] mb-2 uppercase tracking-wide">
+                      Target Audience
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        { value: "all", label: "Everyone", icon: Globe },
+                        { value: "residents", label: "Residents", icon: Users },
+                        { value: "businesses", label: "Businesses", icon: Building2 },
+                      ].map((audience) => (
+                        <button
+                          key={audience.value}
+                          onClick={() => setFilterAudience(audience.value as typeof filterAudience)}
+                          className={`h-9 px-3 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-all ${
+                            filterAudience === audience.value
+                              ? "bg-[#000080] text-white shadow-sm"
+                              : "bg-gray-50 text-[#666666] hover:bg-gray-100"
+                          }`}
+                        >
+                          <audience.icon className="h-3.5 w-3.5" />
+                          {audience.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Reset Button */}
+                  {hasActiveFilters && (
+                    <motion.button
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={resetFilters}
+                      className="h-9 px-4 rounded-lg text-sm font-medium flex items-center gap-2 text-red-600 bg-red-50 hover:bg-red-100 transition-all"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      Reset Filters
+                    </motion.button>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Status Tabs */}
+        <div className="flex flex-wrap gap-2">
+          {(["all", "active", "inactive"] as const).map((filter) => (
+            <motion.button
+              key={filter}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setFilterActive(filter)}
+              className={`relative h-10 px-5 rounded-xl text-sm font-medium transition-all duration-200 capitalize ${
+                filterActive === filter
+                  ? "text-white"
+                  : "bg-white text-[#363535] hover:bg-gray-50 border border-[#E7EBF0]"
+              }`}
+            >
+              {filterActive === filter && (
+                <motion.div
+                  layoutId="activeFilterBg"
+                  className="absolute inset-0 bg-gradient-to-r from-[#000080] to-[#1D4F91] rounded-xl shadow-lg shadow-[#000080]/25"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10 flex items-center gap-2">
+                {filter === "all" && `All (${announcements.length})`}
+                {filter === "active" && (
+                  <>
+                    <Eye className="h-3.5 w-3.5" />
+                    Active ({activeCount})
+                  </>
+                )}
+                {filter === "inactive" && (
+                  <>
+                    <EyeOff className="h-3.5 w-3.5" />
+                    Inactive ({announcements.length - activeCount})
+                  </>
+                )}
+              </span>
+            </motion.button>
+          ))}
+
+          {/* Results Count */}
+          {(searchQuery || hasActiveFilters) && (
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="h-10 px-4 flex items-center text-sm text-[#666666] bg-gray-50 rounded-xl"
+            >
+              Showing {filteredAnnouncements.length} of {announcements.length} announcements
+            </motion.div>
+          )}
+        </div>
       </motion.div>
 
       {/* Add/Edit Form */}
