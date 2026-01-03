@@ -26,8 +26,6 @@ import {
   Square,
   Search,
   Filter,
-  SortAsc,
-  SortDesc,
   Users,
   Building2,
   Globe,
@@ -354,7 +352,7 @@ export default function Announcements() {
   };
 
   const filteredAnnouncements = useMemo(() => {
-    let filtered = announcements.filter((a) => {
+    const filtered = announcements.filter((a) => {
       // Status filter
       if (filterActive === "active" && !a.isActive) return false;
       if (filterActive === "inactive" && a.isActive) return false;

@@ -54,8 +54,8 @@ export default function ChatPage() {
 
   // Set initial welcome message after hydration
   useEffect(() => {
-    setIsHydrated(true); // eslint-disable-line
-    setMessages([ // eslint-disable-line
+    setIsHydrated(true);  
+    setMessages([  
       {
         id: "welcome",
         role: "assistant",

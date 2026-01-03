@@ -40,10 +40,7 @@ import {
   File,
   FileType,
   Link,
-  ToggleLeft,
-  ToggleRight,
   PlusCircle,
-  ChevronDown,
 } from "lucide-react";
 
 // Zod validation schema for FAQ
@@ -944,7 +941,7 @@ export default function ContentManagement() {
         }));
         setCrawlerUrls(urls);
       }
-    } catch (error) {
+    } catch {
       // Initialize from knowledge base on error
       const urls: CrawlerURL[] = knowledgeItems.map((item, idx) => ({
         id: `kb-${idx}`,
@@ -980,7 +977,7 @@ export default function ContentManagement() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, enabled: !crawlerUrls.find(u => u.id === id)?.enabled }),
       });
-    } catch (error) {
+    } catch {
       // Silently fail - state is already updated locally
     }
   };
@@ -997,7 +994,7 @@ export default function ContentManagement() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ section, enabled: enable }),
       });
-    } catch (error) {
+    } catch {
       // Silently fail - state is already updated locally
     }
   };
@@ -1029,7 +1026,7 @@ export default function ContentManagement() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newUrl),
       });
-    } catch (error) {
+    } catch {
       // Silently fail - state is already updated locally
     }
   };

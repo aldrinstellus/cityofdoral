@@ -976,7 +976,7 @@ export default function SettingsPage() {
               <div className="text-center py-12">
                 <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                 <p className="text-[#666666]">No team members yet</p>
-                <p className="text-sm text-gray-400">Click "Invite Member" to add someone</p>
+                <p className="text-sm text-gray-400">Click &quot;Invite Member&quot; to add someone</p>
               </div>
             )}
 

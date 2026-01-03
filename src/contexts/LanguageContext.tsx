@@ -246,7 +246,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (savedLang && (savedLang === "en" || savedLang === "es")) {
       setLanguageState(savedLang); // eslint-disable-line
     }
-    setIsHydrated(true); // eslint-disable-line
+    setIsHydrated(true);  
   }, []);
 
   const setLanguage = (lang: Language) => {

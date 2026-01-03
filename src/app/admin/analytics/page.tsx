@@ -14,8 +14,6 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
-  LineChart,
-  Line,
   Legend,
 } from "recharts";
 import {
@@ -31,7 +29,6 @@ import {
   ThumbsUp,
   AlertTriangle,
   HelpCircle,
-  Filter,
   FileText,
 } from "lucide-react";
 
@@ -66,32 +63,6 @@ interface AnalyticsData {
     negative: number;
     satisfactionPercentage: number;
   };
-}
-
-// Animated counter component
-function AnimatedCounter({ value, duration = 1.5 }: { value: number; duration?: number }) {
-  const [displayValue, setDisplayValue] = useState(0);
-
-  useEffect(() => {
-    let startTime: number;
-    let animationFrame: number;
-
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      setDisplayValue(Math.floor(easeOut * value));
-
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate);
-      }
-    };
-
-    animationFrame = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationFrame);
-  }, [value, duration]);
-
-  return <span>{displayValue.toLocaleString()}</span>;
 }
 
 export default function AnalyticsPage() {
