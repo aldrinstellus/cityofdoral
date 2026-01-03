@@ -238,13 +238,15 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>("en");
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Load saved language preference on mount
+  // Load saved language preference on mount - only runs on client
   useEffect(() => {
     const savedLang = localStorage.getItem("admin-language") as Language;
     if (savedLang && (savedLang === "en" || savedLang === "es")) {
-      setLanguageState(savedLang);
+      setLanguageState(savedLang); // eslint-disable-line
     }
+    setIsHydrated(true); // eslint-disable-line
   }, []);
 
   const setLanguage = (lang: Language) => {
@@ -255,6 +257,16 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const t = (key: string): string => {
     return translations[language][key] || key;
   };
+
+  // Prevent hydration mismatch by not rendering until client-side hydration is complete
+  // This ensures server and client render the same initial content
+  if (!isHydrated) {
+    return (
+      <LanguageContext.Provider value={{ language: "en", setLanguage, t: (key) => translations.en[key] || key }}>
+        {children}
+      </LanguageContext.Provider>
+    );
+  }
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>

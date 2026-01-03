@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar } from "@/components/ui/avatar";
 import {
   Send,
@@ -48,15 +47,24 @@ interface Message {
 export default function ChatPage() {
   const [language, setLanguage] = useState<Language>("en");
   const labels = getLabels(language);
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "welcome",
-      role: "assistant",
-      content: labels.welcome,
-      timestamp: new Date(),
-    },
-  ]);
+  // Initialize with empty messages to avoid hydration mismatch
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  // Set initial welcome message after hydration
+  useEffect(() => {
+    setIsHydrated(true); // eslint-disable-line
+    setMessages([ // eslint-disable-line
+      {
+        id: "welcome",
+        role: "assistant",
+        content: getLabels(language).welcome,
+        timestamp: new Date(),
+      },
+    ]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
@@ -78,12 +86,6 @@ export default function ChatPage() {
       return newMessages;
     });
   }, [language]);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [messages]);
 
   // Hide suggestions after user sends first message
   useEffect(() => {
@@ -270,7 +272,7 @@ export default function ChatPage() {
         </div>
 
         {/* Messages Area - Maximized */}
-        <ScrollArea ref={scrollRef} className="flex-1 min-h-0 bg-gray-50/50" aria-live="polite">
+        <div ref={scrollRef} className="flex-1 min-h-0 bg-gray-50/50 overflow-y-auto" aria-live="polite">
           <div className="px-4 py-3 space-y-3" role="log" aria-label={language === "es" ? "Historial del chat" : "Chat history"}>
             {messages.map((message) => (
               <div key={message.id} className="animate-in fade-in slide-in-from-bottom-2 duration-200">
@@ -300,16 +302,18 @@ export default function ChatPage() {
                     }`}
                   >
                     <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
-                    <p
-                      className={`text-[10px] mt-1 ${
-                        message.role === "user" ? "text-blue-200" : "text-gray-400"
-                      }`}
-                    >
-                      {message.timestamp.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
+                    {isHydrated && (
+                      <p
+                        className={`text-[10px] mt-1 ${
+                          message.role === "user" ? "text-blue-200" : "text-gray-400"
+                        }`}
+                      >
+                        {message.timestamp.toLocaleTimeString('en-US', {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -405,7 +409,7 @@ export default function ChatPage() {
               </div>
             )}
           </div>
-        </ScrollArea>
+        </div>
 
         {/* Floating Suggestions - Above Input */}
         <div

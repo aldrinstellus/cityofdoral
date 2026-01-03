@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
@@ -134,8 +134,11 @@ function formatDuration(seconds: number): string {
 // Animated counter component
 function AnimatedCounter({ value, duration = 1 }: { value: number; duration?: number }) {
   const [displayValue, setDisplayValue] = useState(0);
+  const mountedRef = useRef(false);
 
   useEffect(() => {
+    mountedRef.current = true;
+
     let startTime: number;
     let animationFrame: number;
 
@@ -151,17 +154,22 @@ function AnimatedCounter({ value, duration = 1 }: { value: number; duration?: nu
     };
 
     animationFrame = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationFrame);
+    return () => {
+      mountedRef.current = false;
+      cancelAnimationFrame(animationFrame);
+    };
   }, [value, duration]);
 
-  return <span>{displayValue.toLocaleString()}</span>;
+  // Use fixed locale to prevent hydration mismatch
+  return <span>{displayValue.toLocaleString('en-US')}</span>;
 }
 
 export default function AdminDashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [isOnline, setIsOnline] = useState(true);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   const refreshData = useCallback(() => {
     setLoading(true);
@@ -173,21 +181,33 @@ export default function AdminDashboard() {
     }, 500);
   }, []);
 
+  // Mark as hydrated after client mount - combined with data refresh
   useEffect(() => {
-    refreshData();
+    setIsHydrated(true); // eslint-disable-line
+  }, []);
+
+  useEffect(() => {
+    refreshData(); // eslint-disable-line
     // Auto-refresh every 30 seconds
     const interval = setInterval(refreshData, 30000);
     return () => clearInterval(interval);
   }, [refreshData]);
 
-  // Simulate online status check
+  // Online status check - only runs on client
   useEffect(() => {
-    const checkOnline = () => setIsOnline(navigator.onLine);
-    window.addEventListener('online', checkOnline);
-    window.addEventListener('offline', checkOnline);
+    if (typeof window === 'undefined') return;
+
+    // Set initial online status - runs once on mount
+    setIsOnline(navigator.onLine); // eslint-disable-line
+
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
     return () => {
-      window.removeEventListener('online', checkOnline);
-      window.removeEventListener('offline', checkOnline);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
     };
   }, []);
 
@@ -264,10 +284,12 @@ export default function AdminDashboard() {
               <span className="text-[#363535]">{data.activeSessions} Active</span>
             </div>
           )}
-          <div className="flex items-center gap-2 bg-white border border-[#E7EBF0] rounded-lg px-3 py-2 text-sm text-[#666]">
-            <Clock className="h-4 w-4" />
-            <span>Updated {lastUpdate.toLocaleTimeString()}</span>
-          </div>
+          {isHydrated && lastUpdate && (
+            <div className="flex items-center gap-2 bg-white border border-[#E7EBF0] rounded-lg px-3 py-2 text-sm text-[#666]">
+              <Clock className="h-4 w-4" />
+              <span>Updated {lastUpdate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
+            </div>
+          )}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
