@@ -11523,7 +11523,65 @@
       "feedbackGiven": false,
       "userAgent": "unknown",
       "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767507699657_itw3lc7as",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-04T06:21:39.657Z",
+      "endTime": "2026-01-04T06:21:39.657Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-04T06:21:39.657Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-04T06:21:39.657Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, here are the key steps:\n\n1. Prepare your permit application and required documents. The new, simple permit application form can be found in the Forms section of the Building Department website. \n\n2. Submit your application and documents online through the city's permitting portal. All applications can be submitted digitally.\n\n3. The Building Department will review your application to ensure it meets code requirements. They offer services like pre-construction meetings and walk-through plans processing to help guide you through the process.\n\n4. Once approved, you can pay the permit fees and receive your permit. The Building Department's hours of operation are Monday-Thursday 7am-3pm, and Friday by appointment.\n\nIf you have any other questions about the permit application process, I recommend contacting the Building Department directly at 305-593-6700 or building@cityofdoral.com. They can provide more details and assistance.",
+          "timestamp": "2026-01-04T06:21:39.657Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767507699738_urnagunca",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-04T06:21:13.816Z",
+      "endTime": "2026-01-04T06:21:39.660Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-04T06:21:13.816Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-04T06:21:37.195Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, here are the key steps:\n\n1. Prepare your permit application and required documents. The new, simple permit application form can be found in the Forms section of the Building Department website. \n\n2. Submit your application and documents online through the city's permitting portal. All applications can be submitted digitally.\n\n3. The Building Department will review your application to ensure it meets code requirements. They offer services like pre-construction meetings and walk-through plans processing to help guide you through the process.\n\n4. Once approved, you can pay the permit fees and receive your permit. The Building Department's hours of operation are Monday-Thursday 7am-3pm, and Friday by appointment.\n\nIf you have any other questions about the permit application process, I recommend contacting the Building Department directly at 305-593-6700 or building@cityofdoral.com. They can provide more details and assistance.",
+          "timestamp": "2026-01-04T06:21:39.660Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
     }
   ],
-  "lastUpdated": "2026-01-04T00:04:59.127Z"
+  "lastUpdated": "2026-01-04T06:21:39.744Z"
 }
