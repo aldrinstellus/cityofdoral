@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Pagination } from "@/components/ui/pagination";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -199,6 +200,7 @@ type KBSubTab = "scraped" | "custom";
 type KBLanguage = "en" | "es";
 
 export default function ContentManagement() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<TabKey>("knowledge");
   const [kbSubTab, setKbSubTab] = useState<KBSubTab>("scraped");
   const [kbLanguage, setKbLanguage] = useState<KBLanguage>("en");
@@ -1042,7 +1044,7 @@ export default function ContentManagement() {
       >
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-[32px] font-bold text-[#000034] tracking-tight">Content Management</h1>
+            <h1 className="text-[32px] font-bold text-[#000034] tracking-tight">{t("content.title")}</h1>
             <motion.div
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
@@ -1050,7 +1052,7 @@ export default function ContentManagement() {
               <Sparkles className="h-6 w-6 text-amber-500" />
             </motion.div>
           </div>
-          <p className="text-[#666666] mt-1 text-[15px]">Manage knowledge base and custom FAQs</p>
+          <p className="text-[#666666] mt-1 text-[15px]">{t("content.subtitle")}</p>
         </div>
       </motion.div>
 

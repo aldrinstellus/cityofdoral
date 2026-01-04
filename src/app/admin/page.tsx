@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   PieChart,
   Pie,
@@ -162,6 +163,7 @@ function AnimatedCounter({ value, duration = 1 }: { value: number; duration?: nu
 }
 
 export default function AdminDashboard() {
+  const { t } = useLanguage();
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
@@ -233,9 +235,9 @@ export default function AdminDashboard() {
   };
 
   const responseData = data ? [
-    { name: 'Under 1 min', value: data.responseDistribution.under1min, color: '#22c55e' },
-    { name: '1-5 min', value: data.responseDistribution.oneToFive, color: '#f59e0b' },
-    { name: 'Over 5 min', value: data.responseDistribution.over5min, color: '#ef4444' },
+    { name: t("dashboard.under1min"), value: data.responseDistribution.under1min, color: '#22c55e' },
+    { name: t("dashboard.oneToFive"), value: data.responseDistribution.oneToFive, color: '#f59e0b' },
+    { name: t("dashboard.over5min"), value: data.responseDistribution.over5min, color: '#ef4444' },
   ] : [];
 
   const calculateChange = (today: number, yesterday: number): { value: number; isPositive: boolean } => {
@@ -254,13 +256,13 @@ export default function AdminDashboard() {
       >
         <div>
           <h1 className="text-[32px] font-bold text-[#000034] tracking-tight flex items-center gap-3">
-            Dashboard
+            {t("dashboard.title")}
             <span className="relative flex h-3 w-3">
               <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isOnline ? 'bg-green-400' : 'bg-red-400'} opacity-75`}></span>
               <span className={`relative inline-flex rounded-full h-3 w-3 ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}></span>
             </span>
           </h1>
-          <p className="text-[#666666] mt-1 text-[15px]">Real-time operational overview</p>
+          <p className="text-[#666666] mt-1 text-[15px]">{t("dashboard.subtitle")}</p>
         </div>
 
         {/* Live Status Indicators */}
@@ -272,13 +274,13 @@ export default function AdminDashboard() {
               <WifiOff className="h-4 w-4 text-red-500" />
             )}
             <span className={isOnline ? 'text-green-600' : 'text-red-600'}>
-              {isOnline ? 'System Online' : 'Offline'}
+              {isOnline ? t("dashboard.liveStatus") : t("dashboard.offline")}
             </span>
           </div>
           {data && (
             <div className="flex items-center gap-2 bg-white border border-[#E7EBF0] rounded-lg px-3 py-2 text-sm">
               <Users className="h-4 w-4 text-[#000080]" />
-              <span className="text-[#363535]">{data.activeSessions} Active</span>
+              <span className="text-[#363535]">{data.activeSessions} {t("common.active")}</span>
             </div>
           )}
           {isHydrated && lastUpdate && (
@@ -305,22 +307,22 @@ export default function AdminDashboard() {
               className="h-10 px-4 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg flex items-center gap-2 shadow-lg shadow-[#000080]/20"
             >
               <Download className="h-4 w-4" />
-              Export
+              {t("common.export")}
             </motion.button>
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl border border-[#E7EBF0] shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
               <button
-                onClick={() => window.open('/api/analytics?days=1&format=json', '_blank')}
+                onClick={() => window.open('/api/analytics?days=7&format=json', '_blank')}
                 className="w-full px-4 py-3 text-left text-sm text-[#363535] hover:bg-[#F5F9FD] flex items-center gap-2 rounded-t-xl"
               >
                 <FileText className="h-4 w-4 text-[#000080]" />
-                Export JSON
+                {t("common.exportJSON")}
               </button>
               <button
-                onClick={() => window.open('/api/analytics?days=1&format=csv', '_blank')}
+                onClick={() => window.open('/api/analytics?days=7&format=csv', '_blank')}
                 className="w-full px-4 py-3 text-left text-sm text-[#363535] hover:bg-[#F5F9FD] flex items-center gap-2 rounded-b-xl border-t border-[#E7EBF0]"
               >
                 <Download className="h-4 w-4 text-[#000080]" />
-                Export CSV
+                {t("common.exportCSV")}
               </button>
             </div>
           </div>
@@ -341,28 +343,28 @@ export default function AdminDashboard() {
           {/* Today's Snapshot KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
             <KPICard
-              title="Today's Conversations"
+              title={t("dashboard.todayConversations")}
               value={data.todayConversations}
               icon={MessageSquare}
               iconBg="bg-gradient-to-br from-[#000080] to-[#1D4F91]"
               delay={0}
             />
             <KPICard
-              title="Resolved"
+              title={t("dashboard.resolved")}
               value={data.todayResolved}
               icon={CheckCircle2}
               iconBg="bg-gradient-to-br from-green-500 to-emerald-600"
               delay={0.1}
             />
             <KPICard
-              title="Pending"
+              title={t("dashboard.pending")}
               value={data.todayPending}
               icon={Clock}
               iconBg="bg-gradient-to-br from-amber-500 to-orange-500"
               delay={0.2}
             />
             <KPICard
-              title="Avg Wait Time"
+              title={t("dashboard.avgWaitTime")}
               value={data.avgWaitTime}
               suffix="s"
               icon={Timer}
@@ -384,7 +386,7 @@ export default function AdminDashboard() {
                 <div className="p-2 bg-gradient-to-br from-red-500 to-rose-600 rounded-lg shadow-lg shadow-red-500/20">
                   <Activity className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#000034]">Active Now</h3>
+                <h3 className="text-lg font-semibold text-[#000034]">{t("dashboard.activeNow")}</h3>
                 <span className="ml-auto relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
@@ -396,20 +398,20 @@ export default function AdminDashboard() {
                   <div className="text-4xl font-bold text-[#000034] mb-1">
                     <AnimatedCounter value={data.activeSessions} />
                   </div>
-                  <p className="text-sm text-[#666]">Active sessions</p>
+                  <p className="text-sm text-[#666]">{t("dashboard.sessions")}</p>
                 </div>
                 <div className="w-px h-16 bg-[#E7EBF0]" />
                 <div className="flex-1">
                   <div className="text-4xl font-bold text-amber-600 mb-1">
                     <AnimatedCounter value={data.queueLength} />
                   </div>
-                  <p className="text-sm text-[#666]">In queue</p>
+                  <p className="text-sm text-[#666]">{t("dashboard.inQueue")}</p>
                 </div>
               </div>
 
               <div className="bg-gray-50 rounded-lg p-3">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-[#666]">Longest wait</span>
+                  <span className="text-[#666]">{t("dashboard.longestWait")}</span>
                   <span className="font-medium text-[#000034]">{formatDuration(data.longestWait)}</span>
                 </div>
                 <div className="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -434,8 +436,8 @@ export default function AdminDashboard() {
                 <div className="p-2 bg-gradient-to-br from-violet-500 to-purple-600 rounded-lg shadow-lg shadow-violet-500/20">
                   <Zap className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#000034]">Channel Health</h3>
-                <span className="ml-auto text-xs text-[#666] bg-violet-100 px-2 py-1 rounded-full">Today</span>
+                <h3 className="text-lg font-semibold text-[#000034]">{t("dashboard.channelHealth")}</h3>
+                <span className="ml-auto text-xs text-[#666] bg-violet-100 px-2 py-1 rounded-full">{t("common.today")}</span>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
@@ -484,7 +486,7 @@ export default function AdminDashboard() {
                 <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg shadow-blue-500/20">
                   <Activity className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#000034]">Recent Activity</h3>
+                <h3 className="text-lg font-semibold text-[#000034]">{t("dashboard.recentActivity")}</h3>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   onClick={refreshData}
@@ -530,15 +532,15 @@ export default function AdminDashboard() {
                 <div className="p-2 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg shadow-lg shadow-green-500/20">
                   <TrendingUp className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#000034]">Today vs Yesterday</h3>
+                <h3 className="text-lg font-semibold text-[#000034]">{t("dashboard.todayVsYesterday")}</h3>
               </div>
 
               <div className="space-y-4">
                 {[
-                  { label: 'Conversations', today: data.todayConversations, yesterday: data.yesterdayConversations },
-                  { label: 'Satisfaction', today: data.todaySatisfaction, yesterday: data.yesterdaySatisfaction, suffix: '%' },
-                  { label: 'Avg Duration', today: data.todayDuration, yesterday: data.yesterdayDuration, suffix: 's', invert: true },
-                  { label: 'Escalations', today: data.todayEscalations, yesterday: data.yesterdayEscalations, invert: true },
+                  { label: t("dashboard.conversations"), today: data.todayConversations, yesterday: data.yesterdayConversations },
+                  { label: t("dashboard.satisfaction"), today: data.todaySatisfaction, yesterday: data.yesterdaySatisfaction, suffix: '%' },
+                  { label: t("dashboard.avgDuration"), today: data.todayDuration, yesterday: data.yesterdayDuration, suffix: 's', invert: true },
+                  { label: t("dashboard.escalations"), today: data.todayEscalations, yesterday: data.yesterdayEscalations, invert: true },
                 ].map((item) => {
                   const change = calculateChange(item.today, item.yesterday);
                   const isGood = item.invert ? !change.isPositive : change.isPositive;
@@ -580,7 +582,7 @@ export default function AdminDashboard() {
                 <div className="p-2 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg shadow-lg shadow-amber-500/20">
                   <AlertTriangle className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#000034]">Requires Attention</h3>
+                <h3 className="text-lg font-semibold text-[#000034]">{t("dashboard.requiresAttention")}</h3>
               </div>
 
               <div className="space-y-3">
@@ -593,7 +595,7 @@ export default function AdminDashboard() {
                       <div className="flex items-center gap-3">
                         <div className="w-3 h-3 rounded-full bg-red-500" />
                         <span className="text-sm font-medium text-red-800">
-                          {data.pendingEscalations} Escalation{data.pendingEscalations > 1 ? 's' : ''} Pending
+                          {data.pendingEscalations} {t("dashboard.escalationsPending")}
                         </span>
                       </div>
                       <ChevronRight className="h-4 w-4 text-red-500" />
@@ -610,7 +612,7 @@ export default function AdminDashboard() {
                       <div className="flex items-center gap-3">
                         <div className="w-3 h-3 rounded-full bg-amber-500" />
                         <span className="text-sm font-medium text-amber-800">
-                          {data.negativeFeedback} Negative Feedback
+                          {data.negativeFeedback} {t("dashboard.negativeFeedback")}
                         </span>
                       </div>
                       <ChevronRight className="h-4 w-4 text-amber-500" />
@@ -621,13 +623,13 @@ export default function AdminDashboard() {
                 {data.pendingEscalations === 0 && data.negativeFeedback === 0 && (
                   <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-100 rounded-lg">
                     <div className="w-3 h-3 rounded-full bg-green-500" />
-                    <span className="text-sm font-medium text-green-800">All clear! No pending items</span>
+                    <span className="text-sm font-medium text-green-800">{t("dashboard.allClear")}</span>
                   </div>
                 )}
 
                 <div className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-100 rounded-lg">
                   <div className="w-3 h-3 rounded-full bg-blue-500" />
-                  <span className="text-sm font-medium text-blue-800">All channels operational</span>
+                  <span className="text-sm font-medium text-blue-800">{t("dashboard.allOperational")}</span>
                 </div>
               </div>
             </motion.div>
@@ -643,8 +645,8 @@ export default function AdminDashboard() {
                 <div className="p-2 bg-gradient-to-br from-cyan-500 to-teal-600 rounded-lg shadow-lg shadow-cyan-500/20">
                   <Timer className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#000034]">Response Time</h3>
-                <span className="ml-auto text-xs text-[#666] bg-cyan-100 px-2 py-1 rounded-full">Today</span>
+                <h3 className="text-lg font-semibold text-[#000034]">{t("dashboard.responseTime")}</h3>
+                <span className="ml-auto text-xs text-[#666] bg-cyan-100 px-2 py-1 rounded-full">{t("common.today")}</span>
               </div>
 
               <div className="flex items-center gap-6">

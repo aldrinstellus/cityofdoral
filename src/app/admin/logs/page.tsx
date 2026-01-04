@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Pagination } from "@/components/ui/pagination";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageSquare,
@@ -71,6 +72,7 @@ type SortDirection = "asc" | "desc" | null;
 type SortKey = "sessionId" | "language" | "sentiment" | "feedbackGiven" | "startTime" | "messages" | "";
 
 export default function ConversationLogs() {
+  const { t } = useLanguage();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -304,7 +306,7 @@ export default function ConversationLogs() {
       >
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-[32px] font-bold text-[#000034] tracking-tight">Conversation Logs</h1>
+            <h1 className="text-[32px] font-bold text-[#000034] tracking-tight">{t("conversations.title")}</h1>
             <motion.div
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
@@ -312,7 +314,7 @@ export default function ConversationLogs() {
               <MessageSquare className="h-6 w-6 text-[#1D4F91]" />
             </motion.div>
           </div>
-          <p className="text-[#666666] mt-1 text-[15px]">Audit trail of all chatbot interactions</p>
+          <p className="text-[#666666] mt-1 text-[15px]">{t("conversations.subtitle")}</p>
         </div>
         <div className="flex items-center gap-2">
           <motion.button
@@ -322,7 +324,7 @@ export default function ConversationLogs() {
             className="h-11 px-5 bg-gradient-to-r from-white to-blue-50/50 border border-[#E7EBF0] text-[#363535] text-sm font-medium rounded-xl hover:shadow-lg hover:border-[#000080]/30 transition-all duration-300 flex items-center gap-2"
           >
             <Download className="h-4 w-4" />
-            Export JSON
+            {t("common.exportJSON")}
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.02, y: -2 }}
@@ -331,7 +333,7 @@ export default function ConversationLogs() {
             className="h-11 px-5 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2"
           >
             <Download className="h-4 w-4" />
-            Export CSV
+            {t("common.exportCSV")}
           </motion.button>
         </div>
       </motion.div>
@@ -379,7 +381,7 @@ export default function ConversationLogs() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
             <input
               type="text"
-              placeholder="Search conversations..."
+              placeholder={t("conversations.searchPlaceholder")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full h-11 pl-10 pr-4 bg-white border border-[#E7EBF0] rounded-xl text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200"
@@ -396,7 +398,7 @@ export default function ConversationLogs() {
             }`}
           >
             <Filter className="h-4 w-4" />
-            Filters
+            {t("common.filters")}
             <motion.div
               animate={{ rotate: showFilters ? 180 : 0 }}
               transition={{ duration: 0.2 }}
@@ -462,7 +464,7 @@ export default function ConversationLogs() {
             >
               <RefreshCw className="h-8 w-8 text-[#000080] mx-auto mb-3" />
             </motion.div>
-            <p className="text-[#666666] text-sm">Loading conversations...</p>
+            <p className="text-[#666666] text-sm">{t("conversations.loading")}</p>
           </div>
         ) : filteredConversations.length === 0 ? (
           <div className="p-12 text-center">
@@ -473,8 +475,8 @@ export default function ConversationLogs() {
               <MessageSquare className="h-12 w-12 mx-auto mb-3 text-[#E7EBF0]" />
               <p className="text-[#666666] text-sm">
                 {searchTerm || filterLanguage !== "all" || filterSentiment !== "all"
-                  ? "No conversations match your filters"
-                  : "No conversations yet"}
+                  ? t("conversations.noMatch")
+                  : t("conversations.noConversations")}
               </p>
             </motion.div>
           </div>

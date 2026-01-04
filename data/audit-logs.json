@@ -1,5 +1,81 @@
 [
   {
+    "id": "log-1767458472628",
+    "timestamp": "2026-01-03T16:41:12.628Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-0",
+    "details": {
+      "url": "/A-Z-Index",
+      "enabled": true
+    }
+  },
+  {
+    "id": "log-1767458471614",
+    "timestamp": "2026-01-03T16:41:11.614Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-0",
+    "details": {
+      "url": "/A-Z-Index",
+      "enabled": false
+    }
+  },
+  {
+    "id": "log-1767424211851",
+    "timestamp": "2026-01-03T07:10:11.851Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-15",
+    "details": {
+      "title": "Power Outage Restoration Update - NW 112th Area",
+      "changes": {
+        "isActive": true
+      }
+    }
+  },
+  {
+    "id": "log-1767424210803",
+    "timestamp": "2026-01-03T07:10:10.803Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-15",
+    "details": {
+      "title": "Power Outage Restoration Update - NW 112th Area",
+      "changes": {
+        "isActive": false
+      }
+    }
+  },
+  {
+    "id": "log-1767424058367",
+    "timestamp": "2026-01-03T07:07:38.367Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-5",
+    "details": {
+      "url": "/Businesses",
+      "enabled": true
+    }
+  },
+  {
+    "id": "log-1767424057531",
+    "timestamp": "2026-01-03T07:07:37.531Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-5",
+    "details": {
+      "url": "/Businesses",
+      "enabled": false
+    }
+  },
+  {
     "id": "log-1767343799466",
     "timestamp": "2026-01-02T08:49:59.466Z",
     "user": "Admin",

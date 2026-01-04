@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Bell,
   CheckCircle,
@@ -97,6 +98,7 @@ function formatRelativeTime(dateString: string): string {
 }
 
 export default function NotificationsPage() {
+  const { t } = useLanguage();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [stats, setStats] = useState<NotificationStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -192,11 +194,11 @@ export default function NotificationsPage() {
   };
 
   const filterTabs: { key: FilterType; label: string; icon?: React.ReactNode }[] = [
-    { key: "all", label: "All" },
-    { key: "unread", label: `Unread${stats?.unread ? ` (${stats.unread})` : ""}` },
-    { key: "system", label: "System", icon: <Server className="h-3.5 w-3.5" /> },
-    { key: "activity", label: "Activity", icon: <Activity className="h-3.5 w-3.5" /> },
-    { key: "reminder", label: "Reminders", icon: <Clock className="h-3.5 w-3.5" /> },
+    { key: "all", label: t("notifications.all") },
+    { key: "unread", label: `${t("notifications.unread")}${stats?.unread ? ` (${stats.unread})` : ""}` },
+    { key: "system", label: t("notifications.system"), icon: <Server className="h-3.5 w-3.5" /> },
+    { key: "activity", label: t("notifications.activity"), icon: <Activity className="h-3.5 w-3.5" /> },
+    { key: "reminder", label: t("notifications.scheduled"), icon: <Clock className="h-3.5 w-3.5" /> },
   ];
 
   return (
@@ -210,7 +212,7 @@ export default function NotificationsPage() {
         <div>
           <h1 className="text-[32px] font-bold text-[#000034] tracking-tight flex items-center gap-3">
             <Bell className="h-8 w-8 text-[#000080]" />
-            Notifications
+            {t("notifications.title")}
             {stats && stats.unread > 0 && (
               <span className="bg-red-500 text-white text-sm px-2.5 py-0.5 rounded-full font-medium">
                 {stats.unread}
@@ -218,7 +220,7 @@ export default function NotificationsPage() {
             )}
           </h1>
           <p className="text-[#666666] mt-1 text-[15px]">
-            System alerts, user activity, and scheduled reminders
+            {t("notifications.subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -230,7 +232,7 @@ export default function NotificationsPage() {
               className="h-10 px-4 flex items-center gap-2 bg-white border border-[#E7EBF0] rounded-lg hover:bg-gray-50 transition-all shadow-sm"
             >
               <CheckCheck className="h-4 w-4" />
-              Mark All Read
+              {t("notifications.markAllRead")}
             </motion.button>
           )}
           <motion.button
@@ -244,7 +246,7 @@ export default function NotificationsPage() {
             className="h-10 px-4 flex items-center gap-2 bg-[#000080] text-white rounded-lg hover:bg-[#0000a0] transition-all shadow-sm"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-            Refresh
+            {t("common.refresh")}
           </motion.button>
         </div>
       </motion.div>
@@ -264,7 +266,7 @@ export default function NotificationsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#000034]">{stats.total}</p>
-                <p className="text-xs text-[#666666]">Total</p>
+                <p className="text-xs text-[#666666]">{t("common.total")}</p>
               </div>
             </div>
           </div>
@@ -275,7 +277,7 @@ export default function NotificationsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#000034]">{stats.unread}</p>
-                <p className="text-xs text-[#666666]">Unread</p>
+                <p className="text-xs text-[#666666]">{t("notifications.unread")}</p>
               </div>
             </div>
           </div>
@@ -286,7 +288,7 @@ export default function NotificationsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#000034]">{stats.byType.system}</p>
-                <p className="text-xs text-[#666666]">System</p>
+                <p className="text-xs text-[#666666]">{t("notifications.system")}</p>
               </div>
             </div>
           </div>
@@ -297,7 +299,7 @@ export default function NotificationsPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#000034]">{stats.byType.activity}</p>
-                <p className="text-xs text-[#666666]">Activity</p>
+                <p className="text-xs text-[#666666]">{t("notifications.activity")}</p>
               </div>
             </div>
           </div>
@@ -346,10 +348,10 @@ export default function NotificationsPage() {
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
               <Bell className="h-8 w-8 text-gray-400" />
             </div>
-            <h3 className="text-lg font-semibold text-[#000034] mb-1">No Notifications</h3>
+            <h3 className="text-lg font-semibold text-[#000034] mb-1">{t("notifications.noNotifications")}</h3>
             <p className="text-[#666666] text-sm">
               {filter === "all"
-                ? "You're all caught up!"
+                ? t("notifications.allCaughtUp")
                 : `No ${filter} notifications found`}
             </p>
           </div>
@@ -408,7 +410,7 @@ export default function NotificationsPage() {
                               className="flex items-center gap-1 text-[#000080] hover:underline"
                             >
                               <ExternalLink className="h-3 w-3" />
-                              View details
+                              {t("notifications.viewDetails")}
                             </Link>
                           )}
                         </div>

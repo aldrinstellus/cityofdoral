@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Pagination } from "@/components/ui/pagination";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Shield,
@@ -152,6 +153,7 @@ function SortIcon({ direction }: { direction: SortDirection }) {
 }
 
 export default function AuditLogsPage() {
+  const { t } = useLanguage();
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -306,10 +308,10 @@ export default function AuditLogsPage() {
         <div>
           <h1 className="text-[32px] font-bold text-[#000034] tracking-tight flex items-center gap-3">
             <Shield className="h-8 w-8 text-[#000080]" />
-            Audit Logs
+            {t("auditLogs.title")}
           </h1>
           <p className="text-[#666666] mt-1 text-[15px]">
-            Track all administrative actions for security and compliance
+            {t("auditLogs.subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -320,7 +322,7 @@ export default function AuditLogsPage() {
             className="h-10 px-4 flex items-center gap-2 bg-white border border-[#E7EBF0] rounded-lg hover:bg-gray-50 transition-all shadow-sm"
           >
             <Download className="h-4 w-4" />
-            Export CSV
+            {t("common.exportCSV")}
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.02 }}
@@ -330,7 +332,7 @@ export default function AuditLogsPage() {
             className="h-10 px-4 flex items-center gap-2 bg-[#000080] text-white rounded-lg hover:bg-[#0000a0] transition-all shadow-sm"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-            Refresh
+            {t("common.refresh")}
           </motion.button>
         </div>
       </motion.div>
@@ -346,10 +348,9 @@ export default function AuditLogsPage() {
             <AlertCircle className="h-5 w-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-semibold text-blue-900">Security & Compliance</h3>
+            <h3 className="font-semibold text-blue-900">{t("auditLogs.securityCompliance")}</h3>
             <p className="text-sm text-blue-700 mt-1">
-              All administrative actions are logged for security auditing and regulatory compliance.
-              Logs are retained for 90 days and cannot be modified or deleted.
+              {t("auditLogs.complianceNotice")}
             </p>
           </div>
         </div>
@@ -368,7 +369,7 @@ export default function AuditLogsPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search by admin, resource, or details..."
+                placeholder={t("auditLogs.searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full h-10 pl-10 pr-4 border border-[#E7EBF0] rounded-lg text-sm focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/20"
@@ -421,9 +422,9 @@ export default function AuditLogsPage() {
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
               <Shield className="h-8 w-8 text-gray-400" />
             </div>
-            <h3 className="text-lg font-semibold text-[#000034] mb-1">No Audit Logs</h3>
+            <h3 className="text-lg font-semibold text-[#000034] mb-1">{t("auditLogs.noLogs")}</h3>
             <p className="text-[#666666] text-sm">
-              No logs match your current filters
+              {t("auditLogs.noLogsMatch")}
             </p>
           </div>
         ) : (

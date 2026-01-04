@@ -10297,7 +10297,1233 @@
       "feedbackGiven": false,
       "userAgent": "unknown",
       "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767372423669_nyolgxpn6",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-02T16:47:03.669Z",
+      "endTime": "2026-01-02T16:47:03.669Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-02T16:47:03.669Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-02T16:47:03.669Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, you have a few options:\n\n1. Apply online through the city's permitting portal. You can find information on the required documents and submittal process on the city website.\n\n2. Visit the Building Department at City Hall, located at 8401 NW 53rd Terrace. The department is open Monday-Thursday from 7am-3pm, and Friday by appointment. You can submit your permit application and documents in person.\n\n3. If you have a small, residential project up to 11x17 paper size, you can take advantage of the walk-thru plans processing service at the department.\n\nThe key things you'll need to apply for a permit include:\n\n- A completed permit application\n- Construction plans and drawings\n- Any required supporting documents, like surveys, engineering calculations, etc.\n- Verification of the contractor's license and insurance\n\nI'd suggest reviewing the city's submittal guidelines and FAQs on the website for full details on the permit application process. Let me know if you have any other questions!",
+          "timestamp": "2026-01-02T16:47:03.669Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767372423754_k7no2vm2b",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-02T16:46:46.081Z",
+      "endTime": "2026-01-02T16:47:03.671Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-02T16:46:46.081Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-02T16:47:00.803Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, you have a few options:\n\n1. Apply online through the city's permitting portal. You can find information on the required documents and submittal process on the city website.\n\n2. Visit the Building Department at City Hall, located at 8401 NW 53rd Terrace. The department is open Monday-Thursday from 7am-3pm, and Friday by appointment. You can submit your permit application and documents in person.\n\n3. If you have a small, residential project up to 11x17 paper size, you can take advantage of the walk-thru plans processing service at the department.\n\nThe key things you'll need to apply for a permit include:\n\n- A completed permit application\n- Construction plans and drawings\n- Any required supporting documents, like surveys, engineering calculations, etc.\n- Verification of the contractor's license and insurance\n\nI'd suggest reviewing the city's submittal guidelines and FAQs on the website for full details on the permit application process. Let me know if you have any other questions!",
+          "timestamp": "2026-01-02T16:47:03.671Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767423013202_5xeact6gm",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T06:50:13.202Z",
+      "endTime": "2026-01-03T06:50:13.202Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T06:50:13.202Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T06:50:13.202Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, you can follow these steps:\n\n1. Refer to the Submittal Guides on the city website for the specific documents and information needed for your permit application.\n\n2. All permit applications can be submitted online through the city's permitting portal. \n\n3. If you have any questions or need assistance with the application process, you can visit the Building Department at City Hall, located at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday from 7am-3pm, and Friday by appointment.\n\n4. The Building Department can also be reached by phone at (305) 593-6700 or by email at building@cityofdoral.com.\n\n5. As a homeowner, you may be able to apply for your own permit if you meet the owner/builder exemption requirements. However, it's important to understand the responsibilities and liabilities that come with that.\n\nLet me know if you have any other questions! I'm happy to provide more details about the permit application process.",
+          "timestamp": "2026-01-03T06:50:13.202Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767423013227_ylypby8oq",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-02T16:47:09.142Z",
+      "endTime": "2026-01-03T06:50:13.204Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-02T16:47:09.142Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T06:50:10.299Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, you can follow these steps:\n\n1. Refer to the Submittal Guides on the city website for the specific documents and information needed for your permit application.\n\n2. All permit applications can be submitted online through the city's permitting portal. \n\n3. If you have any questions or need assistance with the application process, you can visit the Building Department at City Hall, located at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday from 7am-3pm, and Friday by appointment.\n\n4. The Building Department can also be reached by phone at (305) 593-6700 or by email at building@cityofdoral.com.\n\n5. As a homeowner, you may be able to apply for your own permit if you meet the owner/builder exemption requirements. However, it's important to understand the responsibilities and liabilities that come with that.\n\nLet me know if you have any other questions! I'm happy to provide more details about the permit application process.",
+          "timestamp": "2026-01-03T06:50:13.204Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767423173049_9tbju1khv",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T06:52:53.049Z",
+      "endTime": "2026-01-03T06:52:53.049Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T06:52:53.049Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T06:52:53.049Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, you can follow these steps:\n\n1. Refer to the Submittal Guides on the city website for the specific documents and information needed for your permit application.\n\n2. All permit applications can be submitted online through the city's permitting portal. \n\n3. If you have any questions or need assistance with the application process, you can visit the Building Department at City Hall, located at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday from 7am-3pm, and Friday by appointment.\n\n4. The Building Department can also be reached by phone at (305) 593-6700 or by email at building@cityofdoral.com.\n\n5. As a homeowner, you may be able to apply for your own permit if you meet the owner/builder exemption requirements. However, it's important to understand the responsibilities and liabilities that come with that.\n\nLet me know if you have any other questions! I'm happy to provide more details about the permit application process.",
+          "timestamp": "2026-01-03T06:52:53.049Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T06:52:53.049Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I've already provided the steps for applying for a building permit in Doral. To summarize:\n\n1. Review the Submittal Guides on the city website to determine what documents and information you need.\n\n2. Submit your permit application online through the city's permitting portal. \n\n3. If you need assistance, you can visit the Building Department at City Hall or contact them by phone or email.\n\n4. Homeowners may be able to apply for their own permit if they meet the owner/builder exemption requirements.\n\nPlease let me know if you need any clarification or have additional questions about the permit application process.",
+          "timestamp": "2026-01-03T06:52:53.049Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767423173083_57qi256d6",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-02T16:47:09.142Z",
+      "endTime": "2026-01-03T06:52:53.052Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-02T16:47:09.142Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T06:50:10.299Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, you can follow these steps:\n\n1. Refer to the Submittal Guides on the city website for the specific documents and information needed for your permit application.\n\n2. All permit applications can be submitted online through the city's permitting portal. \n\n3. If you have any questions or need assistance with the application process, you can visit the Building Department at City Hall, located at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday from 7am-3pm, and Friday by appointment.\n\n4. The Building Department can also be reached by phone at (305) 593-6700 or by email at building@cityofdoral.com.\n\n5. As a homeowner, you may be able to apply for your own permit if you meet the owner/builder exemption requirements. However, it's important to understand the responsibilities and liabilities that come with that.\n\nLet me know if you have any other questions! I'm happy to provide more details about the permit application process.",
+          "timestamp": "2026-01-03T06:50:13.204Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T06:52:51.252Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I've already provided the steps for applying for a building permit in Doral. To summarize:\n\n1. Review the Submittal Guides on the city website to determine what documents and information you need.\n\n2. Submit your permit application online through the city's permitting portal. \n\n3. If you need assistance, you can visit the Building Department at City Hall or contact them by phone or email.\n\n4. Homeowners may be able to apply for their own permit if they meet the owner/builder exemption requirements.\n\nPlease let me know if you need any clarification or have additional questions about the permit application process.",
+          "timestamp": "2026-01-03T06:52:53.052Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767423259972_86pccc5s7",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T06:54:19.972Z",
+      "endTime": "2026-01-03T06:54:19.972Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T06:54:19.972Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T06:54:19.972Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key steps for applying for a building permit in Doral:\n\nTo apply for a permit, you'll need to submit a completed City of Doral permit application online through the CSS Portal. The new, simple permit application form can be found in the Forms section of the Building Department website.\n\nThe permit application must include all required supporting documentation, such as construction plans, specifications, and any necessary approvals from other agencies like DERM or Miami-Dade County.\n\nYou can also submit permit applications in person at the Building Department counter on the 2nd floor of City Hall. Their hours are Monday-Thursday from 7am to 3pm, and Friday by appointment.\n\nThe Building Department will review your permit application to ensure it meets all code requirements before issuing the permit. Permit fees are based on the scope of work and can be paid online or in person.\n\nLet me know if you need any other details on the permit application process! The Building Department website has a lot of helpful information and resources available.",
+          "timestamp": "2026-01-03T06:54:19.972Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767423259992_hhlvmggk2",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T06:54:15.420Z",
+      "endTime": "2026-01-03T06:54:19.974Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T06:54:15.420Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T06:54:17.535Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key steps for applying for a building permit in Doral:\n\nTo apply for a permit, you'll need to submit a completed City of Doral permit application online through the CSS Portal. The new, simple permit application form can be found in the Forms section of the Building Department website.\n\nThe permit application must include all required supporting documentation, such as construction plans, specifications, and any necessary approvals from other agencies like DERM or Miami-Dade County.\n\nYou can also submit permit applications in person at the Building Department counter on the 2nd floor of City Hall. Their hours are Monday-Thursday from 7am to 3pm, and Friday by appointment.\n\nThe Building Department will review your permit application to ensure it meets all code requirements before issuing the permit. Permit fees are based on the scope of work and can be paid online or in person.\n\nLet me know if you need any other details on the permit application process! The Building Department website has a lot of helpful information and resources available.",
+          "timestamp": "2026-01-03T06:54:19.974Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767423646360_iloppg61g",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T07:00:46.360Z",
+      "endTime": "2026-01-03T07:00:46.360Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T07:00:46.360Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-03T07:00:46.360Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number is (305) 593-6725. City Hall is open Monday through Friday from 8:00 AM to 5:00 PM.",
+          "timestamp": "2026-01-03T07:00:46.360Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767423646438_whzzc395f",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T07:00:38.135Z",
+      "endTime": "2026-01-03T07:00:46.362Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T07:00:38.135Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-03T07:00:45.063Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number is (305) 593-6725. City Hall is open Monday through Friday from 8:00 AM to 5:00 PM.",
+          "timestamp": "2026-01-03T07:00:46.362Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767423675756_7eq6v0nj6",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T07:01:15.756Z",
+      "endTime": "2026-01-03T07:01:15.756Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T07:01:15.756Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-03T07:01:15.756Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number is (305) 593-6725. City Hall is open Monday through Friday from 8:00 AM to 5:00 PM.",
+          "timestamp": "2026-01-03T07:01:15.756Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I contact Doral Police?",
+          "timestamp": "2026-01-03T07:01:15.756Z"
+        },
+        {
+          "role": "assistant",
+          "content": "For non-emergency police matters, you can contact the Doral Police Department at (305) 593-6699. For emergencies, always call 911.",
+          "timestamp": "2026-01-03T07:01:15.756Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767423675793_z58hfcynu",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T07:00:38.135Z",
+      "endTime": "2026-01-03T07:01:15.758Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T07:00:38.135Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-03T07:00:45.063Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number is (305) 593-6725. City Hall is open Monday through Friday from 8:00 AM to 5:00 PM.",
+          "timestamp": "2026-01-03T07:00:46.362Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I contact Doral Police?",
+          "timestamp": "2026-01-03T07:01:14.421Z"
+        },
+        {
+          "role": "assistant",
+          "content": "For non-emergency police matters, you can contact the Doral Police Department at (305) 593-6699. For emergencies, always call 911.",
+          "timestamp": "2026-01-03T07:01:15.758Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767423686415_ko4so5bzt",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T07:01:26.415Z",
+      "endTime": "2026-01-03T07:01:26.415Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T07:01:26.415Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-03T07:01:26.415Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number is (305) 593-6725. City Hall is open Monday through Friday from 8:00 AM to 5:00 PM.",
+          "timestamp": "2026-01-03T07:01:26.415Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I contact Doral Police?",
+          "timestamp": "2026-01-03T07:01:26.415Z"
+        },
+        {
+          "role": "assistant",
+          "content": "For non-emergency police matters, you can contact the Doral Police Department at (305) 593-6699. For emergencies, always call 911.",
+          "timestamp": "2026-01-03T07:01:26.415Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T07:01:26.415Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, you have a few options:\n\n1. Apply online through the city's permitting portal. The portal allows you to submit your permit application and required documents electronically.\n\n2. Visit the Building Department at City Hall, located at 8401 NW 53rd Terrace. Their office is open Monday through Thursday from 7:00 AM to 3:00 PM, and Friday by appointment.\n\n3. Call the Building Department at (305) 593-6700 to inquire about the application process and required documents.\n\nThe city's website has detailed information on permit submittal guidelines and the required documentation needed for different types of permits. I'd recommend reviewing that information before applying.",
+          "timestamp": "2026-01-03T07:01:26.415Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767423686478_s5fpyhs2t",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T07:00:38.135Z",
+      "endTime": "2026-01-03T07:01:26.423Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T07:00:38.135Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-03T07:00:45.063Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number is (305) 593-6725. City Hall is open Monday through Friday from 8:00 AM to 5:00 PM.",
+          "timestamp": "2026-01-03T07:00:46.362Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I contact Doral Police?",
+          "timestamp": "2026-01-03T07:01:14.421Z"
+        },
+        {
+          "role": "assistant",
+          "content": "For non-emergency police matters, you can contact the Doral Police Department at (305) 593-6699. For emergencies, always call 911.",
+          "timestamp": "2026-01-03T07:01:15.758Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T07:01:24.456Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, you have a few options:\n\n1. Apply online through the city's permitting portal. The portal allows you to submit your permit application and required documents electronically.\n\n2. Visit the Building Department at City Hall, located at 8401 NW 53rd Terrace. Their office is open Monday through Thursday from 7:00 AM to 3:00 PM, and Friday by appointment.\n\n3. Call the Building Department at (305) 593-6700 to inquire about the application process and required documents.\n\nThe city's website has detailed information on permit submittal guidelines and the required documentation needed for different types of permits. I'd recommend reviewing that information before applying.",
+          "timestamp": "2026-01-03T07:01:26.423Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767458191890_ajxjl3x4o",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T16:36:31.890Z",
+      "endTime": "2026-01-03T16:36:31.890Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T16:36:31.890Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-03T16:36:31.890Z"
+        },
+        {
+          "role": "assistant",
+          "content": "According to the information provided, the City Hall for the City of Doral is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number for City Hall is (305) 593-6725, but I don't have specific details on the business hours. For the most up-to-date information on City Hall hours, I'd recommend checking the city website or calling the main number.",
+          "timestamp": "2026-01-03T16:36:31.890Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767458192097_as4shzg2o",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T16:28:29.215Z",
+      "endTime": "2026-01-03T16:36:31.894Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T16:28:29.215Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-03T16:36:29.973Z"
+        },
+        {
+          "role": "assistant",
+          "content": "According to the information provided, the City Hall for the City of Doral is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number for City Hall is (305) 593-6725, but I don't have specific details on the business hours. For the most up-to-date information on City Hall hours, I'd recommend checking the city website or calling the main number.",
+          "timestamp": "2026-01-03T16:36:31.894Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767458206261_tv3tq5igh",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T16:36:46.261Z",
+      "endTime": "2026-01-03T16:36:46.261Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T16:36:46.261Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-03T16:36:46.261Z"
+        },
+        {
+          "role": "assistant",
+          "content": "According to the information provided, the City Hall for the City of Doral is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number for City Hall is (305) 593-6725, but I don't have specific details on the business hours. For the most up-to-date information on City Hall hours, I'd recommend checking the city website or calling the main number.",
+          "timestamp": "2026-01-03T16:36:46.261Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T16:36:46.261Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key details on how to apply for a building permit in the City of Doral:\n\n- All permits can be applied for online using the CSS Portal. \n- For additional inquiries, you can visit the Building Department on the 2nd floor of the Government Center located at 8401 NW 53 Terrace.\n- The Building Department has specific operational hours, which are provided on the website. Generally it's Monday-Thursday 7am-3pm and Friday by appointment.\n- When applying, you'll need to submit a completed permit application, along with any required plans, documents, and fees. \n- The website has detailed Submittal Guides with information on what is needed for different types of permits.\n\nI'd recommend reviewing the Building Department section of the city website for the most up-to-date and comprehensive information on the permit application process. Let me know if you have any other questions!",
+          "timestamp": "2026-01-03T16:36:46.261Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767458206311_c3kri3zm8",
+      "sessionId": "sess_1767372406080_1kv39x2ql",
+      "startTime": "2026-01-03T16:28:29.215Z",
+      "endTime": "2026-01-03T16:36:46.264Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T16:28:29.215Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-03T16:36:29.973Z"
+        },
+        {
+          "role": "assistant",
+          "content": "According to the information provided, the City Hall for the City of Doral is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number for City Hall is (305) 593-6725, but I don't have specific details on the business hours. For the most up-to-date information on City Hall hours, I'd recommend checking the city website or calling the main number.",
+          "timestamp": "2026-01-03T16:36:31.894Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T16:36:43.307Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key details on how to apply for a building permit in the City of Doral:\n\n- All permits can be applied for online using the CSS Portal. \n- For additional inquiries, you can visit the Building Department on the 2nd floor of the Government Center located at 8401 NW 53 Terrace.\n- The Building Department has specific operational hours, which are provided on the website. Generally it's Monday-Thursday 7am-3pm and Friday by appointment.\n- When applying, you'll need to submit a completed permit application, along with any required plans, documents, and fees. \n- The website has detailed Submittal Guides with information on what is needed for different types of permits.\n\nI'd recommend reviewing the Building Department section of the city website for the most up-to-date and comprehensive information on the permit application process. Let me know if you have any other questions!",
+          "timestamp": "2026-01-03T16:36:46.264Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767458989738_iym472p26",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-03T16:49:49.738Z",
+      "endTime": "2026-01-03T16:49:49.738Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T16:49:49.738Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T16:49:49.738Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, here are the steps:\n\n1. All permits can be applied for online using the City's CSS Portal. You'll need to create an account on the portal to submit your application.\n\n2. Refer to the Permit Submittal Guidelines on the Building Department website for information on the required documents and plans needed for your specific project. This includes things like construction drawings, specifications, site plans, etc.\n\n3. You can also visit the Building Department in person at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday from 7am-3pm, and Friday by appointment. They can provide guidance on the permit application process.\n\n4. The cost of the permit depends on the type of project. You can find the Fee Schedule on the Building Department website to get an estimate. Permit fees are due at the time of application.\n\n5. Once your application is submitted, it will go through a review process. The Building Department will let you know if any revisions or additional information is needed before the permit can be issued.\n\nLet me know if you have any other questions! The Building Department is happy to assist you through the permit application process.",
+          "timestamp": "2026-01-03T16:49:49.738Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767458989847_2brjk2b0p",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-03T16:47:35.309Z",
+      "endTime": "2026-01-03T16:49:49.740Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T16:47:35.309Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T16:49:46.973Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, here are the steps:\n\n1. All permits can be applied for online using the City's CSS Portal. You'll need to create an account on the portal to submit your application.\n\n2. Refer to the Permit Submittal Guidelines on the Building Department website for information on the required documents and plans needed for your specific project. This includes things like construction drawings, specifications, site plans, etc.\n\n3. You can also visit the Building Department in person at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday from 7am-3pm, and Friday by appointment. They can provide guidance on the permit application process.\n\n4. The cost of the permit depends on the type of project. You can find the Fee Schedule on the Building Department website to get an estimate. Permit fees are due at the time of application.\n\n5. Once your application is submitted, it will go through a review process. The Building Department will let you know if any revisions or additional information is needed before the permit can be issued.\n\nLet me know if you have any other questions! The Building Department is happy to assist you through the permit application process.",
+          "timestamp": "2026-01-03T16:49:49.740Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767459000040_kcc0f40k2",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-03T16:50:00.040Z",
+      "endTime": "2026-01-03T16:50:00.040Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T16:50:00.040Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T16:50:00.040Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, here are the steps:\n\n1. All permits can be applied for online using the City's CSS Portal. You'll need to create an account on the portal to submit your application.\n\n2. Refer to the Permit Submittal Guidelines on the Building Department website for information on the required documents and plans needed for your specific project. This includes things like construction drawings, specifications, site plans, etc.\n\n3. You can also visit the Building Department in person at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday from 7am-3pm, and Friday by appointment. They can provide guidance on the permit application process.\n\n4. The cost of the permit depends on the type of project. You can find the Fee Schedule on the Building Department website to get an estimate. Permit fees are due at the time of application.\n\n5. Once your application is submitted, it will go through a review process. The Building Department will let you know if any revisions or additional information is needed before the permit can be issued.\n\nLet me know if you have any other questions! The Building Department is happy to assist you through the permit application process.",
+          "timestamp": "2026-01-03T16:50:00.040Z"
+        },
+        {
+          "role": "user",
+          "content": "What parks and recreation programs are available?",
+          "timestamp": "2026-01-03T16:50:00.040Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City of Doral offers a wide variety of parks and recreation programs for residents of all ages:\n\nAdult and Teen Programs: The city has many programs and activities designed specifically for adults and teens, including sports leagues, fitness classes, and enrichment programs.\n\nAquatic Center: The brand new Doral Aquatic Center has a 50-meter Olympic competition pool and a 25-yard training pool, offering swim lessons and open swim times.\n\nCamps: The Parks & Recreation Department runs seasonal camps for kids during school breaks, with a focus on sports, arts, and outdoor exploration.\n\nFitness Center: The city's fitness center offers memberships and classes like yoga, Pilates, and more.\n\nYouth Programs: From sports leagues to STEM classes, the city has enriching programs for children and teens.\n\nSpecial Events: Doral hosts fun, family-friendly events throughout the year, like movie nights, concerts, and festivals.\n\nYou can find full details on all the parks, facilities, and program offerings on the city's Parks & Recreation website. I'd be happy to provide more specifics on any programs or activities you're interested in.",
+          "timestamp": "2026-01-03T16:50:00.040Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767459000124_4pbxf9uj4",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-03T16:47:35.309Z",
+      "endTime": "2026-01-03T16:50:00.043Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T16:47:35.309Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T16:49:46.973Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, here are the steps:\n\n1. All permits can be applied for online using the City's CSS Portal. You'll need to create an account on the portal to submit your application.\n\n2. Refer to the Permit Submittal Guidelines on the Building Department website for information on the required documents and plans needed for your specific project. This includes things like construction drawings, specifications, site plans, etc.\n\n3. You can also visit the Building Department in person at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday from 7am-3pm, and Friday by appointment. They can provide guidance on the permit application process.\n\n4. The cost of the permit depends on the type of project. You can find the Fee Schedule on the Building Department website to get an estimate. Permit fees are due at the time of application.\n\n5. Once your application is submitted, it will go through a review process. The Building Department will let you know if any revisions or additional information is needed before the permit can be issued.\n\nLet me know if you have any other questions! The Building Department is happy to assist you through the permit application process.",
+          "timestamp": "2026-01-03T16:49:49.740Z"
+        },
+        {
+          "role": "user",
+          "content": "What parks and recreation programs are available?",
+          "timestamp": "2026-01-03T16:49:57.006Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City of Doral offers a wide variety of parks and recreation programs for residents of all ages:\n\nAdult and Teen Programs: The city has many programs and activities designed specifically for adults and teens, including sports leagues, fitness classes, and enrichment programs.\n\nAquatic Center: The brand new Doral Aquatic Center has a 50-meter Olympic competition pool and a 25-yard training pool, offering swim lessons and open swim times.\n\nCamps: The Parks & Recreation Department runs seasonal camps for kids during school breaks, with a focus on sports, arts, and outdoor exploration.\n\nFitness Center: The city's fitness center offers memberships and classes like yoga, Pilates, and more.\n\nYouth Programs: From sports leagues to STEM classes, the city has enriching programs for children and teens.\n\nSpecial Events: Doral hosts fun, family-friendly events throughout the year, like movie nights, concerts, and festivals.\n\nYou can find full details on all the parks, facilities, and program offerings on the city's Parks & Recreation website. I'd be happy to provide more specifics on any programs or activities you're interested in.",
+          "timestamp": "2026-01-03T16:50:00.043Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767459009473_r4zmdujv1",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-03T16:50:09.473Z",
+      "endTime": "2026-01-03T16:50:09.473Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T16:50:09.473Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T16:50:09.473Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, here are the steps:\n\n1. All permits can be applied for online using the City's CSS Portal. You'll need to create an account on the portal to submit your application.\n\n2. Refer to the Permit Submittal Guidelines on the Building Department website for information on the required documents and plans needed for your specific project. This includes things like construction drawings, specifications, site plans, etc.\n\n3. You can also visit the Building Department in person at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday from 7am-3pm, and Friday by appointment. They can provide guidance on the permit application process.\n\n4. The cost of the permit depends on the type of project. You can find the Fee Schedule on the Building Department website to get an estimate. Permit fees are due at the time of application.\n\n5. Once your application is submitted, it will go through a review process. The Building Department will let you know if any revisions or additional information is needed before the permit can be issued.\n\nLet me know if you have any other questions! The Building Department is happy to assist you through the permit application process.",
+          "timestamp": "2026-01-03T16:50:09.473Z"
+        },
+        {
+          "role": "user",
+          "content": "What parks and recreation programs are available?",
+          "timestamp": "2026-01-03T16:50:09.473Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City of Doral offers a wide variety of parks and recreation programs for residents of all ages:\n\nAdult and Teen Programs: The city has many programs and activities designed specifically for adults and teens, including sports leagues, fitness classes, and enrichment programs.\n\nAquatic Center: The brand new Doral Aquatic Center has a 50-meter Olympic competition pool and a 25-yard training pool, offering swim lessons and open swim times.\n\nCamps: The Parks & Recreation Department runs seasonal camps for kids during school breaks, with a focus on sports, arts, and outdoor exploration.\n\nFitness Center: The city's fitness center offers memberships and classes like yoga, Pilates, and more.\n\nYouth Programs: From sports leagues to STEM classes, the city has enriching programs for children and teens.\n\nSpecial Events: Doral hosts fun, family-friendly events throughout the year, like movie nights, concerts, and festivals.\n\nYou can find full details on all the parks, facilities, and program offerings on the city's Parks & Recreation website. I'd be happy to provide more specifics on any programs or activities you're interested in.",
+          "timestamp": "2026-01-03T16:50:09.473Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I contact Doral Police?",
+          "timestamp": "2026-01-03T16:50:09.473Z"
+        },
+        {
+          "role": "assistant",
+          "content": "For non-emergency police matters, you can contact the Doral Police Department in the following ways:\n\nPhone: (305) 593-6699\nThis is the main non-emergency number to reach the Doral Police Department.\n\nIn-Person: \nThe Doral Police Department is located at 6111 NW 112th Avenue, Doral, FL 33178.\n\nOnline:\nYou can submit non-emergency requests or inquiries through the City of Doral's 311 system on their website.\n\nFor any emergencies, always call 911 immediately.\n\nThe Doral Police Department is available 24/7 to assist residents and visitors. They have a variety of specialized units and services, including traffic enforcement, community policing, and investigations. Let me know if you need any other information about contacting or working with the Doral Police Department.",
+          "timestamp": "2026-01-03T16:50:09.473Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767459009535_v5tb3dnpk",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-03T16:47:35.309Z",
+      "endTime": "2026-01-03T16:50:09.478Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T16:47:35.309Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T16:49:46.973Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, here are the steps:\n\n1. All permits can be applied for online using the City's CSS Portal. You'll need to create an account on the portal to submit your application.\n\n2. Refer to the Permit Submittal Guidelines on the Building Department website for information on the required documents and plans needed for your specific project. This includes things like construction drawings, specifications, site plans, etc.\n\n3. You can also visit the Building Department in person at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday from 7am-3pm, and Friday by appointment. They can provide guidance on the permit application process.\n\n4. The cost of the permit depends on the type of project. You can find the Fee Schedule on the Building Department website to get an estimate. Permit fees are due at the time of application.\n\n5. Once your application is submitted, it will go through a review process. The Building Department will let you know if any revisions or additional information is needed before the permit can be issued.\n\nLet me know if you have any other questions! The Building Department is happy to assist you through the permit application process.",
+          "timestamp": "2026-01-03T16:49:49.740Z"
+        },
+        {
+          "role": "user",
+          "content": "What parks and recreation programs are available?",
+          "timestamp": "2026-01-03T16:49:57.006Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City of Doral offers a wide variety of parks and recreation programs for residents of all ages:\n\nAdult and Teen Programs: The city has many programs and activities designed specifically for adults and teens, including sports leagues, fitness classes, and enrichment programs.\n\nAquatic Center: The brand new Doral Aquatic Center has a 50-meter Olympic competition pool and a 25-yard training pool, offering swim lessons and open swim times.\n\nCamps: The Parks & Recreation Department runs seasonal camps for kids during school breaks, with a focus on sports, arts, and outdoor exploration.\n\nFitness Center: The city's fitness center offers memberships and classes like yoga, Pilates, and more.\n\nYouth Programs: From sports leagues to STEM classes, the city has enriching programs for children and teens.\n\nSpecial Events: Doral hosts fun, family-friendly events throughout the year, like movie nights, concerts, and festivals.\n\nYou can find full details on all the parks, facilities, and program offerings on the city's Parks & Recreation website. I'd be happy to provide more specifics on any programs or activities you're interested in.",
+          "timestamp": "2026-01-03T16:50:00.043Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I contact Doral Police?",
+          "timestamp": "2026-01-03T16:50:06.262Z"
+        },
+        {
+          "role": "assistant",
+          "content": "For non-emergency police matters, you can contact the Doral Police Department in the following ways:\n\nPhone: (305) 593-6699\nThis is the main non-emergency number to reach the Doral Police Department.\n\nIn-Person: \nThe Doral Police Department is located at 6111 NW 112th Avenue, Doral, FL 33178.\n\nOnline:\nYou can submit non-emergency requests or inquiries through the City of Doral's 311 system on their website.\n\nFor any emergencies, always call 911 immediately.\n\nThe Doral Police Department is available 24/7 to assist residents and visitors. They have a variety of specialized units and services, including traffic enforcement, community policing, and investigations. Let me know if you need any other information about contacting or working with the Doral Police Department.",
+          "timestamp": "2026-01-03T16:50:09.478Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767459016885_u4w69m7k5",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-03T16:50:16.885Z",
+      "endTime": "2026-01-03T16:50:16.885Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T16:50:16.885Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T16:50:16.885Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, here are the steps:\n\n1. All permits can be applied for online using the City's CSS Portal. You'll need to create an account on the portal to submit your application.\n\n2. Refer to the Permit Submittal Guidelines on the Building Department website for information on the required documents and plans needed for your specific project. This includes things like construction drawings, specifications, site plans, etc.\n\n3. You can also visit the Building Department in person at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday from 7am-3pm, and Friday by appointment. They can provide guidance on the permit application process.\n\n4. The cost of the permit depends on the type of project. You can find the Fee Schedule on the Building Department website to get an estimate. Permit fees are due at the time of application.\n\n5. Once your application is submitted, it will go through a review process. The Building Department will let you know if any revisions or additional information is needed before the permit can be issued.\n\nLet me know if you have any other questions! The Building Department is happy to assist you through the permit application process.",
+          "timestamp": "2026-01-03T16:50:16.885Z"
+        },
+        {
+          "role": "user",
+          "content": "What parks and recreation programs are available?",
+          "timestamp": "2026-01-03T16:50:16.885Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City of Doral offers a wide variety of parks and recreation programs for residents of all ages:\n\nAdult and Teen Programs: The city has many programs and activities designed specifically for adults and teens, including sports leagues, fitness classes, and enrichment programs.\n\nAquatic Center: The brand new Doral Aquatic Center has a 50-meter Olympic competition pool and a 25-yard training pool, offering swim lessons and open swim times.\n\nCamps: The Parks & Recreation Department runs seasonal camps for kids during school breaks, with a focus on sports, arts, and outdoor exploration.\n\nFitness Center: The city's fitness center offers memberships and classes like yoga, Pilates, and more.\n\nYouth Programs: From sports leagues to STEM classes, the city has enriching programs for children and teens.\n\nSpecial Events: Doral hosts fun, family-friendly events throughout the year, like movie nights, concerts, and festivals.\n\nYou can find full details on all the parks, facilities, and program offerings on the city's Parks & Recreation website. I'd be happy to provide more specifics on any programs or activities you're interested in.",
+          "timestamp": "2026-01-03T16:50:16.885Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I contact Doral Police?",
+          "timestamp": "2026-01-03T16:50:16.885Z"
+        },
+        {
+          "role": "assistant",
+          "content": "For non-emergency police matters, you can contact the Doral Police Department in the following ways:\n\nPhone: (305) 593-6699\nThis is the main non-emergency number to reach the Doral Police Department.\n\nIn-Person: \nThe Doral Police Department is located at 6111 NW 112th Avenue, Doral, FL 33178.\n\nOnline:\nYou can submit non-emergency requests or inquiries through the City of Doral's 311 system on their website.\n\nFor any emergencies, always call 911 immediately.\n\nThe Doral Police Department is available 24/7 to assist residents and visitors. They have a variety of specialized units and services, including traffic enforcement, community policing, and investigations. Let me know if you need any other information about contacting or working with the Doral Police Department.",
+          "timestamp": "2026-01-03T16:50:16.885Z"
+        },
+        {
+          "role": "user",
+          "content": "What job opportunities are available with the city?",
+          "timestamp": "2026-01-03T16:50:16.885Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City of Doral has a variety of job opportunities available across different departments. You can view the current job openings on the city's website under the \"Job Opportunities\" section.\n\nSome of the job categories they are regularly hiring for include:\n\n- Clerical/Administrative roles\n- Building Inspectors\n- Finance and Accounting positions\n- Aquatics and Lifeguard roles\n- Planning and Zoning\n- Procurement and Asset Management\n- Maintenance Technicians\n- And more\n\nThe job postings include details on the position duties, qualifications, and the application process. Many of the roles are full-time, but they also have some part-time and seasonal opportunities.\n\nTo apply, you'll need to create an account on the city's applicant portal and submit your resume and any required supplemental materials. The application process includes steps like interviews, background checks, and pre-employment testing.\n\nI'd recommend reviewing the current job listings on the website to see what positions may be a good fit for your skills and experience. Let me know if you have any other questions about employment with the City of Doral!",
+          "timestamp": "2026-01-03T16:50:16.885Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767459016940_kcg94ta3a",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-03T16:47:35.309Z",
+      "endTime": "2026-01-03T16:50:16.889Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T16:47:35.309Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T16:49:46.973Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, here are the steps:\n\n1. All permits can be applied for online using the City's CSS Portal. You'll need to create an account on the portal to submit your application.\n\n2. Refer to the Permit Submittal Guidelines on the Building Department website for information on the required documents and plans needed for your specific project. This includes things like construction drawings, specifications, site plans, etc.\n\n3. You can also visit the Building Department in person at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday from 7am-3pm, and Friday by appointment. They can provide guidance on the permit application process.\n\n4. The cost of the permit depends on the type of project. You can find the Fee Schedule on the Building Department website to get an estimate. Permit fees are due at the time of application.\n\n5. Once your application is submitted, it will go through a review process. The Building Department will let you know if any revisions or additional information is needed before the permit can be issued.\n\nLet me know if you have any other questions! The Building Department is happy to assist you through the permit application process.",
+          "timestamp": "2026-01-03T16:49:49.740Z"
+        },
+        {
+          "role": "user",
+          "content": "What parks and recreation programs are available?",
+          "timestamp": "2026-01-03T16:49:57.006Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City of Doral offers a wide variety of parks and recreation programs for residents of all ages:\n\nAdult and Teen Programs: The city has many programs and activities designed specifically for adults and teens, including sports leagues, fitness classes, and enrichment programs.\n\nAquatic Center: The brand new Doral Aquatic Center has a 50-meter Olympic competition pool and a 25-yard training pool, offering swim lessons and open swim times.\n\nCamps: The Parks & Recreation Department runs seasonal camps for kids during school breaks, with a focus on sports, arts, and outdoor exploration.\n\nFitness Center: The city's fitness center offers memberships and classes like yoga, Pilates, and more.\n\nYouth Programs: From sports leagues to STEM classes, the city has enriching programs for children and teens.\n\nSpecial Events: Doral hosts fun, family-friendly events throughout the year, like movie nights, concerts, and festivals.\n\nYou can find full details on all the parks, facilities, and program offerings on the city's Parks & Recreation website. I'd be happy to provide more specifics on any programs or activities you're interested in.",
+          "timestamp": "2026-01-03T16:50:00.043Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I contact Doral Police?",
+          "timestamp": "2026-01-03T16:50:06.262Z"
+        },
+        {
+          "role": "assistant",
+          "content": "For non-emergency police matters, you can contact the Doral Police Department in the following ways:\n\nPhone: (305) 593-6699\nThis is the main non-emergency number to reach the Doral Police Department.\n\nIn-Person: \nThe Doral Police Department is located at 6111 NW 112th Avenue, Doral, FL 33178.\n\nOnline:\nYou can submit non-emergency requests or inquiries through the City of Doral's 311 system on their website.\n\nFor any emergencies, always call 911 immediately.\n\nThe Doral Police Department is available 24/7 to assist residents and visitors. They have a variety of specialized units and services, including traffic enforcement, community policing, and investigations. Let me know if you need any other information about contacting or working with the Doral Police Department.",
+          "timestamp": "2026-01-03T16:50:09.478Z"
+        },
+        {
+          "role": "user",
+          "content": "What job opportunities are available with the city?",
+          "timestamp": "2026-01-03T16:50:13.651Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City of Doral has a variety of job opportunities available across different departments. You can view the current job openings on the city's website under the \"Job Opportunities\" section.\n\nSome of the job categories they are regularly hiring for include:\n\n- Clerical/Administrative roles\n- Building Inspectors\n- Finance and Accounting positions\n- Aquatics and Lifeguard roles\n- Planning and Zoning\n- Procurement and Asset Management\n- Maintenance Technicians\n- And more\n\nThe job postings include details on the position duties, qualifications, and the application process. Many of the roles are full-time, but they also have some part-time and seasonal opportunities.\n\nTo apply, you'll need to create an account on the city's applicant portal and submit your resume and any required supplemental materials. The application process includes steps like interviews, background checks, and pre-employment testing.\n\nI'd recommend reviewing the current job listings on the website to see what positions may be a good fit for your skills and experience. Let me know if you have any other questions about employment with the City of Doral!",
+          "timestamp": "2026-01-03T16:50:16.889Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767460858119_p9fin3k31",
+      "sessionId": "sess_1767460813657_56kyxp65i",
+      "startTime": "2026-01-03T17:20:58.119Z",
+      "endTime": "2026-01-03T17:20:58.119Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T17:20:58.119Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T17:20:58.119Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in the City of Doral, here are the steps:\n\n1. Gather all the required documentation and information. This includes completed permit application forms, construction plans, drawings, and any other supporting documents needed for your specific project.\n\n2. The permit application and all required documents can be submitted online through the city's permitting portal. You can access the portal from the Building Department section of the city website.\n\n3. For small, residential projects up to 11x17 paper size, you can also submit plans for a \"walk-thru\" permit review at the Building Department counter. This allows for a faster turnaround time.\n\n4. The Building Department will review your application to ensure it meets the Florida Building Code, Miami-Dade County Code, and any relevant city ordinances. They may request additional information or revisions during this process.\n\n5. Once the permit is approved, you can pay the permit fees online or at the Building Department counter. \n\n6. After the permit is issued, you can schedule any required inspections through the online portal or by contacting the Building Department.\n\nLet me know if you need any clarification or have additional questions! The Building Department is also available to assist you with the permit application process.",
+          "timestamp": "2026-01-03T17:20:58.119Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8889/"
+    },
+    {
+      "id": "conv_1767460858253_sr6aer41h",
+      "sessionId": "sess_1767460813657_56kyxp65i",
+      "startTime": "2026-01-03T17:20:13.658Z",
+      "endTime": "2026-01-03T17:20:58.123Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T17:20:13.658Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-03T17:20:55.326Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in the City of Doral, here are the steps:\n\n1. Gather all the required documentation and information. This includes completed permit application forms, construction plans, drawings, and any other supporting documents needed for your specific project.\n\n2. The permit application and all required documents can be submitted online through the city's permitting portal. You can access the portal from the Building Department section of the city website.\n\n3. For small, residential projects up to 11x17 paper size, you can also submit plans for a \"walk-thru\" permit review at the Building Department counter. This allows for a faster turnaround time.\n\n4. The Building Department will review your application to ensure it meets the Florida Building Code, Miami-Dade County Code, and any relevant city ordinances. They may request additional information or revisions during this process.\n\n5. Once the permit is approved, you can pay the permit fees online or at the Building Department counter. \n\n6. After the permit is issued, you can schedule any required inspections through the online portal or by contacting the Building Department.\n\nLet me know if you need any clarification or have additional questions! The Building Department is also available to assist you with the permit application process.",
+          "timestamp": "2026-01-03T17:20:58.123Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767466123436_vsulgb1th",
+      "sessionId": "sess_1767460813657_56kyxp65i",
+      "startTime": "2026-01-03T18:48:43.436Z",
+      "endTime": "2026-01-03T18:48:43.436Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T18:48:43.436Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-03T18:48:43.436Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City Hall for the City of Doral is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number is (305) 593-6725. City Hall is open Monday through Friday from 8:00 AM to 5:00 PM.",
+          "timestamp": "2026-01-03T18:48:43.436Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8889/"
+    },
+    {
+      "id": "conv_1767466123497_vkivntdjy",
+      "sessionId": "sess_1767460813657_56kyxp65i",
+      "startTime": "2026-01-03T18:48:23.435Z",
+      "endTime": "2026-01-03T18:48:43.440Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-03T18:48:23.435Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-03T18:48:42.134Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City Hall for the City of Doral is located at 8401 NW 53rd Terrace, Doral, FL 33166. The main phone number is (305) 593-6725. City Hall is open Monday through Friday from 8:00 AM to 5:00 PM.",
+          "timestamp": "2026-01-03T18:48:43.440Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767485085027_lw4xt95oq",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-04T00:04:45.027Z",
+      "endTime": "2026-01-04T00:04:45.027Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-04T00:04:45.027Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-04T00:04:45.027Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, you have a few options:\n\n1. Apply online using the CSS Portal. All permits can be applied for online through the portal.\n\n2. Visit the Building Department on the 2nd floor of the Government Center at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday 7am-3pm, and Friday by appointment. \n\n3. To get information on what you'll need to submit for your specific permit application, you can review the Submittal Guides on the city website. This will outline the required documents and plans.\n\nThe key things to have ready when applying for a permit are a completed application form, construction plans and documents, and any supporting information required for the specific project. The Building Department can provide guidance on the process and requirements.\n\nLet me know if you have any other questions! I'm happy to provide more details on the permit application process.",
+          "timestamp": "2026-01-04T00:04:45.027Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767485085173_uz15wbg3c",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-04T00:04:40.791Z",
+      "endTime": "2026-01-04T00:04:45.029Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-04T00:04:40.791Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-04T00:04:42.291Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, you have a few options:\n\n1. Apply online using the CSS Portal. All permits can be applied for online through the portal.\n\n2. Visit the Building Department on the 2nd floor of the Government Center at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday 7am-3pm, and Friday by appointment. \n\n3. To get information on what you'll need to submit for your specific permit application, you can review the Submittal Guides on the city website. This will outline the required documents and plans.\n\nThe key things to have ready when applying for a permit are a completed application form, construction plans and documents, and any supporting information required for the specific project. The Building Department can provide guidance on the process and requirements.\n\nLet me know if you have any other questions! I'm happy to provide more details on the permit application process.",
+          "timestamp": "2026-01-04T00:04:45.029Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767485099076_m8bgnj101",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-04T00:04:59.076Z",
+      "endTime": "2026-01-04T00:04:59.076Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-04T00:04:59.076Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-04T00:04:59.076Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, you have a few options:\n\n1. Apply online using the CSS Portal. All permits can be applied for online through the portal.\n\n2. Visit the Building Department on the 2nd floor of the Government Center at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday 7am-3pm, and Friday by appointment. \n\n3. To get information on what you'll need to submit for your specific permit application, you can review the Submittal Guides on the city website. This will outline the required documents and plans.\n\nThe key things to have ready when applying for a permit are a completed application form, construction plans and documents, and any supporting information required for the specific project. The Building Department can provide guidance on the process and requirements.\n\nLet me know if you have any other questions! I'm happy to provide more details on the permit application process.",
+          "timestamp": "2026-01-04T00:04:59.076Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I pay my water bill?",
+          "timestamp": "2026-01-04T00:04:59.076Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the options for paying your water bill in Doral:\n\n- Online - You can pay your bill online through the Miami-Dade County Water and Sewer Department (WASD) website. This is the quickest and most convenient way to pay.\n\n- By Phone - You can call WASD customer service at 305-665-7477 to make a payment over the phone.\n\n- By Mail - You can mail your payment to the address listed on your water bill statement.\n\n- In Person - You can pay in person at the WASD Customer Service Center located at 3071 SW 38th Ave, Miami, FL 33146.\n\nThe City of Doral bills for stormwater services through WASD, so your water and stormwater charges will be on the same bill. The stormwater fee is $4 per month for residential and $4 per 1,548 sq ft of impervious area for commercial properties.\n\nIf you have any other questions about your water or stormwater bill, you can contact the WASD customer service team at the number I provided or the City's Public Works Department at 305-593-6740.",
+          "timestamp": "2026-01-04T00:04:59.076Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:8888/"
+    },
+    {
+      "id": "conv_1767485099118_6xppzyt85",
+      "sessionId": "sess_1767458855307_6yzwts366",
+      "startTime": "2026-01-04T00:04:40.791Z",
+      "endTime": "2026-01-04T00:04:59.078Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. I can help you with information about city services, permits, events, parks, and more. How can I assist you today?",
+          "timestamp": "2026-01-04T00:04:40.791Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-04T00:04:42.291Z"
+        },
+        {
+          "role": "assistant",
+          "content": "To apply for a building permit in Doral, you have a few options:\n\n1. Apply online using the CSS Portal. All permits can be applied for online through the portal.\n\n2. Visit the Building Department on the 2nd floor of the Government Center at 8401 NW 53rd Terrace. Their counter hours are Monday-Thursday 7am-3pm, and Friday by appointment. \n\n3. To get information on what you'll need to submit for your specific permit application, you can review the Submittal Guides on the city website. This will outline the required documents and plans.\n\nThe key things to have ready when applying for a permit are a completed application form, construction plans and documents, and any supporting information required for the specific project. The Building Department can provide guidance on the process and requirements.\n\nLet me know if you have any other questions! I'm happy to provide more details on the permit application process.",
+          "timestamp": "2026-01-04T00:04:45.029Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I pay my water bill?",
+          "timestamp": "2026-01-04T00:04:56.495Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the options for paying your water bill in Doral:\n\n- Online - You can pay your bill online through the Miami-Dade County Water and Sewer Department (WASD) website. This is the quickest and most convenient way to pay.\n\n- By Phone - You can call WASD customer service at 305-665-7477 to make a payment over the phone.\n\n- By Mail - You can mail your payment to the address listed on your water bill statement.\n\n- In Person - You can pay in person at the WASD Customer Service Center located at 3071 SW 38th Ave, Miami, FL 33146.\n\nThe City of Doral bills for stormwater services through WASD, so your water and stormwater charges will be on the same bill. The stormwater fee is $4 per month for residential and $4 per 1,548 sq ft of impervious area for commercial properties.\n\nIf you have any other questions about your water or stormwater bill, you can contact the WASD customer service team at the number I provided or the City's Public Works Department at 305-593-6740.",
+          "timestamp": "2026-01-04T00:04:59.078Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
     }
   ],
-  "lastUpdated": "2026-01-02T08:47:18.980Z"
+  "lastUpdated": "2026-01-04T00:04:59.127Z"
 }

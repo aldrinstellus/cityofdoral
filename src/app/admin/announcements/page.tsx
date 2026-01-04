@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   Bell,
@@ -121,6 +122,7 @@ interface APIAnnouncement {
 }
 
 export default function Announcements() {
+  const { t } = useLanguage();
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -422,7 +424,7 @@ export default function Announcements() {
       >
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-[32px] font-bold text-[#000034] tracking-tight">Announcements</h1>
+            <h1 className="text-[32px] font-bold text-[#000034] tracking-tight">{t("announcements.title")}</h1>
             <motion.div
               animate={{ rotate: [0, 15, -15, 0] }}
               transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
@@ -430,7 +432,7 @@ export default function Announcements() {
               <Bell className="h-6 w-6 text-amber-500" />
             </motion.div>
           </div>
-          <p className="text-[#666666] mt-1 text-[15px]">Manage system alerts and city notifications</p>
+          <p className="text-[#666666] mt-1 text-[15px]">{t("announcements.subtitle")}</p>
         </div>
         <motion.button
           whileHover={{ scale: 1.02, y: -2 }}
@@ -439,17 +441,17 @@ export default function Announcements() {
           className="h-11 px-6 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-[#000080]/25 transition-all duration-300 flex items-center gap-2 w-fit"
         >
           <Plus className="h-4 w-4" />
-          New Announcement
+          {t("announcements.newAnnouncement")}
         </motion.button>
       </motion.div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
-          { label: "Total", value: announcements.length, icon: Bell, gradient: "from-[#000080]" },
-          { label: "Active", value: activeCount, icon: Eye, gradient: "from-[#006A52]" },
-          { label: "Inactive", value: announcements.length - activeCount, icon: EyeOff, gradient: "from-gray-500" },
-          { label: "High Priority", value: highPriorityCount, icon: AlertTriangle, gradient: "from-amber-500" },
+          { label: t("common.total"), value: announcements.length, icon: Bell, gradient: "from-[#000080]" },
+          { label: t("common.active"), value: activeCount, icon: Eye, gradient: "from-[#006A52]" },
+          { label: t("common.inactive"), value: announcements.length - activeCount, icon: EyeOff, gradient: "from-gray-500" },
+          { label: t("announcements.highPriority"), value: highPriorityCount, icon: AlertTriangle, gradient: "from-amber-500" },
         ].map((stat, idx) => (
           <motion.div
             key={stat.label}
@@ -487,7 +489,7 @@ export default function Announcements() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
             <input
               type="text"
-              placeholder="Search announcements by title or content..."
+              placeholder={t("announcements.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full h-11 pl-11 pr-4 bg-white border border-[#E7EBF0] rounded-xl text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
@@ -806,9 +808,9 @@ export default function Announcements() {
             className="bg-gradient-to-br from-white via-white to-blue-50/30 rounded-xl border border-[#E7EBF0] p-12 text-center shadow-[0_4px_20px_-4px_rgba(0,0,128,0.08)]"
           >
             <Bell className="h-12 w-12 mx-auto mb-4 text-[#E7EBF0]" />
-            <h3 className="font-medium text-[#000034] mb-2">No announcements</h3>
+            <h3 className="font-medium text-[#000034] mb-2">{t("announcements.noAnnouncements")}</h3>
             <p className="text-sm text-[#666666]">
-              Create your first announcement to display in the chatbot
+              {t("announcements.createFirst")}
             </p>
           </motion.div>
         ) : (

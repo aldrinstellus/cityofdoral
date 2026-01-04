@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -161,6 +162,7 @@ const defaultSettings: ChatbotSettings = {
 };
 
 export default function SettingsPage() {
+  const { t } = useLanguage();
   const [settings, setSettings] = useState<ChatbotSettings>(defaultSettings);
   const [originalSettings, setOriginalSettings] = useState<ChatbotSettings>(defaultSettings);
   const [saving, setSaving] = useState(false);
@@ -514,7 +516,7 @@ export default function SettingsPage() {
       <div className="p-6 lg:p-8 max-w-[1600px] mx-auto flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin text-[#000080] mx-auto mb-4" />
-          <p className="text-[#666666]">Loading settings...</p>
+          <p className="text-[#666666]">{t("settings.loading")}</p>
         </div>
       </div>
     );
@@ -546,7 +548,7 @@ export default function SettingsPage() {
       >
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-[32px] font-bold text-[#000034] tracking-tight">Settings</h1>
+            <h1 className="text-[32px] font-bold text-[#000034] tracking-tight">{t("settings.title")}</h1>
             <motion.div
               animate={{ rotate: [0, 180, 360] }}
               transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
@@ -555,11 +557,11 @@ export default function SettingsPage() {
             </motion.div>
           </div>
           <p className="text-[#666666] mt-1 text-[15px]">
-            {activeMainTab === 'profile' && 'Manage your account profile and security'}
-            {activeMainTab === 'team' && 'Manage team members and access'}
-            {activeMainTab === 'permissions' && 'Configure role-based permissions'}
-            {activeMainTab === 'integrations' && 'Configure external service connections'}
-            {activeMainTab === 'chatbot' && 'Configure chatbot behavior and appearance'}
+            {activeMainTab === 'profile' && t("settings.profileSubtitle")}
+            {activeMainTab === 'team' && t("settings.teamSubtitle")}
+            {activeMainTab === 'permissions' && t("settings.permissionsSubtitle")}
+            {activeMainTab === 'integrations' && t("settings.integrationsSubtitle")}
+            {activeMainTab === 'chatbot' && t("settings.chatbotSubtitle")}
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -570,7 +572,7 @@ export default function SettingsPage() {
             className="h-11 px-6 bg-white border border-[#E7EBF0] text-[#363535] text-sm font-medium rounded-xl hover:bg-gray-50 hover:border-[#000080]/30 transition-all duration-200 flex items-center gap-2"
           >
             <RefreshCw className="h-4 w-4" />
-            Reset
+            {t("common.reset")}
           </motion.button>
           {hasUnsavedChanges && (
             <motion.span
@@ -579,7 +581,7 @@ export default function SettingsPage() {
               className="text-amber-600 text-sm font-medium flex items-center gap-1.5"
             >
               <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-              Unsaved changes
+              {t("settings.unsavedChanges")}
             </motion.span>
           )}
           <motion.button
@@ -602,7 +604,7 @@ export default function SettingsPage() {
             ) : (
               <Save className="h-4 w-4" />
             )}
-            {saved ? "Saved!" : "Save Changes"}
+            {saved ? t("common.saved") : t("common.saveChanges")}
           </motion.button>
         </div>
       </motion.div>

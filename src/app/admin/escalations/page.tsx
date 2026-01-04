@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { Pagination } from "@/components/ui/pagination";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   AlertTriangle,
@@ -88,6 +89,7 @@ type SortDirection = "asc" | "desc" | null;
 type SortKey = "userName" | "contactMethod" | "reason" | "requestedAt" | "status" | "";
 
 export default function EscalationsPage() {
+  const { t } = useLanguage();
   const [escalations, setEscalations] = useState<Escalation[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -265,15 +267,15 @@ export default function EscalationsPage() {
       >
         <div>
           <h1 className="text-[32px] font-bold text-[#000034] tracking-tight flex items-center gap-3">
-            Escalations
+            {t("escalations.title")}
             {pendingCount > 0 && (
               <span className="px-3 py-1 text-sm font-semibold bg-amber-100 text-amber-700 rounded-full">
-                {pendingCount} pending
+                {pendingCount} {t("escalations.pending")}
               </span>
             )}
           </h1>
           <p className="text-[#666666] mt-1 text-[15px]">
-            Manage human assistance requests from chatbot users
+            {t("escalations.subtitle")}
           </p>
         </div>
         <motion.button
@@ -284,7 +286,7 @@ export default function EscalationsPage() {
           className="h-10 px-4 flex items-center gap-2 bg-white border border-[#E7EBF0] rounded-lg hover:bg-gray-50 transition-all shadow-sm"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-          Refresh
+          {t("common.refresh")}
         </motion.button>
       </motion.div>
 
@@ -420,9 +422,9 @@ export default function EscalationsPage() {
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
               <CheckCircle className="h-8 w-8 text-green-500" />
             </div>
-            <h3 className="text-lg font-semibold text-[#000034] mb-1">No Escalations</h3>
+            <h3 className="text-lg font-semibold text-[#000034] mb-1">{t("escalations.noEscalations")}</h3>
             <p className="text-[#666666] text-sm">
-              {statusFilter !== "all" ? "No escalations match your filter" : "All users are being helped by the chatbot"}
+              {statusFilter !== "all" ? "No escalations match your filter" : t("escalations.allClear")}
             </p>
           </div>
         ) : (

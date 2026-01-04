@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   PieChart,
   Pie,
@@ -66,6 +67,7 @@ interface AnalyticsData {
 }
 
 export default function AnalyticsPage() {
+  const { t } = useLanguage();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -216,12 +218,12 @@ export default function AnalyticsPage() {
       >
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-[32px] font-bold text-[#000034] tracking-tight">Analytics</h1>
+            <h1 className="text-[32px] font-bold text-[#000034] tracking-tight">{t("analytics.title")}</h1>
             <div className="px-3 py-1 bg-gradient-to-r from-violet-500 to-purple-600 text-white text-xs font-medium rounded-full">
-              Power BI Ready
+              {t("analytics.powerBIReady")}
             </div>
           </div>
-          <p className="text-[#666666] mt-1 text-[15px]">Detailed chatbot performance metrics and insights</p>
+          <p className="text-[#666666] mt-1 text-[15px]">{t("analytics.subtitle")}</p>
         </div>
         <div className="flex items-center gap-3">
           {/* Date Range Controls */}
@@ -248,7 +250,7 @@ export default function AnalyticsPage() {
               }`}
             >
               <Calendar className="h-3.5 w-3.5" />
-              Custom
+              {t("analytics.custom")}
             </button>
           </div>
           <motion.button
@@ -269,7 +271,7 @@ export default function AnalyticsPage() {
               className="h-10 px-4 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg flex items-center gap-2 shadow-lg shadow-[#000080]/20"
             >
               <Download className="h-4 w-4" />
-              Export
+              {t("common.export")}
             </motion.button>
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl border border-[#E7EBF0] shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
               <button
@@ -277,14 +279,14 @@ export default function AnalyticsPage() {
                 className="w-full px-4 py-3 text-left text-sm text-[#363535] hover:bg-[#F5F9FD] flex items-center gap-2 rounded-t-xl"
               >
                 <FileText className="h-4 w-4 text-[#000080]" />
-                Export JSON
+                {t("common.exportJSON")}
               </button>
               <button
                 onClick={handleExportCSV}
                 className="w-full px-4 py-3 text-left text-sm text-[#363535] hover:bg-[#F5F9FD] flex items-center gap-2 rounded-b-xl border-t border-[#E7EBF0]"
               >
                 <Download className="h-4 w-4 text-[#000080]" />
-                Export CSV
+                {t("common.exportCSV")}
               </button>
             </div>
           </div>
@@ -307,7 +309,7 @@ export default function AnalyticsPage() {
               onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
               className="h-10 px-3 border border-[#E7EBF0] rounded-lg text-sm focus:outline-none focus:border-[#000080]"
             />
-            <span className="text-[#666]">to</span>
+            <span className="text-[#666]">{t("common.to")}</span>
             <input
               type="date"
               value={dateRange.end}
@@ -320,7 +322,7 @@ export default function AnalyticsPage() {
             whileTap={{ scale: 0.98 }}
             className="h-10 px-4 bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white text-sm font-medium rounded-lg"
           >
-            Apply
+            {t("common.apply")}
           </motion.button>
         </motion.div>
       )}
@@ -336,7 +338,7 @@ export default function AnalyticsPage() {
           <AlertTriangle className="h-8 w-8 text-amber-500 mx-auto mb-3" />
           <p className="text-[#666666]">{error}</p>
           <button onClick={fetchAnalytics} className="mt-4 px-4 py-2 bg-[#000080] text-white rounded-lg">
-            Try Again
+            {t("analytics.tryAgain")}
           </button>
         </div>
       ) : analytics ? (
@@ -344,10 +346,10 @@ export default function AnalyticsPage() {
           {/* KPI Summary Row */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {[
-              { label: "Total Conversations", value: analytics.summary.totalConversations, icon: MessageSquare, color: "from-blue-500 to-blue-600" },
-              { label: "Satisfaction Rate", value: `${analytics.summary.satisfactionRate}%`, icon: ThumbsUp, color: "from-green-500 to-emerald-600" },
-              { label: "Escalation Rate", value: `${analytics.summary.escalationRate}%`, icon: AlertTriangle, color: "from-amber-500 to-orange-500" },
-              { label: "Avg Duration", value: `${analytics.summary.avgDurationSeconds}s`, icon: Clock, color: "from-purple-500 to-violet-600" },
+              { label: t("analytics.totalConversations"), value: analytics.summary.totalConversations, icon: MessageSquare, color: "from-blue-500 to-blue-600" },
+              { label: t("analytics.satisfactionRate"), value: `${analytics.summary.satisfactionRate}%`, icon: ThumbsUp, color: "from-green-500 to-emerald-600" },
+              { label: t("analytics.escalationRate"), value: `${analytics.summary.escalationRate}%`, icon: AlertTriangle, color: "from-amber-500 to-orange-500" },
+              { label: t("analytics.avgDuration"), value: `${analytics.summary.avgDurationSeconds}s`, icon: Clock, color: "from-purple-500 to-violet-600" },
             ].map((kpi, idx) => (
               <motion.div
                 key={kpi.label}
@@ -379,7 +381,7 @@ export default function AnalyticsPage() {
                   <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg">
                     <TrendingUp className="h-4 w-4 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-[#000034]">Conversation Trend</h3>
+                  <h3 className="text-lg font-semibold text-[#000034]">{t("analytics.conversationTrend")}</h3>
                 </div>
               </div>
               <div className="h-[280px]">
@@ -414,16 +416,16 @@ export default function AnalyticsPage() {
                   <div className="p-2 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg">
                     <Clock className="h-4 w-4 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-[#000034]">Peak Hours</h3>
+                  <h3 className="text-lg font-semibold text-[#000034]">{t("analytics.peakHours")}</h3>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-[#666]">
-                  <span>Low</span>
+                  <span>{t("common.low")}</span>
                   <div className="flex gap-0.5">
                     {["#F0F4F8", "#C5D5EC", "#8BAAD9", "#4B7BB5", "#1D4F91", "#000080"].map((color, i) => (
                       <div key={i} className="w-4 h-3 rounded-sm" style={{ backgroundColor: color }} />
                     ))}
                   </div>
-                  <span>High</span>
+                  <span>{t("common.high")}</span>
                 </div>
               </div>
               <div className="overflow-x-auto">
@@ -470,11 +472,11 @@ export default function AnalyticsPage() {
                 <div className="p-2 bg-gradient-to-br from-violet-500 to-purple-600 rounded-lg">
                   <Globe className="h-4 w-4 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#000034]">Language & Sentiment</h3>
+                <h3 className="text-lg font-semibold text-[#000034]">{t("analytics.languageDistribution")} & {t("analytics.sentiment")}</h3>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-[#666] mb-2 text-center">Language</p>
+                  <p className="text-sm text-[#666] mb-2 text-center">{t("common.language")}</p>
                   <div className="h-[180px]">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -497,7 +499,7 @@ export default function AnalyticsPage() {
                   </div>
                 </div>
                 <div>
-                  <p className="text-sm text-[#666] mb-2 text-center">Sentiment</p>
+                  <p className="text-sm text-[#666] mb-2 text-center">{t("analytics.sentiment")}</p>
                   <div className="h-[180px]">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -533,7 +535,7 @@ export default function AnalyticsPage() {
                 <div className="p-2 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg">
                   <Activity className="h-4 w-4 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#000034]">Top Categories</h3>
+                <h3 className="text-lg font-semibold text-[#000034]">{t("analytics.topCategories")}</h3>
               </div>
               <div className="h-[280px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -561,7 +563,7 @@ export default function AnalyticsPage() {
                 <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg">
                   <BarChart3 className="h-4 w-4 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#000034]">Channel Performance</h3>
+                <h3 className="text-lg font-semibold text-[#000034]">{t("analytics.channelPerformance")}</h3>
               </div>
               <div className="h-[280px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -594,7 +596,7 @@ export default function AnalyticsPage() {
                 <div className="p-2 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-lg">
                   <Clock className="h-4 w-4 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#000034]">Resolution Time Distribution</h3>
+                <h3 className="text-lg font-semibold text-[#000034]">{t("analytics.resolutionTime")}</h3>
               </div>
               <div className="space-y-3">
                 {resolutionTimeData.map((item, idx) => (
@@ -640,7 +642,7 @@ export default function AnalyticsPage() {
               <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg">
                 <HelpCircle className="h-4 w-4 text-white" />
               </div>
-              <h3 className="text-lg font-semibold text-[#000034]">Top Questions</h3>
+              <h3 className="text-lg font-semibold text-[#000034]">{t("analytics.topQuestions")}</h3>
             </div>
             <div className="space-y-3">
               {topQuestions.map((q, idx) => (
