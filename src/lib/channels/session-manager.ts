@@ -4,25 +4,42 @@ import path from 'path';
 import { ChannelSession, ChannelType, SESSION_TIMEOUTS } from './types';
 import { Language } from '../i18n';
 
-const SESSIONS_FILE = path.join(process.cwd(), 'data', 'channel-sessions.json');
+// Use /tmp on Vercel (writable), fallback to data/ locally
+const isVercel = process.env.VERCEL === '1';
+const DATA_DIR = isVercel ? '/tmp' : path.join(process.cwd(), 'data');
+const SESSIONS_FILE = path.join(DATA_DIR, 'channel-sessions.json');
 
 interface SessionStore {
   sessions: Record<string, ChannelSession>;
   lastUpdated: string;
 }
 
+// In-memory fallback for serverless environments
+let memoryStore: SessionStore = { sessions: {}, lastUpdated: new Date().toISOString() };
+
 async function loadSessions(): Promise<SessionStore> {
   try {
     const content = await fs.readFile(SESSIONS_FILE, 'utf-8');
     return JSON.parse(content);
   } catch {
-    return { sessions: {}, lastUpdated: new Date().toISOString() };
+    // Return in-memory store on Vercel, empty store locally
+    return isVercel ? memoryStore : { sessions: {}, lastUpdated: new Date().toISOString() };
   }
 }
 
 async function saveSessions(store: SessionStore): Promise<void> {
   store.lastUpdated = new Date().toISOString();
-  await fs.writeFile(SESSIONS_FILE, JSON.stringify(store, null, 2));
+  if (isVercel) {
+    // Update in-memory store and try to write to /tmp
+    memoryStore = store;
+    try {
+      await fs.writeFile(SESSIONS_FILE, JSON.stringify(store, null, 2));
+    } catch {
+      // Ignore write errors on Vercel, use in-memory
+    }
+  } else {
+    await fs.writeFile(SESSIONS_FILE, JSON.stringify(store, null, 2));
+  }
 }
 
 function generateSessionKey(channel: ChannelType, userId: string): string {
@@ -145,19 +162,31 @@ export interface CrossChannelToken {
   used: boolean;
 }
 
-const CROSS_CHANNEL_TOKENS_FILE = path.join(process.cwd(), 'data', 'cross-channel-tokens.json');
+const CROSS_CHANNEL_TOKENS_FILE = path.join(DATA_DIR, 'cross-channel-tokens.json');
+
+// In-memory fallback for cross-channel tokens
+let memoryTokens: Record<string, CrossChannelToken> = {};
 
 async function loadCrossChannelTokens(): Promise<Record<string, CrossChannelToken>> {
   try {
     const content = await fs.readFile(CROSS_CHANNEL_TOKENS_FILE, 'utf-8');
     return JSON.parse(content);
   } catch {
-    return {};
+    return isVercel ? memoryTokens : {};
   }
 }
 
 async function saveCrossChannelTokens(tokens: Record<string, CrossChannelToken>): Promise<void> {
-  await fs.writeFile(CROSS_CHANNEL_TOKENS_FILE, JSON.stringify(tokens, null, 2));
+  if (isVercel) {
+    memoryTokens = tokens;
+    try {
+      await fs.writeFile(CROSS_CHANNEL_TOKENS_FILE, JSON.stringify(tokens, null, 2));
+    } catch {
+      // Ignore write errors on Vercel
+    }
+  } else {
+    await fs.writeFile(CROSS_CHANNEL_TOKENS_FILE, JSON.stringify(tokens, null, 2));
+  }
 }
 
 // Generate a token for cross-channel session handoff

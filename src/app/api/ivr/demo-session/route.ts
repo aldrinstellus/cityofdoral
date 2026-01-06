@@ -25,6 +25,8 @@ export async function POST(request: NextRequest) {
     }
 
     if (action === 'generate-token') {
+      // Ensure session exists first (needed for serverless environments)
+      await getOrCreateSession('ivr', userId, 'en');
       // Generate cross-channel transfer token
       const token = await generateCrossChannelToken('ivr', userId);
       return NextResponse.json({ success: true, token });
