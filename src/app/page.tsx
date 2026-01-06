@@ -327,7 +327,7 @@ export default function ChatPage() {
                           href={source.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full hover:bg-blue-100 transition-colors"
+                          className="inline-flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full hover:bg-[#1e3a5f] hover:text-white focus:bg-[#1e3a5f] focus:text-white focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/40 transition-colors"
                         >
                           <ExternalLink className="h-2.5 w-2.5" aria-hidden="true" />
                           {source.title.length > 25

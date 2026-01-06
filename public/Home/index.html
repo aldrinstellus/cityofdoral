@@ -1602,43 +1602,31 @@ $(document).ready(function () {
         });  
     });
      
-    // popular filter setup ---
+    // Filters are pre-defined in HTML - only set up initial state
     if ($('.ocsf-popular').length){
-        $('.ocsf-filters').append('<label for="popular_filter">Filter by:</label><div class="select-wrapper"><select id="popular_filter"><option value="all">All Services</option><option value="ocsf-popular">Most Popular</option></select></div>');
-         
         // set initial results if popular tag exists ---
         $('label[for="popular_filter"]').addClass('active-filter');
         $('#popular_filter').val('ocsf-popular');
         $('.ocsf-popular').addClass('active');
-         
+
         var first = $('.ocsf.active a').first();
         first.addClass('selected');
         popResult(first.text(), first.attr('href'), first.next('span').text());
-         
+
     } else {
         // set initial results if popular tag DOES NOT exist ---
         $('.ocsf').addClass('active');
-         
+
         var first = $('.ocsf.active a').first();
         first.addClass('selected');
         popResult(first.text(), first.attr('href'), first.next('span').text());
     }
-     
-    // category filter setup ---
-    if (categoryFilter.length > 0){
-        $('.ocsf-filters').append('<label for="category_filter">Filter by Category:</label><div class="select-wrapper"><select id="category_filter"><option value="all">All</option></select></div>');
-         
-        $.each(categoryFilter, function(index, value){     
-            var optionText = value.replace('ocsf-cat-','').replace(/-/g, ' ');
-            $('#category_filter').append('<option value="'+value+'">'+optionText+'</option>');
-        });
-    }
-     
-    // department filter selector ---
-    if (departmentFilter.length > 0){
+
+    // Department filter - only add if not already present and has departments
+    if (departmentFilter.length > 0 && !$('#department_filter').length){
         $('.ocsf-filters').append('<label for="department_filter">Filter by Department:</label><div class="select-wrapper"><select id="department_filter"><option value="all">All</option></select></div>');
-         
-        $.each(departmentFilter, function(index, value){           
+
+        $.each(departmentFilter, function(index, value){
             var optionText = value.replace('ocsf-dept-','').replace(/-/g, ' ');
             $('#department_filter').append('<option value="'+value+'">'+optionText+'</option>');
         });
@@ -2636,6 +2624,63 @@ gtag('config', 'G-ZW2SDKHF6L');
   }
   setTimeout(removeDuplicatePageAssist, 2000);
   setTimeout(removeDuplicatePageAssist, 3000);
+})();
+</script>
+
+<!-- Fix duplicate OCSF filters (Granicus CMS adds duplicates) -->
+<script>
+(function() {
+  function cleanupDuplicateFilters() {
+    var filtersContainer = document.querySelector('.ocsf-filters');
+    if (!filtersContainer) return;
+
+    // Remove duplicate filter labels and selects (keep first of each)
+    var seenIds = {};
+    var children = Array.from(filtersContainer.children);
+    children.forEach(function(child) {
+      // Handle labels
+      if (child.tagName === 'LABEL') {
+        var forAttr = child.getAttribute('for');
+        if (seenIds['label-' + forAttr]) {
+          child.remove();
+        } else {
+          seenIds['label-' + forAttr] = true;
+        }
+      }
+      // Handle select wrappers
+      if (child.classList && child.classList.contains('select-wrapper')) {
+        var select = child.querySelector('select');
+        if (select) {
+          var selectId = select.id;
+          if (seenIds['select-' + selectId]) {
+            child.remove();
+          } else {
+            seenIds['select-' + selectId] = true;
+            // Also remove duplicate options within this select
+            var seenValues = {};
+            Array.from(select.options).forEach(function(option) {
+              if (seenValues[option.value]) {
+                option.remove();
+              } else {
+                seenValues[option.value] = true;
+              }
+            });
+          }
+        }
+      }
+    });
+  }
+
+  // Run cleanup after Granicus scripts have executed
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(cleanupDuplicateFilters, 500);
+      setTimeout(cleanupDuplicateFilters, 1500);
+    });
+  } else {
+    setTimeout(cleanupDuplicateFilters, 500);
+    setTimeout(cleanupDuplicateFilters, 1500);
+  }
 })();
 </script>
 

@@ -682,12 +682,10 @@
   border: 1px solid #e0e0e0;
 }
 
-.doral-chat-source-link:hover {
+.doral-chat-source-link:hover,
+.doral-chat-source-link:focus {
   background: var(--doral-primary);
   color: var(--doral-text-on-dark);
-}
-
-.doral-chat-source-link:focus {
   outline: none;
   border-color: var(--doral-focus);
   box-shadow: 0 0 0 2px var(--doral-focus-ring);
@@ -828,8 +826,10 @@
   border-color: var(--doral-border);
 }
 
-.doral-action-secondary:hover:not(:disabled) {
+.doral-action-secondary:hover:not(:disabled),
+.doral-action-secondary:focus:not(:disabled) {
   background: var(--doral-primary-light);
+  color: var(--doral-text-on-dark);
   border-color: var(--doral-primary);
 }
 
