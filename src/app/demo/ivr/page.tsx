@@ -504,7 +504,7 @@ export default function IVRDemoPage() {
                   </button>
                 )}
               </div>
-              <p className="text-slate-400">
+              <p className="text-slate-300">
                 Simulate the City of Doral phone IVR experience
               </p>
             </div>
@@ -513,14 +513,14 @@ export default function IVRDemoPage() {
             <div className="bg-slate-800 rounded-3xl overflow-hidden shadow-2xl border border-slate-700">
           {/* Phone Top Bar */}
           <div className="bg-slate-900 px-4 py-2 flex items-center justify-between text-sm">
-            <span className="text-slate-400">City of Doral IVR</span>
+            <span className="text-slate-300">City of Doral IVR</span>
             <div className="flex items-center gap-3">
               <button
                 onClick={toggleAudio}
                 className={`flex items-center gap-1.5 px-2 py-1 rounded text-xs transition-colors ${
                   state.audioEnabled
                     ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30'
-                    : 'bg-slate-700 text-slate-500 hover:bg-slate-600'
+                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                 }`}
                 title={state.audioEnabled ? 'Audio on - click to mute' : 'Audio off - click to unmute'}
               >
@@ -536,7 +536,7 @@ export default function IVRDemoPage() {
                 )}
                 {state.audioEnabled ? 'ON' : 'OFF'}
               </button>
-              <span className="text-slate-400">
+              <span className="text-slate-300">
                 {state.isActive ? 'In Call' : 'Ready'}
               </span>
             </div>
@@ -551,7 +551,7 @@ export default function IVRDemoPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                 </div>
-                <p className="text-slate-400 mb-4">305-593-6725</p>
+                <p className="text-slate-300 mb-4">305-593-6725</p>
                 <button
                   onClick={startCall}
                   className="px-8 py-3 bg-green-600 hover:bg-green-700 rounded-full font-semibold transition-colors"
@@ -695,7 +695,7 @@ export default function IVRDemoPage() {
                       className="py-1.5 bg-slate-700 hover:bg-slate-600 rounded-md font-medium text-sm transition-colors disabled:opacity-50"
                     >
                       {digit}
-                      <span className="block text-[10px] text-slate-400">
+                      <span className="block text-[10px] text-slate-300">
                         {label}
                       </span>
                     </button>
@@ -780,7 +780,7 @@ export default function IVRDemoPage() {
 
           <div className="mt-4 pt-4 border-t border-slate-700">
             <h3 className="font-semibold mb-2 text-sm">Voice Commands</h3>
-            <ul className="space-y-1 text-slate-400 text-xs">
+            <ul className="space-y-1 text-slate-300 text-xs">
               <li>Say &quot;website&quot; or &quot;transfer&quot; for transfer code</li>
               <li>Say &quot;agent&quot; or &quot;human&quot; for live agent</li>
               <li>Say &quot;goodbye&quot; to end the call</li>

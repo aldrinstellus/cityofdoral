@@ -233,7 +233,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                 className="overflow-hidden"
               >
                 <p className="font-bold text-sm tracking-wide text-white">CITY OF DORAL</p>
-                <p className="text-[11px] text-blue-200 uppercase tracking-wider">
+                <p className="text-[11px] text-blue-100 uppercase tracking-wider">
                   Admin Portal
                 </p>
               </motion.div>
@@ -255,7 +255,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         {/* Navigation */}
         <nav className="relative p-3 space-y-1">
           {!sidebarCollapsed && (
-            <p className="px-3 py-2 text-[10px] font-semibold text-blue-300/70 uppercase tracking-wider">
+            <p className="px-3 py-2 text-[10px] font-semibold text-blue-200 uppercase tracking-wider">
               {t("nav.mainMenu")}
             </p>
           )}
@@ -370,7 +370,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                   className="flex-1 min-w-0"
                 >
                   <p className="text-sm font-medium text-white truncate">{t("user.adminUser")}</p>
-                  <p className="text-[10px] text-blue-300 truncate">{t("user.systemAdmin")}</p>
+                  <p className="text-[10px] text-blue-200 truncate">{t("user.systemAdmin")}</p>
                 </motion.div>
               )}
             </div>

@@ -305,7 +305,7 @@ export default function ChatPage() {
                     {isHydrated && (
                       <p
                         className={`text-[10px] mt-1 ${
-                          message.role === "user" ? "text-blue-200" : "text-gray-400"
+                          message.role === "user" ? "text-blue-100" : "text-gray-500"
                         }`}
                       >
                         {message.timestamp.toLocaleTimeString('en-US', {
@@ -361,14 +361,14 @@ export default function ChatPage() {
                 {/* Feedback Buttons - Inline */}
                 {message.role === "assistant" && message.id !== "welcome" && (
                   <div className="ml-10 mt-1 flex items-center gap-1">
-                    <span className="text-[10px] text-gray-400">{labels.feedback}</span>
+                    <span className="text-[10px] text-gray-500">{labels.feedback}</span>
                     <Button
                       variant="ghost"
                       size="sm"
                       className={`h-5 w-5 p-0 ${
                         message.feedback === "positive"
                           ? "text-green-600"
-                          : "text-gray-300 hover:text-green-600"
+                          : "text-gray-500 hover:text-green-600"
                       }`}
                       onClick={() => handleFeedback(message.id, "positive")}
                       aria-label={labels.yes}
@@ -382,7 +382,7 @@ export default function ChatPage() {
                       className={`h-5 w-5 p-0 ${
                         message.feedback === "negative"
                           ? "text-red-600"
-                          : "text-gray-300 hover:text-red-600"
+                          : "text-gray-500 hover:text-red-600"
                       }`}
                       onClick={() => handleFeedback(message.id, "negative")}
                       aria-label={labels.no}
