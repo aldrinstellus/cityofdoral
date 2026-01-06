@@ -379,7 +379,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           {/* Back to Website */}
           <div className={`px-3 pb-3 ${sidebarCollapsed ? "flex justify-center" : ""}`}>
             <a
-              href="http://localhost:8888/Home/index.html"
+              href="/Home/index.html"
               target="_blank"
               rel="noopener noreferrer"
               className={`
