@@ -647,10 +647,13 @@ export default function IVRDemoPage() {
                     })
                     .map(m => ({ role: m.type, content: m.text }));
                   // Encode conversation for URL (works across serverless instances)
-                  const historyParam = encodeURIComponent(btoa(JSON.stringify({
+                  // Use UTF-8 safe base64 encoding to handle Unicode characters
+                  const jsonStr = JSON.stringify({
                     messages: conversationHistory,
                     language: state.language,
-                  })));
+                  });
+                  // Safe base64 encode: UTF-8 → percent-encoded → binary string → base64
+                  const historyParam = encodeURIComponent(btoa(unescape(encodeURIComponent(jsonStr))));
                   const websiteUrl = `/Home/index.html?transfer=${state.transferCode}&history=${historyParam}`;
                   window.open(websiteUrl, '_blank');
                 }}

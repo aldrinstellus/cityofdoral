@@ -142,73 +142,43 @@
   "EYJJIJ": {
     "token": "EYJJIJ",
     "sourceChannel": "ivr",
-    "sourceUserId": "+1-demo-1767687656065",
-    "sessionId": "ivr_1767687845233",
-    "language": "es",
-    "createdAt": "2026-01-06T08:24:05.233Z",
-    "expiresAt": "2026-01-06T08:54:05.232Z",
+    "sourceUserId": "+1-demo-1767691570875",
+    "sessionId": "ivr_1767691635819",
+    "language": "en",
+    "createdAt": "2026-01-06T09:27:15.819Z",
+    "expiresAt": "2026-01-06T09:57:15.816Z",
     "used": true,
-    "fullData": "eyJjIjoiaXZyIiwibCI6ImVzIiwiZSI6MTc2NzY4OTY0NTIzMiwidiI6MX0",
+    "fullData": "eyJjIjoiaXZyIiwibCI6ImVuIiwiZSI6MTc2NzY5MzQzNTgxNiwidiI6MX0",
     "messages": [
       {
         "role": "assistant",
         "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
-        "timestamp": "2026-01-06T08:24:05.233Z"
+        "timestamp": "2026-01-06T09:27:15.820Z"
       },
       {
         "role": "user",
-        "content": "Pressed: 2",
-        "timestamp": "2026-01-06T08:24:05.233Z"
+        "content": "Pressed: 1",
+        "timestamp": "2026-01-06T09:27:15.820Z"
       },
       {
         "role": "assistant",
-        "content": "Puede hacerme preguntas sobre servicios de la ciudad, permisos, parques y más. Presione 1 en cualquier momento para hablar con un representante. Presione 2 para obtener un código para continuar esta conversación en nuestro sitio web. ¿En qué puedo ayudarle hoy?",
-        "timestamp": "2026-01-06T08:24:05.233Z"
+        "content": "You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+        "timestamp": "2026-01-06T09:27:15.820Z"
       },
       {
         "role": "user",
-        "content": "Said: \"¿Cómo puedo reportar un bache cerca de mi vecindario?\"",
-        "timestamp": "2026-01-06T08:24:05.233Z"
+        "content": "Said: \"When is the next city council meeting?\"",
+        "timestamp": "2026-01-06T09:27:15.820Z"
       },
       {
         "role": "assistant",
-        "content": "Aquí le explico cómo reportar un bache en su vecindario:\n\n**Reportar bache:**\n• Llamar al (305) 593-6699\n• Proporcionar ubicación exacta\n• Descripción detallada del bache\n• Servicio atendido durante horario hábil\n\n**Contactos adicionales:**\n• City Hall: (305) 593-6725\n• Emergencias: 911\n\nEstaremos contentos de asistirle para abordar y reparar el bache reportado.",
-        "timestamp": "2026-01-06T08:24:05.233Z"
+        "content": "**Next Meeting:**\n• January 15, 2026\n• 10 AM and 6 PM\n• Doral Government Center\n\n**Agenda Highlights:**\n• Budget amendment for parks\n• Zoning text amendment\n• Downtown streetscape update\n• Summer camp program fees\n\nView full agenda: www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Council-Meetings",
+        "timestamp": "2026-01-06T09:27:15.820Z"
       },
       {
         "role": "assistant",
-        "content": "Presione 2 para obtener un código y continuar en nuestro sitio web para más detalles. O haga otra pregunta.",
-        "timestamp": "2026-01-06T08:24:05.233Z"
-      },
-      {
-        "role": "user",
-        "content": "Said: \"¿Cuándo debo renovar mi licencia de negocio y puedo pagar en línea?\"",
-        "timestamp": "2026-01-06T08:24:05.233Z"
-      },
-      {
-        "role": "assistant",
-        "content": "Aquí está la información sobre la renovación de licencias de negocio en Doral:\n\n**Renovación de Licencias:**\n• Fecha límite: 31 de diciembre\n• Pago en línea disponible\n• Requerido cada año\n\n**Cómo Renovar:**\n• Visitar cityofdoral.com/business\n• Completar formulario\n• Pagar en línea o en persona\n\nPóngase en contacto con el Departamento de Desarrollo Económico al (305) 593-6680 si tiene alguna otra pregunta.",
-        "timestamp": "2026-01-06T08:24:05.233Z"
-      },
-      {
-        "role": "assistant",
-        "content": "Presione 2 para obtener un código y continuar en nuestro sitio web para más detalles. O haga otra pregunta.",
-        "timestamp": "2026-01-06T08:24:05.233Z"
-      },
-      {
-        "role": "user",
-        "content": "Said: \"¿Cuándo es la próxima reunión del Concejo Municipal y dónde puedo encontrar la agenda?\"",
-        "timestamp": "2026-01-06T08:24:05.233Z"
-      },
-      {
-        "role": "assistant",
-        "content": "Aquí está la información sobre las próximas reuniones del Concejo Municipal:\n\n**Próxima Reunión del Concejo:**\n• 1er y 3er Miércoles a las 6 PM\n• City Hall, 8401 NW 53rd Terrace\n\n**Agenda:**\n• Publicada una semana antes\n• Disponible en sitio web de la Ciudad\n• www.cityofdoral.com/agendas-and-minutes\n\nSi necesita más detalles, puede comunicarse con la Oficina del Secretario de la Ciudad al (305) 593-6730.",
-        "timestamp": "2026-01-06T08:24:05.233Z"
-      },
-      {
-        "role": "assistant",
-        "content": "Presione 2 para obtener un código y continuar en nuestro sitio web para más detalles. O haga otra pregunta.",
-        "timestamp": "2026-01-06T08:24:05.233Z"
+        "content": "Press 2 to get a code and continue on our website for more details. Or ask another question.",
+        "timestamp": "2026-01-06T09:27:15.820Z"
       }
     ]
   }

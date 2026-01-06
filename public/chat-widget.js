@@ -814,7 +814,9 @@
       let urlHistory = null;
       if (historyParam) {
         try {
-          urlHistory = JSON.parse(atob(decodeURIComponent(historyParam)));
+          // Safe UTF-8 base64 decode: base64 → binary string → percent-encoded → UTF-8
+          const decoded = decodeURIComponent(escape(atob(decodeURIComponent(historyParam))));
+          urlHistory = JSON.parse(decoded);
           console.log('[DoralChat] URL history decoded:', urlHistory.messages?.length, 'messages');
         } catch (e) {
           console.warn('[DoralChat] Failed to decode URL history:', e);

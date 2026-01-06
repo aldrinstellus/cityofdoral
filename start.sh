@@ -24,7 +24,7 @@ NC='\033[0m' # No Color
 
 # Project directory
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
-STATIC_SITE_DIR="$PROJECT_DIR/Website Scrapped"
+STATIC_SITE_DIR="$PROJECT_DIR/public"
 
 # PID files for cleanup
 NEXTJS_PID=""

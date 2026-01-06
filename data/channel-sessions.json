@@ -2098,7 +2098,72 @@
           "timestamp": "2026-01-06T08:24:05.233Z"
         }
       ]
+    },
+    "ivr:+1-demo-1767691570875": {
+      "sessionId": "ivr_1767691570980_t2u1sr36v",
+      "channel": "ivr",
+      "userId": "+1-demo-1767691570875",
+      "startTime": "2026-01-06T09:26:10.980Z",
+      "lastActivity": "2026-01-06T09:27:05.921Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T09:26:11.004Z"
+        },
+        {
+          "role": "user",
+          "content": "When is the next city council meeting?",
+          "timestamp": "2026-01-06T09:26:39.066Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Meeting:**\n• January 15, 2026\n• 10 AM and 6 PM\n• Doral Government Center\n\n**Agenda Highlights:**\n• Budget amendment for parks\n• Zoning text amendment\n• Downtown streetscape update\n• Summer camp program fees\n\nView full agenda: www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Council-Meetings",
+          "timestamp": "2026-01-06T09:27:05.921Z"
+        }
+      ]
+    },
+    "web:sess_1767691646241_drvhm9ulu": {
+      "sessionId": "web_1767691646863_uq9nluvi9",
+      "channel": "web",
+      "userId": "sess_1767691646241_drvhm9ulu",
+      "startTime": "2026-01-06T09:27:26.863Z",
+      "lastActivity": "2026-01-06T09:27:26.863Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T09:27:15.820Z"
+        },
+        {
+          "role": "user",
+          "content": "Pressed: 1",
+          "timestamp": "2026-01-06T09:27:15.820Z"
+        },
+        {
+          "role": "assistant",
+          "content": "You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-06T09:27:15.820Z"
+        },
+        {
+          "role": "user",
+          "content": "Said: \"When is the next city council meeting?\"",
+          "timestamp": "2026-01-06T09:27:15.820Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Meeting:**\n• January 15, 2026\n• 10 AM and 6 PM\n• Doral Government Center\n\n**Agenda Highlights:**\n• Budget amendment for parks\n• Zoning text amendment\n• Downtown streetscape update\n• Summer camp program fees\n\nView full agenda: www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Council-Meetings",
+          "timestamp": "2026-01-06T09:27:15.820Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Press 2 to get a code and continue on our website for more details. Or ask another question.",
+          "timestamp": "2026-01-06T09:27:15.820Z"
+        }
+      ]
     }
   },
-  "lastUpdated": "2026-01-06T08:24:16.246Z"
+  "lastUpdated": "2026-01-06T09:27:26.867Z"
 }

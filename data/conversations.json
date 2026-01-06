@@ -1693,7 +1693,89 @@
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1767691601012_v98n5cyda",
+      "sessionId": "ivr-demo-1767691599070",
+      "startTime": "2026-01-06T09:26:41.012Z",
+      "endTime": "2026-01-06T09:26:41.012Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "When is the next city council meeting?",
+          "timestamp": "2026-01-06T09:26:41.012Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Meeting:**\n• January 15, 2026\n• 10 AM and 6 PM\n• Doral Government Center\n\n**Agenda Highlights:**\n• Budget amendment for parks\n• Zoning text amendment\n• Downtown streetscape update\n• Summer camp program fees\n\nView full agenda: www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Council-Meetings",
+          "timestamp": "2026-01-06T09:26:41.012Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1767693596587_r4rr71yrj",
+      "sessionId": "sess_1767691613568_k83cqy2i6",
+      "startTime": "2026-01-06T09:59:56.587Z",
+      "endTime": "2026-01-06T09:59:56.587Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-06T09:59:56.587Z"
+        },
+        {
+          "role": "user",
+          "content": "What events are coming up in Doral?",
+          "timestamp": "2026-01-06T09:59:56.587Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Meeting:**\n• Jan 6, 6pm - Military Affairs Committee\n• Jan 8, 6pm - Environmental Advisory Board\n\n**Upcoming Events:**\n• Jan 5 - Full Moon Yoga\n• Jan 10 - Farmers Market\n• Jan 12 - Paint Like Masters\n• Jan 15 - Kick Start Your Business\n\nView full calendar: www.cityofdoral.com/events",
+          "timestamp": "2026-01-06T09:59:56.587Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/Home/index.html"
+    },
+    {
+      "id": "conv_1767693596872_q1wop7dwd",
+      "sessionId": "sess_1767691613568_k83cqy2i6",
+      "startTime": "2026-01-06T09:36:36.068Z",
+      "endTime": "2026-01-06T09:59:56.592Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-06T09:36:36.068Z"
+        },
+        {
+          "role": "user",
+          "content": "What events are coming up in Doral?",
+          "timestamp": "2026-01-06T09:59:54.868Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Meeting:**\n• Jan 6, 6pm - Military Affairs Committee\n• Jan 8, 6pm - Environmental Advisory Board\n\n**Upcoming Events:**\n• Jan 5 - Full Moon Yoga\n• Jan 10 - Farmers Market\n• Jan 12 - Paint Like Masters\n• Jan 15 - Kick Start Your Business\n\nView full calendar: www.cityofdoral.com/events",
+          "timestamp": "2026-01-06T09:59:56.592Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
     }
   ],
-  "lastUpdated": "2026-01-06T08:23:11.684Z"
+  "lastUpdated": "2026-01-06T09:59:56.892Z"
 }

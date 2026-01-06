@@ -2617,6 +2617,28 @@ gtag('config', 'G-ZW2SDKHF6L');
 <script src="/chat-widget.js"></script>
 
 <!-- Doral Announcements Widget -->
+
+<!-- Fix duplicate PageAssist accessibility button -->
+<script>
+(function() {
+  function removeDuplicatePageAssist() {
+    var buttons = document.querySelectorAll('#monsido-pageassist');
+    if (buttons.length > 1) {
+      buttons[0].remove();
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(removeDuplicatePageAssist, 1000);
+    });
+  } else {
+    setTimeout(removeDuplicatePageAssist, 1000);
+  }
+  setTimeout(removeDuplicatePageAssist, 2000);
+  setTimeout(removeDuplicatePageAssist, 3000);
+})();
+</script>
+
 <script src="/announcements-widget.js"></script>
 
 </body></html>
