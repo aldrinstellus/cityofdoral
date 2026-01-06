@@ -295,13 +295,24 @@ export default function IVRDemoPage() {
       return;
     } else if (digit === '2') {
       // Generate real transfer code via demo session API
+      // Pass conversation history directly (solves serverless session persistence)
       try {
+        // Extract user/assistant messages from state for transfer
+        const conversationHistory = state.messages
+          .filter(m => m.type === 'user' || m.type === 'assistant')
+          .map(m => ({
+            role: m.type as 'user' | 'assistant',
+            content: m.text,
+          }));
+
         const response = await fetch('/api/ivr/demo-session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'generate-token',
             userId: state.demoUserId,
+            messages: conversationHistory, // Pass conversation history directly
+            language: state.language,
           }),
         });
         const data = await response.json();
@@ -313,18 +324,6 @@ export default function IVRDemoPage() {
 
         addMessage('assistant', transferDisplay);
         speakMessage(transferSpoken);
-
-        // Store this message too
-        await fetch('/api/ivr/demo-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'add-message',
-            userId: state.demoUserId,
-            role: 'assistant',
-            content: transferDisplay,
-          }),
-        });
 
         setState(prev => ({ ...prev, isProcessing: false, transferCode: code }));
       } catch {
@@ -389,25 +388,26 @@ export default function IVRDemoPage() {
     if (['website', 'web', 'online', 'transfer', 'sitio', 'página', 'transferir', 'sit', 'entènèt', 'transfè'].some(p => lowerInput.includes(p))) {
       const msgs = MESSAGES[state.language];
 
-      // Store user's message first
-      await fetch('/api/ivr/demo-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'add-message',
-          userId: state.demoUserId,
-          role: 'user',
-          content: userInput,
-        }),
-      });
-
       try {
+        // Extract conversation history including this user message
+        const conversationHistory = [
+          ...state.messages
+            .filter(m => m.type === 'user' || m.type === 'assistant')
+            .map(m => ({
+              role: m.type as 'user' | 'assistant',
+              content: m.text,
+            })),
+          { role: 'user' as const, content: userInput }, // Include current message
+        ];
+
         const response = await fetch('/api/ivr/demo-session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'generate-token',
             userId: state.demoUserId,
+            messages: conversationHistory,
+            language: state.language,
           }),
         });
         const data = await response.json();
@@ -419,18 +419,6 @@ export default function IVRDemoPage() {
 
         addMessage('assistant', transferDisplay);
         speakMessage(transferSpoken);
-
-        // Store assistant message
-        await fetch('/api/ivr/demo-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'add-message',
-            userId: state.demoUserId,
-            role: 'assistant',
-            content: transferDisplay,
-          }),
-        });
 
         setState(prev => ({ ...prev, isProcessing: false, transferCode: code }));
       } catch {

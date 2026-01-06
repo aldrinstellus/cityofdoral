@@ -4,13 +4,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   getOrCreateSession,
   addMessageToSession,
-  generateCrossChannelToken,
+  generateCrossChannelTokenWithMessages,
 } from '@/lib/channels/session-manager';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { action, userId, role, content } = body;
+    const { action, userId, role, content, messages, language } = body;
 
     if (!userId) {
       return NextResponse.json({ error: 'userId required' }, { status: 400 });
@@ -25,10 +25,14 @@ export async function POST(request: NextRequest) {
     }
 
     if (action === 'generate-token') {
-      // Ensure session exists first (needed for serverless environments)
-      await getOrCreateSession('ivr', userId, 'en');
-      // Generate cross-channel transfer token
-      const token = await generateCrossChannelToken('ivr', userId);
+      // Generate cross-channel transfer token with provided messages
+      // This solves serverless session persistence issues by passing messages directly
+      const token = await generateCrossChannelTokenWithMessages(
+        'ivr',
+        userId,
+        messages || [], // Client passes conversation history directly
+        language || 'en'
+      );
       return NextResponse.json({ success: true, token });
     }
 

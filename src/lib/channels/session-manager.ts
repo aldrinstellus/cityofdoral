@@ -245,6 +245,50 @@ export async function generateCrossChannelToken(
   return shortToken;
 }
 
+// Generate token with messages provided directly (for serverless environments)
+// This bypasses session storage and stores messages directly with the token
+export async function generateCrossChannelTokenWithMessages(
+  sourceChannel: ChannelType,
+  sourceUserId: string,
+  messages: Array<{ role: 'user' | 'assistant'; content: string }>,
+  language: Language = 'en'
+): Promise<string> {
+  const expiresAt = Date.now() + 30 * 60 * 1000; // 30 minutes
+
+  // Create a short, IVR-friendly token
+  const tokenData = {
+    c: sourceChannel,
+    l: language,
+    e: expiresAt,
+    v: 1,
+  };
+  const encoded = Buffer.from(JSON.stringify(tokenData)).toString('base64url');
+  const shortToken = encoded.substring(0, 6).toUpperCase().replace(/[^A-Z0-9]/g, 'X');
+
+  // Save token with provided messages directly
+  const tokens = await loadCrossChannelTokens();
+  tokens[shortToken] = {
+    token: shortToken,
+    sourceChannel,
+    sourceUserId,
+    sessionId: `${sourceChannel}_${Date.now()}`,
+    language,
+    createdAt: new Date(),
+    expiresAt: new Date(expiresAt),
+    used: false,
+    fullData: encoded,
+    messages: messages.map(m => ({
+      role: m.role,
+      content: m.content,
+      timestamp: new Date(),
+    })),
+  };
+  await saveCrossChannelTokens(tokens);
+
+  console.log('[Session Manager] Token generated with', messages.length, 'messages');
+  return shortToken;
+}
+
 // Redeem a cross-channel token to transfer session to new channel
 // Works in serverless by decoding embedded data if storage lookup fails
 export async function redeemCrossChannelToken(
