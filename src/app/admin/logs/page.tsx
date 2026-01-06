@@ -101,10 +101,10 @@ export default function ConversationLogs() {
   };
 
   const SortIcon = ({ columnKey }: { columnKey: SortKey }) => {
-    if (sortKey !== columnKey) return <ArrowUpDown className="h-3.5 w-3.5 text-gray-400" />;
+    if (sortKey !== columnKey) return <ArrowUpDown className="h-3.5 w-3.5 text-gray-500" />;
     if (sortDirection === "asc") return <ArrowUp className="h-3.5 w-3.5 text-[#000080]" />;
     if (sortDirection === "desc") return <ArrowDown className="h-3.5 w-3.5 text-[#000080]" />;
-    return <ArrowUpDown className="h-3.5 w-3.5 text-gray-400" />;
+    return <ArrowUpDown className="h-3.5 w-3.5 text-gray-500" />;
   };
 
   useEffect(() => {
@@ -257,7 +257,7 @@ export default function ConversationLogs() {
       case "positive":
         return {
           bg: "bg-gradient-to-r from-green-50 to-emerald-50",
-          text: "text-green-600",
+          text: "text-green-700",
           border: "border-green-100",
           icon: TrendingUp,
         };
@@ -389,13 +389,13 @@ export default function ConversationLogs() {
       >
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
             <input
               type="text"
               placeholder={t("conversations.searchPlaceholder")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full h-11 pl-10 pr-4 bg-white border border-[#E7EBF0] rounded-xl text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200"
+              className="w-full h-11 pl-10 pr-4 bg-white border border-[#E7EBF0] rounded-xl text-sm text-[#363535] placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200"
             />
           </div>
           <motion.button
@@ -595,7 +595,7 @@ export default function ConversationLogs() {
                               animate={{ scale: [1, 1.2, 1] }}
                               transition={{ duration: 1.5, repeat: Infinity }}
                             >
-                              <AlertTriangle className="h-4 w-4 text-amber-500" />
+                              <AlertTriangle className="h-4 w-4 text-amber-700" />
                             </motion.div>
                           )}
                           <span className="text-sm font-medium text-[#000034]">
@@ -639,7 +639,7 @@ export default function ConversationLogs() {
                       </td>
                       <td className="px-6 py-4">
                         <p className="text-sm font-medium text-[#000034]">{calculateDuration(conv.startTime, conv.endTime)}</p>
-                        <p className="text-xs text-gray-400">{conv.messages.length} messages</p>
+                        <p className="text-xs text-gray-500">{conv.messages.length} messages</p>
                       </td>
                       <td className="px-6 py-4">
                         {(() => {
@@ -647,7 +647,7 @@ export default function ConversationLogs() {
                           return (
                             <>
                               <p className="text-sm text-[#666666]">{formatted.date}</p>
-                              <p className="text-xs text-gray-400">{formatted.time}</p>
+                              <p className="text-xs text-gray-500">{formatted.time}</p>
                             </>
                           );
                         })()}
@@ -693,7 +693,7 @@ export default function ConversationLogs() {
                                 </motion.div>
                               ))}
                             </div>
-                            <p className="text-xs text-[#999] mt-5 pt-4 border-t border-[#E7EBF0] flex items-center gap-2">
+                            <p className="text-xs text-[#6b6b6b] mt-5 pt-4 border-t border-[#E7EBF0] flex items-center gap-2">
                               <Sparkles className="h-3 w-3" />
                               Session ID: {conv.sessionId}
                             </p>

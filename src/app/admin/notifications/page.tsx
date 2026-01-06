@@ -57,22 +57,22 @@ const severityConfig = {
   info: {
     icon: Info,
     color: "bg-blue-100 text-blue-700 border-blue-200",
-    iconColor: "text-blue-500",
+    iconColor: "text-blue-600",
   },
   warning: {
     icon: AlertTriangle,
     color: "bg-amber-100 text-amber-700 border-amber-200",
-    iconColor: "text-amber-500",
+    iconColor: "text-amber-700",
   },
   error: {
     icon: AlertCircle,
     color: "bg-red-100 text-red-700 border-red-200",
-    iconColor: "text-red-500",
+    iconColor: "text-red-600",
   },
   success: {
     icon: CheckCircle,
     color: "bg-green-100 text-green-700 border-green-200",
-    iconColor: "text-green-500",
+    iconColor: "text-green-700",
   },
 };
 
@@ -214,7 +214,7 @@ export default function NotificationsPage() {
             <Bell className="h-8 w-8 text-[#000080]" />
             {t("notifications.title")}
             {stats && stats.unread > 0 && (
-              <span className="bg-red-500 text-white text-sm px-2.5 py-0.5 rounded-full font-medium">
+              <span className="bg-red-600 text-white text-sm px-2.5 py-0.5 rounded-full font-medium">
                 {stats.unread}
               </span>
             )}
@@ -295,7 +295,7 @@ export default function NotificationsPage() {
           <div className="bg-white rounded-xl border border-[#E7EBF0] p-4 shadow-sm">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                <Activity className="h-5 w-5 text-green-600" />
+                <Activity className="h-5 w-5 text-green-700" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#000034]">{stats.byType.activity}</p>
@@ -314,7 +314,7 @@ export default function NotificationsPage() {
         className="bg-white rounded-xl border border-[#E7EBF0] p-2 mb-6 shadow-sm"
       >
         <div className="flex items-center gap-2 flex-wrap">
-          <Filter className="h-4 w-4 text-gray-400 ml-2" />
+          <Filter className="h-4 w-4 text-gray-500 ml-2" />
           {filterTabs.map(tab => (
             <button
               key={tab.key}
@@ -346,7 +346,7 @@ export default function NotificationsPage() {
         ) : notifications.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <Bell className="h-8 w-8 text-gray-400" />
+              <Bell className="h-8 w-8 text-gray-500" />
             </div>
             <h3 className="text-lg font-semibold text-[#000034] mb-1">{t("notifications.noNotifications")}</h3>
             <p className="text-[#666666] text-sm">
@@ -402,7 +402,7 @@ export default function NotificationsPage() {
                           </span>
                         </div>
                         <p className="text-sm text-[#666666] mb-2">{notification.message}</p>
-                        <div className="flex items-center gap-3 text-xs text-gray-400">
+                        <div className="flex items-center gap-3 text-xs text-gray-500">
                           <span>{formatRelativeTime(notification.createdAt)}</span>
                           {notification.link && (
                             <Link
@@ -423,7 +423,7 @@ export default function NotificationsPage() {
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={() => handleMarkAsRead(notification.id)}
-                            className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                            className="p-2 text-gray-500 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors"
                             title="Mark as read"
                           >
                             <Check className="h-4 w-4" />
@@ -433,7 +433,7 @@ export default function NotificationsPage() {
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => handleDelete(notification.id)}
-                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                           title="Delete"
                         >
                           <Trash2 className="h-4 w-4" />

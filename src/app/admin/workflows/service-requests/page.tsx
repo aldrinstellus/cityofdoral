@@ -299,9 +299,9 @@ export default function ServiceRequestsPage() {
                           title={rule.isActive ? "Deactivate" : "Activate"}
                         >
                           {rule.isActive ? (
-                            <ToggleRight className="h-5 w-5 text-green-500" />
+                            <ToggleRight className="h-5 w-5 text-green-700" />
                           ) : (
-                            <ToggleLeft className="h-5 w-5 text-gray-400" />
+                            <ToggleLeft className="h-5 w-5 text-gray-500" />
                           )}
                         </motion.button>
                         <motion.button
@@ -321,7 +321,7 @@ export default function ServiceRequestsPage() {
                           onClick={() => deleteRule(rule)}
                           className="p-2 hover:bg-red-50 rounded-lg transition-colors"
                         >
-                          <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
+                          <Trash2 className="h-4 w-4 text-gray-500 hover:text-red-600" />
                         </motion.button>
                       </div>
                     </div>

@@ -458,7 +458,7 @@ function ServicesTab({ configs, loading, onEdit, onDelete, onToggle }: {
     return (
       <div className="bg-white rounded-xl border border-[#E7EBF0] p-12 text-center">
         <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Calendar className="h-8 w-8 text-blue-500" />
+          <Calendar className="h-8 w-8 text-blue-600" />
         </div>
         <h3 className="text-lg font-semibold text-[#000034] mb-2">No Appointment Services</h3>
         <p className="text-[#666666] text-sm">Create your first appointment service to get started.</p>
@@ -499,9 +499,9 @@ function ServicesTab({ configs, loading, onEdit, onDelete, onToggle }: {
                 title={config.isActive ? "Deactivate" : "Activate"}
               >
                 {config.isActive ? (
-                  <ToggleRight className="h-5 w-5 text-green-500" />
+                  <ToggleRight className="h-5 w-5 text-green-700" />
                 ) : (
-                  <ToggleLeft className="h-5 w-5 text-gray-400" />
+                  <ToggleLeft className="h-5 w-5 text-gray-500" />
                 )}
               </motion.button>
               <motion.button
@@ -518,7 +518,7 @@ function ServicesTab({ configs, loading, onEdit, onDelete, onToggle }: {
                 onClick={() => onDelete(config)}
                 className="p-2 hover:bg-red-50 rounded-lg transition-colors"
               >
-                <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
+                <Trash2 className="h-4 w-4 text-gray-500 hover:text-red-600" />
               </motion.button>
             </div>
           </div>
@@ -605,7 +605,7 @@ function AppointmentsTab({
       <div className="p-4 border-b border-[#E7EBF0]">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             <input
               type="text"
               placeholder="Search by name, email, or reason..."
@@ -615,7 +615,7 @@ function AppointmentsTab({
             />
           </div>
           <div className="flex items-center gap-3">
-            <Filter className="h-4 w-4 text-gray-400" />
+            <Filter className="h-4 w-4 text-gray-500" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -648,7 +648,7 @@ function AppointmentsTab({
       ) : appointments.length === 0 ? (
         <div className="p-12 text-center">
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Calendar className="h-8 w-8 text-gray-400" />
+            <Calendar className="h-8 w-8 text-gray-500" />
           </div>
           <h3 className="text-lg font-semibold text-[#000034] mb-2">No Appointments Found</h3>
           <p className="text-[#666666] text-sm">
@@ -942,7 +942,7 @@ function ConfigModal({
                     onChange={(e) => updateTimeSlot(index, "start", e.target.value)}
                     className="flex-1 h-10 px-3 border border-[#E7EBF0] rounded-lg text-sm focus:outline-none focus:border-[#000080]"
                   />
-                  <span className="text-gray-400">to</span>
+                  <span className="text-gray-500">to</span>
                   <input
                     type="time"
                     value={slot.end}
@@ -955,7 +955,7 @@ function ConfigModal({
                       onClick={() => removeTimeSlot(index)}
                       className="p-2 hover:bg-red-50 rounded-lg"
                     >
-                      <X className="h-4 w-4 text-gray-400 hover:text-red-500" />
+                      <X className="h-4 w-4 text-gray-500 hover:text-red-600" />
                     </button>
                   )}
                 </div>

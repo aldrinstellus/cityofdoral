@@ -211,7 +211,7 @@ export default function FAQActionsPage() {
       >
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             <input
               type="text"
               placeholder="Search FAQs..."
@@ -268,7 +268,7 @@ export default function FAQActionsPage() {
         ) : filteredFaqs.length === 0 ? (
           <div className="p-12 text-center">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <MessageSquareText className="h-8 w-8 text-gray-400" />
+              <MessageSquareText className="h-8 w-8 text-gray-500" />
             </div>
             <h3 className="text-lg font-semibold text-[#000034] mb-2">No FAQs Found</h3>
             <p className="text-[#666666] text-sm">
@@ -323,12 +323,12 @@ export default function FAQActionsPage() {
                           {action.buttonLabel}
                         </div>
                       ) : (
-                        <div className="px-3 py-2 rounded-lg border border-dashed border-gray-300 text-gray-400 text-sm flex items-center gap-2">
+                        <div className="px-3 py-2 rounded-lg border border-dashed border-gray-300 text-gray-500 text-sm flex items-center gap-2">
                           <Link2 className="h-4 w-4" />
                           No Action
                         </div>
                       )}
-                      <ChevronRight className="h-5 w-5 text-gray-400" />
+                      <ChevronRight className="h-5 w-5 text-gray-500" />
                     </div>
                   </div>
                 </motion.div>

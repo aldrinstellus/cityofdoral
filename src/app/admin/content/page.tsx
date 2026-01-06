@@ -1073,7 +1073,7 @@ export default function ContentManagement() {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
             >
-              <Sparkles className="h-6 w-6 text-amber-500" />
+              <Sparkles className="h-6 w-6 text-amber-700" />
             </motion.div>
           </div>
           <p className="text-[#666666] mt-1 text-[15px]">{t("content.subtitle")}</p>
@@ -1200,13 +1200,13 @@ export default function ContentManagement() {
             >
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
                   <input
                     type="text"
                     placeholder="Search pages..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
                   />
                 </div>
                 <div className="flex flex-wrap gap-3">
@@ -1303,7 +1303,7 @@ export default function ContentManagement() {
                         })}
                         className={`w-full h-11 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${
                           autoScrapeSettings.enabled
-                            ? "bg-green-500 text-white hover:bg-green-600"
+                            ? "bg-green-700 text-white hover:bg-green-800"
                             : "bg-gray-200 text-gray-600 hover:bg-gray-300"
                         }`}
                       >
@@ -1377,7 +1377,7 @@ export default function ContentManagement() {
                     <div className="px-6 py-12 text-center">
                       {kbLanguage === "ht" && knowledgeItems.length === 0 ? (
                         <>
-                          <Globe className="h-12 w-12 mx-auto mb-4 text-amber-500" />
+                          <Globe className="h-12 w-12 mx-auto mb-4 text-amber-700" />
                           <h3 className="text-lg font-semibold text-[#000034] mb-2">
                             No Haitian Creole Pages Available
                           </h3>
@@ -1507,13 +1507,13 @@ export default function ContentManagement() {
                 >
                   <div className="flex flex-col lg:flex-row gap-4">
                     <div className="relative flex-1">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
                       <input
                         type="text"
                         placeholder="Search custom entries..."
                         value={customSearchTerm}
                         onChange={(e) => setCustomSearchTerm(e.target.value)}
-                        className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+                        className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
                       />
                     </div>
                     <motion.button
@@ -1617,7 +1617,7 @@ export default function ContentManagement() {
                                 animate={{ rotate: expandedEntrySection === section ? 90 : 0 }}
                                 transition={{ duration: 0.2 }}
                               >
-                                <ChevronRight className="h-5 w-5 text-[#999]" />
+                                <ChevronRight className="h-5 w-5 text-[#6b6b6b]" />
                               </motion.div>
                             </button>
 
@@ -1647,7 +1647,7 @@ export default function ContentManagement() {
                                             <p className="text-sm text-[#666666] line-clamp-2 mb-2">
                                               <HighlightText text={entry.content} highlight={customSearchTerm} />
                                             </p>
-                                            <div className="flex items-center gap-3 text-xs text-[#999]">
+                                            <div className="flex items-center gap-3 text-xs text-[#6b6b6b]">
                                               <span className="flex items-center gap-1">
                                                 <Clock className="h-3 w-3" />
                                                 {new Date(entry.updatedAt).toLocaleDateString()}
@@ -1681,7 +1681,7 @@ export default function ContentManagement() {
                                               whileHover={{ scale: 1.1 }}
                                               whileTap={{ scale: 0.9 }}
                                               onClick={() => handleDeleteEntry(entry.id)}
-                                              className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                             >
                                               <Trash2 className="h-4 w-4" />
                                             </motion.button>
@@ -1882,13 +1882,13 @@ export default function ContentManagement() {
             >
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
                   <input
                     type="text"
                     placeholder="Search FAQs..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
                   />
                 </div>
                 <div className="flex flex-wrap gap-3">
@@ -2188,7 +2188,7 @@ export default function ContentManagement() {
                                   <span className="truncate">{faq.url.split("/").pop() || "Link"}</span>
                                 </a>
                               ) : (
-                                <span className="text-xs text-[#999] italic">Global</span>
+                                <span className="text-xs text-[#6b6b6b] italic">Global</span>
                               )}
                             </td>
                             <td className="px-6 py-4">
@@ -2209,7 +2209,7 @@ export default function ContentManagement() {
                                 className="focus:outline-none"
                               >
                                 {faq.isActive ? (
-                                  <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-green-50 text-green-600 text-xs rounded-lg font-medium border border-green-100 hover:bg-green-100 transition-colors">
+                                  <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-green-50 text-green-700 text-xs rounded-lg font-medium border border-green-100 hover:bg-green-100 transition-colors">
                                     <Check className="h-3 w-3" />
                                     Active
                                   </span>
@@ -2234,7 +2234,7 @@ export default function ContentManagement() {
                                   whileHover={{ scale: 1.1 }}
                                   whileTap={{ scale: 0.9 }}
                                   onClick={() => handleDeleteFaq(faq.id)}
-                                  className="w-8 h-8 flex items-center justify-center text-[#666666] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                  className="w-8 h-8 flex items-center justify-center text-[#666666] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                 >
                                   <Trash2 className="h-4 w-4" />
                                 </motion.button>
@@ -2344,7 +2344,7 @@ export default function ContentManagement() {
                     {isDragging ? "Drop files here" : "Drag and drop files here"}
                   </p>
                   <p className="text-sm text-[#666666] mb-3">or click to browse</p>
-                  <p className="text-xs text-[#999]">PDF, DOCX, TXT (max 10MB each)</p>
+                  <p className="text-xs text-[#6b6b6b]">PDF, DOCX, TXT (max 10MB each)</p>
                 </div>
                 {uploading && (
                   <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-xl">
@@ -2366,13 +2366,13 @@ export default function ContentManagement() {
             >
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
                   <input
                     type="text"
                     placeholder="Search documents..."
                     value={docSearchTerm}
                     onChange={(e) => setDocSearchTerm(e.target.value)}
-                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
                   />
                 </div>
                 {selectedDocIds.size > 0 && (
@@ -2412,7 +2412,7 @@ export default function ContentManagement() {
                 <div className="px-6 py-12 text-center">
                   <FileUp className="h-12 w-12 mx-auto mb-3 text-[#E7EBF0]" />
                   <p className="text-[#666666] text-sm">No documents uploaded yet</p>
-                  <p className="text-xs text-[#999] mt-1">Upload PDF, DOCX, or TXT files to enhance the knowledge base</p>
+                  <p className="text-xs text-[#6b6b6b] mt-1">Upload PDF, DOCX, or TXT files to enhance the knowledge base</p>
                 </div>
               ) : (
                 <table className="w-full">
@@ -2506,7 +2506,7 @@ export default function ContentManagement() {
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
                               onClick={() => handleDeleteDocument(doc.id, doc.originalName)}
-                              className="w-8 h-8 flex items-center justify-center text-[#666666] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                              className="w-8 h-8 flex items-center justify-center text-[#666666] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             >
                               <Trash2 className="h-4 w-4" />
                             </motion.button>
@@ -2564,13 +2564,13 @@ export default function ContentManagement() {
             >
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
                   <input
                     type="text"
                     placeholder="Search URLs..."
                     value={crawlerSearchTerm}
                     onChange={(e) => setCrawlerSearchTerm(e.target.value)}
-                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
                   />
                 </div>
                 <div className="flex flex-wrap gap-3">
@@ -2676,7 +2676,7 @@ export default function ContentManagement() {
                         })}
                         className={`w-full h-11 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${
                           autoScrapeSettings.enabled
-                            ? "bg-green-500 text-white hover:bg-green-600"
+                            ? "bg-green-700 text-white hover:bg-green-800"
                             : "bg-gray-200 text-gray-600 hover:bg-gray-300"
                         }`}
                       >
@@ -2748,7 +2748,7 @@ export default function ContentManagement() {
                 <div className="px-6 py-12 text-center">
                   <Globe className="h-12 w-12 mx-auto mb-3 text-[#E7EBF0]" />
                   <p className="text-[#666666] text-sm">No URLs configured for crawling</p>
-                  <p className="text-xs text-[#999] mt-1">URLs will be populated from the knowledge base</p>
+                  <p className="text-xs text-[#6b6b6b] mt-1">URLs will be populated from the knowledge base</p>
                 </div>
               ) : (
                 <div className="divide-y divide-[#E7EBF0]">
@@ -2790,9 +2790,9 @@ export default function ContentManagement() {
                             {urls.length} URLs
                           </span>
                           <span className={`px-2.5 py-1 text-xs rounded-full font-medium ${
-                            urls.every(u => u.enabled) ? "bg-green-100 text-green-600" :
+                            urls.every(u => u.enabled) ? "bg-green-100 text-green-700" :
                             urls.every(u => !u.enabled) ? "bg-gray-100 text-gray-600" :
-                            "bg-amber-100 text-amber-600"
+                            "bg-amber-100 text-amber-700"
                           }`}>
                             {urls.filter(u => u.enabled).length}/{urls.length} enabled
                           </span>
@@ -2807,7 +2807,7 @@ export default function ContentManagement() {
                           className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                             urls.every(u => u.enabled)
                               ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                              : "bg-green-100 text-green-600 hover:bg-green-200"
+                              : "bg-green-100 text-green-700 hover:bg-green-200"
                           }`}
                         >
                           {urls.every(u => u.enabled) ? "Disable All" : "Enable All"}
@@ -2852,12 +2852,12 @@ export default function ContentManagement() {
                                   </div>
                                   <div className="flex items-center gap-3 flex-shrink-0">
                                     {url.lastCrawled && (
-                                      <span className="text-xs text-[#999]">Last: {formatTimeAgo(url.lastCrawled)}</span>
+                                      <span className="text-xs text-[#6b6b6b]">Last: {formatTimeAgo(url.lastCrawled)}</span>
                                     )}
                                     <span className={`px-2 py-1 text-xs rounded font-medium ${
-                                      url.lastStatus === "success" ? "bg-green-100 text-green-600" :
+                                      url.lastStatus === "success" ? "bg-green-100 text-green-700" :
                                       url.lastStatus === "error" ? "bg-red-100 text-red-600" :
-                                      url.lastStatus === "pending" ? "bg-amber-100 text-amber-600" :
+                                      url.lastStatus === "pending" ? "bg-amber-100 text-amber-700" :
                                       "bg-gray-100 text-gray-500"
                                     }`}>
                                       {url.lastStatus === "never" ? "Not crawled" : url.lastStatus}
@@ -2897,13 +2897,13 @@ export default function ContentManagement() {
               </h4>
               <div className="flex flex-col lg:flex-row gap-3">
                 <div className="relative flex-1">
-                  <Link className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                  <Link className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
                   <input
                     type="text"
                     placeholder="https://www.cityofdoral.com/..."
                     value={newCustomUrl}
                     onChange={(e) => setNewCustomUrl(e.target.value)}
-                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+                    className="w-full h-10 pl-10 pr-4 bg-[#F5F9FD] border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
                   />
                 </div>
                 <select
@@ -3028,7 +3028,7 @@ function FaqForm({
           placeholder="Enter the question..."
         />
         {errors.question && (
-          <p className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+          <p className="mt-1.5 text-xs text-red-600 flex items-center gap-1">
             <AlertCircle className="h-3 w-3" />
             {errors.question}
           </p>
@@ -3051,7 +3051,7 @@ function FaqForm({
           placeholder="Enter the answer..."
         />
         {errors.answer && (
-          <p className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+          <p className="mt-1.5 text-xs text-red-600 flex items-center gap-1">
             <AlertCircle className="h-3 w-3" />
             {errors.answer}
           </p>
@@ -3060,10 +3060,10 @@ function FaqForm({
 
       <div>
         <label className="block text-sm font-medium text-[#363535] mb-2">
-          Page URL <span className="text-[#999] font-normal">(optional)</span>
+          Page URL <span className="text-[#6b6b6b] font-normal">(optional)</span>
         </label>
         <div className="relative">
-          <Link className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+          <Link className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
           <input
             type="text"
             value={formData.url || ""}
@@ -3083,7 +3083,7 @@ function FaqForm({
           Associate this FAQ with a specific page. Leave empty for site-wide FAQs.
         </p>
         {errors.url && (
-          <p className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+          <p className="mt-1.5 text-xs text-red-600 flex items-center gap-1">
             <AlertCircle className="h-3 w-3" />
             {errors.url}
           </p>

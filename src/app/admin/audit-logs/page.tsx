@@ -179,7 +179,7 @@ function formatDetails(details: string): { isJson: boolean; items: { key: string
 function SortIcon({ direction }: { direction: SortDirection }) {
   if (direction === "asc") return <ArrowUp className="h-3.5 w-3.5 text-[#000080]" />;
   if (direction === "desc") return <ArrowDown className="h-3.5 w-3.5 text-[#000080]" />;
-  return <ArrowUpDown className="h-3.5 w-3.5 text-gray-400" />;
+  return <ArrowUpDown className="h-3.5 w-3.5 text-gray-500" />;
 }
 
 export default function AuditLogsPage() {
@@ -396,7 +396,7 @@ export default function AuditLogsPage() {
         <div className="flex flex-col lg:flex-row gap-4">
           <form onSubmit={handleSearch} className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <input
                 type="text"
                 placeholder={t("auditLogs.searchPlaceholder")}
@@ -407,7 +407,7 @@ export default function AuditLogsPage() {
             </div>
           </form>
           <div className="flex items-center gap-3">
-            <Filter className="h-4 w-4 text-gray-400" />
+            <Filter className="h-4 w-4 text-gray-500" />
             <select
               value={actionFilter}
               onChange={(e) => setActionFilter(e.target.value)}
@@ -450,7 +450,7 @@ export default function AuditLogsPage() {
         ) : logs.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <Shield className="h-8 w-8 text-gray-400" />
+              <Shield className="h-8 w-8 text-gray-500" />
             </div>
             <h3 className="text-lg font-semibold text-[#000034] mb-1">{t("auditLogs.noLogs")}</h3>
             <p className="text-[#666666] text-sm">
@@ -529,7 +529,7 @@ export default function AuditLogsPage() {
                             animate={{ rotate: isExpanded ? 180 : 0 }}
                             transition={{ duration: 0.2 }}
                           >
-                            <ChevronDown className="h-4 w-4 text-gray-400" />
+                            <ChevronDown className="h-4 w-4 text-gray-500" />
                           </motion.div>
                         </td>
                         <td className="px-6 py-4">
@@ -567,7 +567,7 @@ export default function AuditLogsPage() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-                            <MapPin className="h-3.5 w-3.5 text-gray-400" />
+                            <MapPin className="h-3.5 w-3.5 text-gray-500" />
                             <div>
                               <p className="text-sm text-[#000034]">{log.location || "Unknown"}</p>
                               <p className="text-xs text-gray-500">{log.ipAddress}</p>
@@ -637,9 +637,9 @@ export default function AuditLogsPage() {
                                               <li key={idx} className="text-xs bg-gray-50 rounded p-2">
                                                 <span className="font-medium text-[#000034]">{change.field}:</span>
                                                 <div className="flex flex-wrap items-center gap-1 mt-1">
-                                                  <span className="text-red-500 line-through break-all">{change.oldValue}</span>
-                                                  <span className="text-gray-400">→</span>
-                                                  <span className="text-green-600 break-all">{change.newValue}</span>
+                                                  <span className="text-red-600 line-through break-all">{change.oldValue}</span>
+                                                  <span className="text-gray-500">→</span>
+                                                  <span className="text-green-700 break-all">{change.newValue}</span>
                                                 </div>
                                               </li>
                                             ))}
@@ -656,11 +656,11 @@ export default function AuditLogsPage() {
                                       </h4>
                                       <ul className="space-y-2 text-sm text-[#363535]">
                                         <li className="flex items-start gap-2">
-                                          <Globe className="h-4 w-4 text-gray-400 mt-0.5 shrink-0" />
+                                          <Globe className="h-4 w-4 text-gray-500 mt-0.5 shrink-0" />
                                           <span className="break-words"><strong>Browser:</strong> {log.browser || "Unknown"}</span>
                                         </li>
                                         <li className="flex items-start gap-2">
-                                          <Monitor className="h-4 w-4 text-gray-400 mt-0.5 shrink-0" />
+                                          <Monitor className="h-4 w-4 text-gray-500 mt-0.5 shrink-0" />
                                           <span className="break-words"><strong>OS:</strong> {log.os || "Unknown"}</span>
                                         </li>
                                         {log.userAgent && (
@@ -680,7 +680,7 @@ export default function AuditLogsPage() {
                                       </h4>
                                       <ul className="space-y-2 text-sm text-[#363535]">
                                         <li className="flex items-start gap-2">
-                                          <MapPin className="h-4 w-4 text-gray-400 mt-0.5 shrink-0" />
+                                          <MapPin className="h-4 w-4 text-gray-500 mt-0.5 shrink-0" />
                                           <span><strong>Location:</strong> {log.location || "Unknown"}</span>
                                         </li>
                                         <li className="flex items-start gap-2">
@@ -697,10 +697,10 @@ export default function AuditLogsPage() {
 
                                   {/* Log ID Footer */}
                                   <div className="mt-4 pt-3 border-t border-[#E7EBF0] flex flex-wrap items-center justify-between gap-2">
-                                    <p className="text-xs text-gray-400">
+                                    <p className="text-xs text-gray-500">
                                       <strong>Log ID:</strong> <code className="bg-gray-100 px-1.5 py-0.5 rounded">{log.id}</code>
                                     </p>
-                                    <p className="text-xs text-gray-400">
+                                    <p className="text-xs text-gray-500">
                                       <strong>Admin:</strong> {log.adminUser} ({log.adminEmail})
                                     </p>
                                   </div>

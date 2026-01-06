@@ -73,7 +73,7 @@ const typeConfig = {
   },
   warning: {
     icon: AlertTriangle,
-    color: "text-amber-600",
+    color: "text-amber-700",
     bg: "bg-gradient-to-br from-amber-50 to-yellow-100/50",
     border: "border-amber-200",
     glow: "shadow-amber-500/20",
@@ -503,7 +503,7 @@ export default function Announcements() {
               animate={{ rotate: [0, 15, -15, 0] }}
               transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
             >
-              <Bell className="h-6 w-6 text-amber-500" />
+              <Bell className="h-6 w-6 text-amber-700" />
             </motion.div>
           </div>
           <p className="text-[#666666] mt-1 text-[15px]">{t("announcements.subtitle")}</p>
@@ -609,7 +609,7 @@ export default function Announcements() {
                         <Label htmlFor="rotationEnabled" className="text-sm font-medium text-[#363535]">
                           Enable Auto-Rotation
                         </Label>
-                        <p className="text-xs text-[#999] mt-0.5">
+                        <p className="text-xs text-[#6b6b6b] mt-0.5">
                           Automatically cycle through announcements
                         </p>
                       </div>
@@ -635,7 +635,7 @@ export default function Announcements() {
                         step={1}
                         className="w-full"
                       />
-                      <div className="flex justify-between text-xs text-[#999] mt-2">
+                      <div className="flex justify-between text-xs text-[#6b6b6b] mt-2">
                         <span>3s (fast)</span>
                         <span>30s (slow)</span>
                       </div>
@@ -646,7 +646,7 @@ export default function Announcements() {
                         <Label htmlFor="pauseOnHover" className="text-sm font-medium text-[#363535]">
                           Pause on Hover
                         </Label>
-                        <p className="text-xs text-[#999] mt-0.5">
+                        <p className="text-xs text-[#6b6b6b] mt-0.5">
                           Stop rotation when hovering
                         </p>
                       </div>
@@ -671,7 +671,7 @@ export default function Announcements() {
                         <Label htmlFor="showNavigation" className="text-sm font-medium text-[#363535]">
                           Show Navigation
                         </Label>
-                        <p className="text-xs text-[#999] mt-0.5">
+                        <p className="text-xs text-[#6b6b6b] mt-0.5">
                           Display prev/next arrows and indicators
                         </p>
                       </div>
@@ -687,7 +687,7 @@ export default function Announcements() {
                         <Label htmlFor="showDismiss" className="text-sm font-medium text-[#363535]">
                           Show Dismiss Button
                         </Label>
-                        <p className="text-xs text-[#999] mt-0.5">
+                        <p className="text-xs text-[#6b6b6b] mt-0.5">
                           Allow users to dismiss announcements
                         </p>
                       </div>
@@ -708,7 +708,7 @@ export default function Announcements() {
                         className={`w-full h-11 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all ${
                           settingsChanged
                             ? "bg-gradient-to-r from-[#000080] to-[#1D4F91] text-white hover:shadow-lg hover:shadow-[#000080]/25"
-                            : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                            : "bg-gray-100 text-gray-500 cursor-not-allowed"
                         }`}
                       >
                         {savingSettings ? (
@@ -737,18 +737,18 @@ export default function Announcements() {
         {/* Search Bar */}
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
             <input
               type="text"
               placeholder={t("announcements.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-11 pl-11 pr-4 bg-white border border-[#E7EBF0] rounded-xl text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
+              className="w-full h-11 pl-11 pr-4 bg-white border border-[#E7EBF0] rounded-xl text-sm text-[#363535] placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 transition-all"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] hover:text-[#666] transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6b6b6b] hover:text-[#666] transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -786,7 +786,7 @@ export default function Announcements() {
                 <option value="oldest">Oldest First</option>
                 <option value="priority">Priority</option>
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999] pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b] pointer-events-none" />
             </div>
           </div>
         </div>
@@ -1007,7 +1007,7 @@ export default function Announcements() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleBulkDelete}
-                  className="h-9 px-4 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
+                  className="h-9 px-4 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
                 >
                   <Trash2 className="h-4 w-4" />
                   Delete
@@ -1091,7 +1091,7 @@ export default function Announcements() {
                     className={`flex-shrink-0 mt-1 ${
                       selectedIds.has(announcement.id)
                         ? "text-[#000080]"
-                        : "text-gray-300 hover:text-gray-400"
+                        : "text-gray-300 hover:text-gray-500"
                     } transition-colors`}
                   >
                     {selectedIds.has(announcement.id) ? (
@@ -1128,7 +1128,7 @@ export default function Announcements() {
                       )}
                     </div>
                     <p className="text-sm text-[#666666] mb-3 leading-relaxed">{announcement.message}</p>
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-[#999]">
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-[#6b6b6b]">
                       <span className="flex items-center gap-1.5 bg-gray-50 px-2.5 py-1 rounded-lg">
                         <Calendar className="h-3.5 w-3.5" />
                         {announcement.startDate} - {announcement.endDate}
@@ -1147,7 +1147,7 @@ export default function Announcements() {
                           className={`px-2 py-0.5 text-xs font-medium rounded transition-all ${
                             announcement.language === "en" || announcement.language === "all"
                               ? "bg-[#1D4F91] text-white shadow-sm"
-                              : "text-gray-400 hover:text-gray-600"
+                              : "text-gray-500 hover:text-gray-600"
                           }`}
                           title="English"
                         >
@@ -1161,7 +1161,7 @@ export default function Announcements() {
                           className={`px-2 py-0.5 text-xs font-medium rounded transition-all ${
                             announcement.language === "es" || announcement.language === "all"
                               ? "bg-[#006A52] text-white shadow-sm"
-                              : "text-gray-400 hover:text-gray-600"
+                              : "text-gray-500 hover:text-gray-600"
                           }`}
                           title="Spanish"
                         >
@@ -1175,7 +1175,7 @@ export default function Announcements() {
                           className={`px-2 py-0.5 text-xs font-medium rounded transition-all ${
                             announcement.language === "ht" || announcement.language === "all"
                               ? "bg-[#C8102E] text-white shadow-sm"
-                              : "text-gray-400 hover:text-gray-600"
+                              : "text-gray-500 hover:text-gray-600"
                           }`}
                           title="Haitian Creole"
                         >
@@ -1189,7 +1189,7 @@ export default function Announcements() {
                           className={`px-2 py-0.5 text-xs font-medium rounded transition-all ${
                             announcement.language === "all"
                               ? "bg-gradient-to-r from-[#1D4F91] to-[#C8102E] text-white shadow-sm"
-                              : "text-gray-400 hover:text-gray-600"
+                              : "text-gray-500 hover:text-gray-600"
                           }`}
                           title="All Languages"
                         >
@@ -1211,7 +1211,7 @@ export default function Announcements() {
                       whileTap={{ scale: 0.9 }}
                       onClick={() => handleToggleActive(announcement.id)}
                       className={`w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-50 transition-colors ${
-                        announcement.isActive ? "text-[#006A52]" : "text-[#999]"
+                        announcement.isActive ? "text-[#006A52]" : "text-[#6b6b6b]"
                       }`}
                       title={announcement.isActive ? "Deactivate" : "Activate"}
                     >
@@ -1225,7 +1225,7 @@ export default function Announcements() {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => setEditingAnnouncement(announcement)}
-                      className="w-9 h-9 flex items-center justify-center text-[#999] hover:text-[#1D4F91] hover:bg-blue-50 rounded-lg transition-colors"
+                      className="w-9 h-9 flex items-center justify-center text-[#6b6b6b] hover:text-[#1D4F91] hover:bg-blue-50 rounded-lg transition-colors"
                       title="Edit"
                     >
                       <Edit2 className="h-4 w-4" />
@@ -1234,7 +1234,7 @@ export default function Announcements() {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => handleDelete(announcement.id)}
-                      className="w-9 h-9 flex items-center justify-center text-[#999] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      className="w-9 h-9 flex items-center justify-center text-[#6b6b6b] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                       title="Delete"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -1290,7 +1290,7 @@ function AnnouncementForm({
     onSave(formData);
   };
 
-  const inputClass = "w-full h-11 px-4 bg-white border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200";
+  const inputClass = "w-full h-11 px-4 bg-white border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200";
   const labelClass = "block text-xs font-medium text-[#666666] mb-2 uppercase tracking-wide";
 
   return (
@@ -1312,7 +1312,7 @@ function AnnouncementForm({
         <textarea
           value={formData.message}
           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-          className="w-full px-4 py-3 bg-white border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200 min-h-[120px] resize-none"
+          className="w-full px-4 py-3 bg-white border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200 min-h-[120px] resize-none"
           placeholder="Announcement message..."
           required
         />

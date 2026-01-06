@@ -114,10 +114,10 @@ export default function EscalationsPage() {
   };
 
   const SortIcon = ({ columnKey }: { columnKey: SortKey }) => {
-    if (sortKey !== columnKey) return <ArrowUpDown className="h-3.5 w-3.5 text-gray-400" />;
+    if (sortKey !== columnKey) return <ArrowUpDown className="h-3.5 w-3.5 text-gray-500" />;
     if (sortDirection === "asc") return <ArrowUp className="h-3.5 w-3.5 text-[#000080]" />;
     if (sortDirection === "desc") return <ArrowDown className="h-3.5 w-3.5 text-[#000080]" />;
-    return <ArrowUpDown className="h-3.5 w-3.5 text-gray-400" />;
+    return <ArrowUpDown className="h-3.5 w-3.5 text-gray-500" />;
   };
 
   const sortedEscalations = useMemo(() => {
@@ -331,7 +331,7 @@ export default function EscalationsPage() {
         <div className="flex flex-col lg:flex-row gap-4">
           <form onSubmit={handleSearch} className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <input
                 type="text"
                 placeholder="Search by name, contact, or reason..."
@@ -342,7 +342,7 @@ export default function EscalationsPage() {
             </div>
           </form>
           <div className="flex items-center gap-3">
-            <Filter className="h-4 w-4 text-gray-400" />
+            <Filter className="h-4 w-4 text-gray-500" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -420,7 +420,7 @@ export default function EscalationsPage() {
         ) : escalations.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-green-700" />
             </div>
             <h3 className="text-lg font-semibold text-[#000034] mb-1">{t("escalations.noEscalations")}</h3>
             <p className="text-[#666666] text-sm">
@@ -510,9 +510,9 @@ export default function EscalationsPage() {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           {escalation.contactMethod === "phone" ? (
-                            <Phone className="h-4 w-4 text-gray-400" />
+                            <Phone className="h-4 w-4 text-gray-500" />
                           ) : (
-                            <Mail className="h-4 w-4 text-gray-400" />
+                            <Mail className="h-4 w-4 text-gray-500" />
                           )}
                           <span className="text-sm text-[#363535]">
                             <HighlightText text={escalation.contactValue} highlight={searchQuery} />
@@ -528,7 +528,7 @@ export default function EscalationsPage() {
                         <p className="text-sm text-[#666666]">
                           {new Date(escalation.requestedAt).toLocaleDateString()}
                         </p>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-gray-500">
                           {new Date(escalation.requestedAt).toLocaleTimeString()}
                         </p>
                       </td>
@@ -559,7 +559,7 @@ export default function EscalationsPage() {
                             className="p-2 hover:bg-red-50 rounded-lg transition-colors"
                             title="Delete Escalation"
                           >
-                            <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
+                            <Trash2 className="h-4 w-4 text-gray-500 hover:text-red-600" />
                           </motion.button>
                         </div>
                       </td>

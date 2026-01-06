@@ -336,7 +336,7 @@ export default function AnalyticsPage() {
         </div>
       ) : error ? (
         <div className="bg-amber-50 rounded-xl border border-amber-100 p-12 text-center">
-          <AlertTriangle className="h-8 w-8 text-amber-500 mx-auto mb-3" />
+          <AlertTriangle className="h-8 w-8 text-amber-700 mx-auto mb-3" />
           <p className="text-[#666666]">{error}</p>
           <button onClick={fetchAnalytics} className="mt-4 px-4 py-2 bg-[#000080] text-white rounded-lg">
             {t("analytics.tryAgain")}
@@ -656,7 +656,7 @@ export default function AnalyticsPage() {
                   </div>
                   <div className="flex items-center gap-4">
                     <span className="text-sm font-semibold text-[#000034]">{q.count}</span>
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded ${q.trend > 0 ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded ${q.trend > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"}`}>
                       {q.trend > 0 ? "+" : ""}{q.trend}%
                     </span>
                   </div>

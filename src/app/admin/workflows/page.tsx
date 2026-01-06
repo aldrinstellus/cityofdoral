@@ -486,9 +486,9 @@ export default function WorkflowsPage() {
                   title={type.isActive ? "Disable" : "Enable"}
                 >
                   {type.isActive ? (
-                    <Eye className="h-4 w-4 text-green-600" />
+                    <Eye className="h-4 w-4 text-green-700" />
                   ) : (
-                    <EyeOff className="h-4 w-4 text-gray-400" />
+                    <EyeOff className="h-4 w-4 text-gray-500" />
                   )}
                 </button>
                 {!type.isSystem && (
@@ -915,12 +915,12 @@ function StatusItem({
   const statusConfig = {
     active: {
       icon: CheckCircle,
-      color: "text-green-600 bg-green-100",
+      color: "text-green-700 bg-green-100",
       label: "Active",
     },
     inactive: {
       icon: AlertTriangle,
-      color: "text-amber-600 bg-amber-100",
+      color: "text-amber-700 bg-amber-100",
       label: "Inactive",
     },
     pending: {

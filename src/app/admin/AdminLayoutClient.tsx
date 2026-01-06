@@ -308,7 +308,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="ml-auto px-2 py-0.5 text-[10px] font-bold bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-full shadow-lg"
+                      className="ml-auto px-2 py-0.5 text-[10px] font-bold bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-full shadow-lg"
                     >
                       3
                     </motion.span>
@@ -317,7 +317,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="ml-auto px-2 py-0.5 text-[10px] font-bold bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full shadow-lg"
+                      className="ml-auto px-2 py-0.5 text-[10px] font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-lg"
                     >
                       {unreadNotifications}
                     </motion.span>
@@ -326,7 +326,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute -top-1 -right-1 w-4 h-4 text-[8px] font-bold bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full flex items-center justify-center shadow-lg"
+                      className="absolute -top-1 -right-1 w-4 h-4 text-[8px] font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg"
                     >
                       {unreadNotifications > 9 ? "9+" : unreadNotifications}
                     </motion.span>
@@ -335,7 +335,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="ml-auto px-2 py-0.5 text-[10px] font-bold bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full shadow-lg"
+                      className="ml-auto px-2 py-0.5 text-[10px] font-bold bg-gradient-to-r from-amber-700 to-orange-700 text-white rounded-full shadow-lg"
                     >
                       2
                     </motion.span>

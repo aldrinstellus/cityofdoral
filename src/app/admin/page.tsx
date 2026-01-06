@@ -270,10 +270,10 @@ export default function AdminDashboard() {
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'resolved': return <CheckCircle2 className="h-3.5 w-3.5 text-green-500" />;
-      case 'escalated': return <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />;
-      case 'started': return <Activity className="h-3.5 w-3.5 text-blue-500" />;
-      case 'completed': return <CheckCircle2 className="h-3.5 w-3.5 text-green-500" />;
+      case 'resolved': return <CheckCircle2 className="h-3.5 w-3.5 text-green-700" />;
+      case 'escalated': return <AlertTriangle className="h-3.5 w-3.5 text-amber-700" />;
+      case 'started': return <Activity className="h-3.5 w-3.5 text-blue-600" />;
+      case 'completed': return <CheckCircle2 className="h-3.5 w-3.5 text-green-700" />;
       default: return <Activity className="h-3.5 w-3.5 text-gray-500" />;
     }
   };
@@ -313,11 +313,11 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-2 bg-white border border-[#E7EBF0] rounded-lg px-3 py-2 text-sm">
             {isOnline ? (
-              <Wifi className="h-4 w-4 text-green-500" />
+              <Wifi className="h-4 w-4 text-green-700" />
             ) : (
-              <WifiOff className="h-4 w-4 text-red-500" />
+              <WifiOff className="h-4 w-4 text-red-600" />
             )}
-            <span className={isOnline ? 'text-green-600' : 'text-red-600'}>
+            <span className={isOnline ? 'text-green-700' : 'text-red-600'}>
               {isOnline ? t("dashboard.liveStatus") : t("dashboard.offline")}
             </span>
           </div>
@@ -446,7 +446,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="w-px h-16 bg-[#E7EBF0]" />
                 <div className="flex-1">
-                  <div className="text-4xl font-bold text-amber-600 mb-1">
+                  <div className="text-4xl font-bold text-amber-700 mb-1">
                     <AnimatedCounter value={data.queueLength} />
                   </div>
                   <p className="text-sm text-[#666]">{t("dashboard.inQueue")}</p>
@@ -552,7 +552,7 @@ export default function AdminDashboard() {
                       className="flex items-center gap-3 p-3 bg-[#F5F9FD] rounded-lg"
                     >
                       {getActivityIcon(activity.type)}
-                      <span className="text-xs text-[#999] w-16">{activity.time}</span>
+                      <span className="text-xs text-[#6b6b6b] w-16">{activity.time}</span>
                       <span className="text-sm text-[#363535] flex-1">
                         {activity.channel} {activity.type === 'resolved' ? 'resolved' : activity.type === 'escalated' ? 'escalated' : activity.type === 'started' ? 'started' : 'completed'}
                       </span>
@@ -642,7 +642,7 @@ export default function AdminDashboard() {
                           {data.pendingEscalations} {t("dashboard.escalationsPending")}
                         </span>
                       </div>
-                      <ChevronRight className="h-4 w-4 text-red-500" />
+                      <ChevronRight className="h-4 w-4 text-red-600" />
                     </motion.div>
                   </Link>
                 )}
@@ -659,7 +659,7 @@ export default function AdminDashboard() {
                           {data.negativeFeedback} {t("dashboard.negativeFeedback")}
                         </span>
                       </div>
-                      <ChevronRight className="h-4 w-4 text-amber-500" />
+                      <ChevronRight className="h-4 w-4 text-amber-700" />
                     </motion.div>
                   </Link>
                 )}

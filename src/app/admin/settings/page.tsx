@@ -756,9 +756,9 @@ export default function SettingsPage() {
     { id: "history", label: "History", icon: History, gradient: "from-gray-500" },
   ];
 
-  const inputClass = "w-full h-11 px-4 bg-white border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200";
+  const inputClass = "w-full h-11 px-4 bg-white border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200";
   const labelClass = "block text-xs font-medium text-[#666666] mb-2 uppercase tracking-wide";
-  const textareaClass = "w-full px-4 py-3 bg-white border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#999] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200 min-h-[100px] resize-none";
+  const textareaClass = "w-full px-4 py-3 bg-white border border-[#E7EBF0] rounded-lg text-sm text-[#363535] placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#000080] focus:ring-2 focus:ring-[#000080]/10 focus:shadow-[0_0_0_4px_rgba(0,0,128,0.05)] transition-all duration-200 min-h-[100px] resize-none";
 
   return (
     <div className="p-6 lg:p-8 max-w-[1600px] mx-auto">
@@ -801,7 +801,7 @@ export default function SettingsPage() {
             <motion.span
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              className="text-amber-600 text-sm font-medium flex items-center gap-1.5"
+              className="text-amber-700 text-sm font-medium flex items-center gap-1.5"
             >
               <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
               {t("settings.unsavedChanges")}
@@ -928,7 +928,7 @@ export default function SettingsPage() {
                 <div>
                   <label className={labelClass}>Email Address</label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
                     <input type="email" defaultValue="mrodriguez@cityofdoral.com" className={`${inputClass} pl-10`} />
                   </div>
                 </div>
@@ -936,7 +936,7 @@ export default function SettingsPage() {
                 <div>
                   <label className={labelClass}>Phone Number</label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
                     <input type="tel" defaultValue="(305) 593-6725" className={`${inputClass} pl-10`} />
                   </div>
                 </div>
@@ -945,7 +945,7 @@ export default function SettingsPage() {
                   <div>
                     <label className={labelClass}>Department</label>
                     <div className="relative">
-                      <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                      <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
                       <select defaultValue="it" className={`${inputClass} pl-10 cursor-pointer`}>
                         <option value="it">Information Technology</option>
                         <option value="admin">Administration</option>
@@ -957,7 +957,7 @@ export default function SettingsPage() {
                   <div>
                     <label className={labelClass}>Timezone</label>
                     <div className="relative">
-                      <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                      <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
                       <select defaultValue="est" className={`${inputClass} pl-10 cursor-pointer`}>
                         <option value="est">Eastern Time (ET)</option>
                         <option value="cst">Central Time (CT)</option>
@@ -1015,7 +1015,7 @@ export default function SettingsPage() {
                     <label className={labelClass}>Current Password</label>
                     <div className="relative">
                       <input type={showPassword ? "text" : "password"} placeholder="Enter current password" className={`${inputClass} pr-10`} />
-                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] hover:text-[#666666]">
+                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6b6b6b] hover:text-[#666666]">
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
@@ -1025,7 +1025,7 @@ export default function SettingsPage() {
                     <label className={labelClass}>New Password</label>
                     <div className="relative">
                       <input type={showPassword ? "text" : "password"} placeholder="Enter new password" className={`${inputClass} pr-10`} />
-                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] hover:text-[#666666]">
+                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6b6b6b] hover:text-[#666666]">
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
@@ -1212,7 +1212,7 @@ export default function SettingsPage() {
               <div className="text-center py-12">
                 <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                 <p className="text-[#666666]">No team members yet</p>
-                <p className="text-sm text-gray-400">Click &quot;Invite Member&quot; to add someone</p>
+                <p className="text-sm text-gray-500">Click &quot;Invite Member&quot; to add someone</p>
               </div>
             )}
 
@@ -1369,7 +1369,7 @@ export default function SettingsPage() {
                     </div>
                     <h3 className="font-semibold text-[#000034]">{item.label}</h3>
                     <p className="text-sm text-[#666666] mt-1">{item.desc}</p>
-                    <p className="text-xs text-[#999] mt-2">{count} member{count !== 1 ? 's' : ''}</p>
+                    <p className="text-xs text-[#6b6b6b] mt-2">{count} member{count !== 1 ? 's' : ''}</p>
                   </motion.div>
                 );
               })}
@@ -1428,7 +1428,7 @@ export default function SettingsPage() {
                               onClick={() => togglePermission(idx, 'admin', action)}
                               title={`${action.charAt(0).toUpperCase() + action.slice(1)} - Click to toggle`}
                               className={`w-6 h-6 rounded flex items-center justify-center text-xs transition-all hover:scale-110 cursor-pointer ${
-                                row.admin.includes(action) ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                                row.admin.includes(action) ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                               }`}
                             >
                               {row.admin.includes(action) ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
@@ -1444,7 +1444,7 @@ export default function SettingsPage() {
                               onClick={() => togglePermission(idx, 'editor', action)}
                               title={`${action.charAt(0).toUpperCase() + action.slice(1)} - Click to toggle`}
                               className={`w-6 h-6 rounded flex items-center justify-center text-xs transition-all hover:scale-110 cursor-pointer ${
-                                row.editor.includes(action) ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                                row.editor.includes(action) ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                               }`}
                             >
                               {row.editor.includes(action) ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
@@ -1460,7 +1460,7 @@ export default function SettingsPage() {
                               onClick={() => togglePermission(idx, 'viewer', action)}
                               title={`${action.charAt(0).toUpperCase() + action.slice(1)} - Click to toggle`}
                               className={`w-6 h-6 rounded flex items-center justify-center text-xs transition-all hover:scale-110 cursor-pointer ${
-                                row.viewer.includes(action) ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                                row.viewer.includes(action) ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                               }`}
                             >
                               {row.viewer.includes(action) ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
@@ -1471,7 +1471,7 @@ export default function SettingsPage() {
                       <td className="py-3 px-4 text-right">
                         <button
                           onClick={() => handleDeletePermission(row.resource)}
-                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                           title="Delete permission"
                         >
                           <X className="h-4 w-4" />
@@ -1483,7 +1483,7 @@ export default function SettingsPage() {
               </table>
             </div>
             <div className="flex items-center justify-between mt-4">
-              <p className="text-xs text-[#999]">Legend: R=Read, C=Create, U=Update, D=Delete</p>
+              <p className="text-xs text-[#6b6b6b]">Legend: R=Read, C=Create, U=Update, D=Delete</p>
               <button
                 onClick={() => {
                   setPermissions(initialPermissions);
@@ -1505,7 +1505,7 @@ export default function SettingsPage() {
                   className="bg-white rounded-xl p-6 w-full max-w-lg shadow-2xl"
                 >
                   <h3 className="text-lg font-semibold text-[#000034] mb-4 flex items-center gap-2">
-                    <ShieldCheck className="h-5 w-5 text-amber-500" />
+                    <ShieldCheck className="h-5 w-5 text-amber-700" />
                     Add New Permission
                   </h3>
 
@@ -2434,7 +2434,7 @@ export default function SettingsPage() {
                   <div>
                     <label className={labelClass}>Session Timeout (minutes)</label>
                     <div className="relative">
-                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#999]" />
+                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
                       <input
                         type="number"
                         min="5"
@@ -2571,7 +2571,7 @@ export default function SettingsPage() {
                       <option value="openai">OpenAI (GPT-4o-mini)</option>
                       <option value="none">None (No Backup)</option>
                     </select>
-                    <p className="text-xs text-[#999] mt-2">
+                    <p className="text-xs text-[#6b6b6b] mt-2">
                       Used when primary LLM is unavailable (ITN 3.2.3)
                     </p>
                   </div>
@@ -2592,7 +2592,7 @@ export default function SettingsPage() {
                         }
                         className="w-full h-2 bg-gradient-to-r from-blue-200 to-orange-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gradient-to-br [&::-webkit-slider-thumb]:from-[#000080] [&::-webkit-slider-thumb]:to-[#1D4F91] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:cursor-pointer"
                       />
-                      <div className="flex justify-between text-xs text-[#999] mt-2">
+                      <div className="flex justify-between text-xs text-[#6b6b6b] mt-2">
                         <span>Precise (0)</span>
                         <span>Creative (1)</span>
                       </div>
@@ -2815,7 +2815,7 @@ export default function SettingsPage() {
                   <div className="text-center py-12">
                     <History className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                     <p className="text-[#666666]">No settings changes recorded yet</p>
-                    <p className="text-sm text-gray-400 mt-1">Changes to settings will appear here</p>
+                    <p className="text-sm text-gray-500 mt-1">Changes to settings will appear here</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
@@ -2845,7 +2845,7 @@ export default function SettingsPage() {
                               <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${color}`}>
                                 {log.action}
                               </span>
-                              <span className="text-xs text-gray-400">
+                              <span className="text-xs text-gray-500">
                                 {log.resourceId !== "global" && log.resourceId}
                               </span>
                             </div>
@@ -2866,7 +2866,7 @@ export default function SettingsPage() {
                                 "Settings modified"
                               )}
                             </p>
-                            <p className="text-xs text-gray-400 mt-1">
+                            <p className="text-xs text-gray-500 mt-1">
                               {new Date(log.timestamp).toLocaleString()}
                             </p>
                           </div>
@@ -2944,7 +2944,7 @@ function ComplianceCard({
 }) {
   const bgColor = status === "success" ? "from-green-50 to-emerald-50" : "from-amber-50 to-yellow-50";
   const borderColor = status === "success" ? "border-green-100" : "border-amber-100";
-  const textColor = status === "success" ? "text-[#006A52]" : "text-amber-600";
+  const textColor = status === "success" ? "text-[#006A52]" : "text-amber-700";
 
   return (
     <motion.div

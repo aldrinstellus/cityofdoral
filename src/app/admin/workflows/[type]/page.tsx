@@ -263,7 +263,7 @@ export default function DynamicWorkflowPage() {
     return (
       <div className="p-6 lg:p-8">
         <div className="max-w-md mx-auto text-center py-12">
-          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <AlertCircle className="h-12 w-12 text-red-600 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-[#000034] mb-2">
             {error || "Workflow Not Found"}
           </h2>
@@ -370,7 +370,7 @@ export default function DynamicWorkflowPage() {
               <h3 className="text-lg font-medium text-gray-500 mb-2">
                 No Items Configured
               </h3>
-              <p className="text-sm text-gray-400 mb-4">
+              <p className="text-sm text-gray-500 mb-4">
                 Start by adding items to this workflow or configuring categories.
               </p>
               <button className="inline-flex items-center gap-2 px-4 py-2 bg-[#000080] text-white rounded-lg hover:bg-[#000080]/90 transition-colors">
@@ -450,9 +450,9 @@ export default function DynamicWorkflowPage() {
                         title={cat.isActive ? "Deactivate" : "Activate"}
                       >
                         {cat.isActive ? (
-                          <ToggleRight className="h-4 w-4 text-green-500" />
+                          <ToggleRight className="h-4 w-4 text-green-700" />
                         ) : (
-                          <ToggleLeft className="h-4 w-4 text-gray-400" />
+                          <ToggleLeft className="h-4 w-4 text-gray-500" />
                         )}
                       </button>
                       <button
@@ -467,14 +467,14 @@ export default function DynamicWorkflowPage() {
                         className="p-1 hover:bg-red-100 rounded transition-colors"
                         title="Delete"
                       >
-                        <Trash2 className="h-3.5 w-3.5 text-gray-400 hover:text-red-500" />
+                        <Trash2 className="h-3.5 w-3.5 text-gray-500 hover:text-red-600" />
                       </button>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-400 text-center py-4">
+              <p className="text-sm text-gray-500 text-center py-4">
                 No categories configured
               </p>
             )}
