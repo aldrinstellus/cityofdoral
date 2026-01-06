@@ -50,3 +50,30 @@ Website Scrapped/
 
 # Demo screenshots
 tyler-*.png
+
+# Backup files
+*.backup
+*.backup_*
+*lang_update*.html
+
+# Runtime data (changes during app operation)
+data/channel-sessions.json
+data/conversations.json
+data/audit-logs.json
+data/cross-channel-tokens.json
+data/feedback.json
+data/appointments.json
+data/service-requests.json
+data/notifications.json
+data/escalations.json
+data/documents.json
+
+# Demo/mock data
+data/demo-faq.json
+data/tyler-mock-data.json
+
+# Export/state files
+exports/
+
+# Legacy OpenCities scripts
+ScriptResource.axd*
