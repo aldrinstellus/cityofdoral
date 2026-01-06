@@ -8,10 +8,10 @@
   --doral-primary-dark: #000051;
   --doral-primary-light: #534bae;
 
-  /* Text colors - All meet 4.5:1 contrast ratio on white */
-  --doral-text-primary: #1a1a2e;      /* 12.6:1 contrast */
-  --doral-text-secondary: #374151;    /* 7.5:1 contrast (was #4a4a68 at 3.1:1) */
-  --doral-text-muted: #6b7280;        /* 5.0:1 contrast (was #5c5c7a at 3.3:1) */
+  /* Text colors - All meet 4.5:1 contrast ratio on white AND chat backgrounds */
+  --doral-text-primary: #1a1a2e;      /* 17.1:1 contrast on white */
+  --doral-text-secondary: #374151;    /* 10.3:1 contrast on white */
+  --doral-text-muted: #5e6673;        /* 5.8:1 on white, 5.2:1 on chat bg (was #6b7280 at 4.3:1 on chat bg) */
   --doral-text-on-dark: #ffffff;
   --doral-text-on-dark-muted: #e8eaf6;
 
@@ -23,7 +23,7 @@
   --doral-bg-chat-bot: #f0f2f5;
 
   /* Borders & Dividers - Minimum 3:1 for UI components */
-  --doral-border: #9ca3af;            /* 3.0:1 contrast (was #d1d5db at 1.5:1) */
+  --doral-border: #767c85;            /* 3.8:1 contrast (was #9ca3af at 2.5:1) */
   --doral-border-light: #d1d5db;      /* For decorative borders only */
 
   /* Interactive States */
