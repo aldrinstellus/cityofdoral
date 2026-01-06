@@ -166,5 +166,17 @@
     "slaHours": 48,
     "createdAt": "2026-01-05T15:08:16.436Z",
     "updatedAt": "2026-01-05T15:08:16.436Z"
+  },
+  {
+    "id": "SR-2026-00015",
+    "category": "Road Maintenance",
+    "department": "Public Works",
+    "priority": "medium",
+    "description": "I need to report a pothole near my neighborhood. Can you submit a service request for me?",
+    "location": "8401 NW 53rd Terrace, Doral",
+    "status": "submitted",
+    "slaHours": 48,
+    "createdAt": "2026-01-06T08:17:06.048Z",
+    "updatedAt": "2026-01-06T08:17:06.048Z"
   }
 ]

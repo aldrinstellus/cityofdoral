@@ -805,11 +805,23 @@
   async function checkForTransferCodeInUrl() {
     const urlParams = new URLSearchParams(window.location.search);
     const transferCode = urlParams.get('transfer');
+    const historyParam = urlParams.get('history');
 
     if (transferCode && transferCode.length === 6) {
       console.log('[DoralChat] Transfer code detected in URL:', transferCode);
 
-      // Clean up URL (remove the transfer parameter)
+      // Try to decode history from URL (for serverless environments)
+      let urlHistory = null;
+      if (historyParam) {
+        try {
+          urlHistory = JSON.parse(atob(decodeURIComponent(historyParam)));
+          console.log('[DoralChat] URL history decoded:', urlHistory.messages?.length, 'messages');
+        } catch (e) {
+          console.warn('[DoralChat] Failed to decode URL history:', e);
+        }
+      }
+
+      // Clean up URL (remove the transfer and history parameters)
       const cleanUrl = window.location.pathname + window.location.hash;
       window.history.replaceState({}, document.title, cleanUrl);
 
@@ -821,13 +833,14 @@
       // Small delay to ensure widget is rendered
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      // Auto-redeem the transfer code
-      await autoRedeemTransferCode(transferCode.toUpperCase());
+      // Auto-redeem the transfer code (with fallback history from URL)
+      await autoRedeemTransferCode(transferCode.toUpperCase(), urlHistory);
     }
   }
 
   // Auto-redeem transfer code (called from URL parameter)
-  async function autoRedeemTransferCode(code) {
+  // urlHistory is a fallback for serverless environments where server may not have session data
+  async function autoRedeemTransferCode(code, urlHistory) {
     const labels = LABELS[state.language] || LABELS.en;
 
     try {
@@ -844,28 +857,58 @@
 
       const data = await response.json();
 
-      if (data.success && data.messages) {
-        // Successfully redeemed - restore conversation
+      // Use server data if available, otherwise fall back to URL history
+      let messagesToRestore = [];
+      let languageToUse = state.language;
+
+      if (data.success && data.messages && data.messages.length > 0) {
+        // Server has the messages
+        console.log('[DoralChat] Using server messages:', data.messages.length);
+        messagesToRestore = data.messages;
+        languageToUse = data.language || state.language;
+      } else if (urlHistory && urlHistory.messages && urlHistory.messages.length > 0) {
+        // Fallback to URL history (serverless environment)
+        console.log('[DoralChat] Using URL fallback messages:', urlHistory.messages.length);
+        messagesToRestore = urlHistory.messages;
+        languageToUse = urlHistory.language || state.language;
+      }
+
+      if (messagesToRestore.length > 0) {
+        // Successfully restored - restore conversation
         // Clear existing messages
         state.messages = [];
         elements.messages.innerHTML = '';
 
         // Restore language from transferred session
-        if (data.language) {
-          state.language = data.language;
-          updateLabels();
-        }
+        state.language = languageToUse;
+        updateLabels();
 
         // Add transfer header banner
         renderTransferBanner();
 
+        // Filter out IVR-specific instructions that don't apply to web chat
+        const ivrPhrases = [
+          'Press 1', 'Press 2', 'presione el', 'peze twa', 'peze de',
+          'transfer code', 'código de transferencia', 'kòd transfè',
+          'speak with a representative', 'hablar con un representante'
+        ];
+
+        const filteredMessages = messagesToRestore.filter(msg => {
+          // Keep all user messages
+          if (msg.role === 'user') return true;
+          // Filter out assistant messages that are IVR-specific greetings
+          const content = msg.content.toLowerCase();
+          const isIvrGreeting = ivrPhrases.some(phrase => content.includes(phrase.toLowerCase()));
+          return !isIvrGreeting;
+        });
+
         // Add all transferred messages (marked as transferred)
-        data.messages.forEach(msg => {
+        filteredMessages.forEach(msg => {
           const message = {
             id: generateId('msg'),
             role: msg.role,
             content: msg.content,
-            timestamp: new Date(msg.timestamp),
+            timestamp: new Date(msg.timestamp || Date.now()),
             sources: [],
             escalate: false,
             feedback: null,
@@ -885,26 +928,59 @@
         state.conversationId = data.sessionId || generateId('conv');
         saveConversation();
 
-        // Speak welcome
-        if (state.voiceEnabled && data.messages && data.messages.length > 0) {
-          const welcomeSpoken = state.language === 'es'
-            ? 'Bienvenido de vuelta. Su conversación ha sido restaurada. ¿En qué más puedo ayudarle?'
-            : state.language === 'ht'
-            ? 'Byenveni ankò. Konvèsasyon ou a te restore. Kijan mwen ka ede ou plis?'
-            : 'Welcome back. Your conversation has been restored. How can I help you further?';
-          speakText(welcomeSpoken);
+        // Speak welcome (with delay to avoid overlap with IVR audio)
+        if (state.voiceEnabled && filteredMessages.length > 0) {
+          // Small delay to ensure IVR TTS has fully stopped
+          setTimeout(() => {
+            const welcomeSpoken = state.language === 'es'
+              ? 'Bienvenido de vuelta. Su conversación ha sido restaurada. ¿En qué más puedo ayudarle?'
+              : state.language === 'ht'
+              ? 'Byenveni ankò. Konvèsasyon ou a te restore. Kijan mwen ka ede ou plis?'
+              : 'Welcome back. Your conversation has been restored. How can I help you further?';
+            speakText(welcomeSpoken);
+          }, 500);
         }
 
         scrollToBottom();
 
       } else {
-        // Invalid or expired token - show error as system message
-        console.warn('[DoralChat] Transfer code invalid or expired:', code);
+        // No messages to restore - show error
+        console.warn('[DoralChat] Transfer code invalid or no messages:', code);
         addMessage('assistant', labels.transferCodeError, { skipVoice: false }, true);
       }
     } catch (error) {
       console.error('[DoralChat] Auto-transfer code error:', error);
-      addMessage('assistant', labels.transferCodeError, { skipVoice: false }, true);
+      // Try URL history as last resort on error
+      if (urlHistory && urlHistory.messages && urlHistory.messages.length > 0) {
+        console.log('[DoralChat] API error, using URL fallback:', urlHistory.messages.length);
+        // Restore from URL history
+        state.messages = [];
+        elements.messages.innerHTML = '';
+        state.language = urlHistory.language || state.language;
+        updateLabels();
+        renderTransferBanner();
+
+        urlHistory.messages.forEach(msg => {
+          const message = {
+            id: generateId('msg'),
+            role: msg.role,
+            content: msg.content,
+            timestamp: new Date(),
+            sources: [],
+            escalate: false,
+            feedback: null,
+            actions: [],
+            isTransferred: true
+          };
+          state.messages.push(message);
+        });
+        renderTransferredMessages();
+        renderContinuationDivider();
+        saveConversation();
+        scrollToBottom();
+      } else {
+        addMessage('assistant', labels.transferCodeError, { skipVoice: false }, true);
+      }
     }
   }
 
@@ -1453,8 +1529,24 @@
           updateLabels();
         }
 
+        // Filter out IVR-specific instructions that don't apply to web chat
+        const ivrPhrases = [
+          'Press 1', 'Press 2', 'presione el', 'peze twa', 'peze de',
+          'transfer code', 'código de transferencia', 'kòd transfè',
+          'speak with a representative', 'hablar con un representante'
+        ];
+
+        const filteredMessages = data.messages.filter(msg => {
+          // Keep all user messages
+          if (msg.role === 'user') return true;
+          // Filter out assistant messages that are IVR-specific greetings
+          const content = msg.content.toLowerCase();
+          const isIvrGreeting = ivrPhrases.some(phrase => content.includes(phrase.toLowerCase()));
+          return !isIvrGreeting;
+        });
+
         // Add all transferred messages
-        data.messages.forEach(msg => {
+        filteredMessages.forEach(msg => {
           const message = {
             id: generateId('msg'),
             role: msg.role,
@@ -1478,20 +1570,22 @@
         // Add success notification as a system message (skip auto-speak for this one)
         addMessage('assistant', labels.transferCodeSuccess, { skipVoice: true }, true);
 
-        // Speak welcome and the last assistant message from the IVR conversation
-        if (state.voiceEnabled && data.messages && data.messages.length > 0) {
-          // Find the last assistant message from transferred conversation
-          const lastAssistantMsg = [...data.messages].reverse().find(m => m.role === 'assistant');
-          if (lastAssistantMsg) {
-            // Build a welcome message to speak
-            const welcomeSpoken = state.language === 'es'
-              ? 'Bienvenido de vuelta. Aquí está donde lo dejaste.'
-              : state.language === 'ht'
-              ? 'Byenveni ankò. Men kote ou te rete a.'
-              : 'Welcome back. Here is where you left off.';
+        // Speak welcome message (use filtered messages to avoid IVR-specific content)
+        if (state.voiceEnabled && filteredMessages.length > 0) {
+          // Find the last assistant message from filtered conversation
+          const lastAssistantMsg = [...filteredMessages].reverse().find(m => m.role === 'assistant');
+          // Build a simple welcome message
+          const welcomeSpoken = state.language === 'es'
+            ? 'Bienvenido de vuelta. Su conversación ha sido restaurada. ¿En qué más puedo ayudarle?'
+            : state.language === 'ht'
+            ? 'Byenveni ankò. Konvèsasyon ou a te restore. Kijan mwen ka ede ou plis?'
+            : 'Welcome back. Your conversation has been restored. How can I help you further?';
 
-            // Speak welcome, then the last message after a short delay
+          // Speak just the welcome, or include last relevant response if available
+          if (lastAssistantMsg) {
             speakText(welcomeSpoken + ' ' + lastAssistantMsg.content);
+          } else {
+            speakText(welcomeSpoken);
           }
         }
 

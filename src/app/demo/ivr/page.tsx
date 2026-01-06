@@ -630,7 +630,28 @@ export default function IVRDemoPage() {
               {/* Open Website Button */}
               <button
                 onClick={() => {
-                  const websiteUrl = `/Home/index.html?transfer=${state.transferCode}`;
+                  // Stop IVR TTS before transferring to prevent audio overlap
+                  stopElevenLabsSpeaking();
+                  // Build conversation history for transfer (filter out system messages and IVR-specific prompts)
+                  const conversationHistory = state.messages
+                    .filter(m => m.type === 'user' || m.type === 'assistant')
+                    .filter(m => {
+                      const text = m.text.toLowerCase();
+                      // Filter out IVR-specific messages
+                      return !text.includes('press 1') &&
+                             !text.includes('presione') &&
+                             !text.includes('peze') &&
+                             !text.includes('transfer code') &&
+                             !text.includes('código de transferencia') &&
+                             !text.includes('kòd transfè');
+                    })
+                    .map(m => ({ role: m.type, content: m.text }));
+                  // Encode conversation for URL (works across serverless instances)
+                  const historyParam = encodeURIComponent(btoa(JSON.stringify({
+                    messages: conversationHistory,
+                    language: state.language,
+                  })));
+                  const websiteUrl = `/Home/index.html?transfer=${state.transferCode}&history=${historyParam}`;
                   window.open(websiteUrl, '_blank');
                 }}
                 className="mt-3 w-full py-2.5 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
